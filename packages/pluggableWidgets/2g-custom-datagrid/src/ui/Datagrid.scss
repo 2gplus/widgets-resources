@@ -1,0 +1,86 @@
+.dg-grid {
+    position: relative;
+    border-width: 1px;
+    border-color: #e4e4e4;
+    background-color: #fff;
+    width: 100%;
+    max-width: 100%;
+    line-height: 16px;
+    display: table;
+
+    .dg-row {
+        display: contents;
+    }
+
+    .dg-cell {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        border-style: solid;
+        border-width: 0;
+        border-color: #e4e4e4;
+        border-bottom-width: 1px;
+    }
+
+    .dg-row:last-child {
+        .dg-cell {
+            border-bottom-width: 0px;
+        }
+    }
+
+    .dg-content {
+        display: grid;
+        position: relative;
+        border: 1px solid #e4e4e4;
+    }
+
+    .dg-row.header {
+        font-weight: bold;
+
+        .dg-cell {
+            padding-top: 22px;
+            padding-bottom: 10px;
+        }
+    }
+
+    &.row-condensed {
+        .dg-row {
+            .dg-cell {
+                padding: 12px 16px;
+            }
+        }
+        .dg-row.header {
+            .dg-cell {
+                padding-top: 18px;
+                padding-bottom: 6px;
+            }
+        }
+    }
+
+    &.row-relaxed {
+        .dg-row {
+            .dg-cell {
+                padding: 20px 16px;
+            }
+        }
+        .dg-row.header {
+            .dg-cell {
+                padding-top: 26px;
+                padding-bottom: 14px;
+            }
+        }
+    }
+
+    &.grid-borders {
+        .dg-cell:not(:last-child) {
+            border-right-width: 1px;
+        }
+    }
+
+    &.no-borders {
+        .dg-cell:not(:last-child) {
+            border-width: 0px;
+        }
+    }
+}

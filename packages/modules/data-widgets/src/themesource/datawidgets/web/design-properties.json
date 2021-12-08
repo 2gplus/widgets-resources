@@ -1,4 +1,36 @@
 {
+    "nl.2g.widgets.datagrid.Datagrid": [
+        {
+            "name": "Row Style",
+            "type": "Dropdown",
+            "description": "Changes the padding of the cells",
+            "options": [
+                {
+                    "name": "Condensed",
+                    "class": "row-condensed"
+                },
+                {
+                    "name": "Relaxed",
+                    "class": "row-relaxed"
+                }
+            ]
+        },
+        {
+            "name": "Borders",
+            "type": "Dropdown",
+            "description": "Add either a horizontal, vertical separator or both to the cells.",
+            "options": [
+                {
+                    "name": "Grid",
+                    "class": "grid-borders"
+                },
+                {
+                    "name": "None",
+                    "class": "no-borders"
+                }
+            ]
+        }
+    ],
     "com.mendix.widget.web.datagrid.Datagrid": [
         {
             "name": "Borders",
