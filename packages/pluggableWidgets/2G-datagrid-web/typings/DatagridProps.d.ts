@@ -12,7 +12,8 @@ import {
     ListActionValue,
     ListAttributeValue,
     ListExpressionValue,
-    ListWidgetValue
+    ListWidgetValue,
+    WebIcon
 } from "mendix";
 import { Big } from "big.js";
 
@@ -51,6 +52,15 @@ export type DefaultTriggerEnum = "singleClick" | "doubleClick";
 
 export type SelectionModeEnum = "single" | "multi";
 
+export type ButtonStyleEnum = "default" | "inverse" | "primary" | "info" | "success" | "warning" | "danger";
+
+export interface ButtonsType {
+    caption: string;
+    action?: ListActionValue;
+    icon?: DynamicValue<WebIcon>;
+    buttonStyle: ButtonStyleEnum;
+}
+
 export interface FilterListType {
     filter: ListAttributeValue<string | Big | boolean | Date>;
 }
@@ -70,6 +80,13 @@ export interface ColumnsPreviewType {
     size: number | null;
     alignment: AlignmentEnum;
     columnClass: string;
+}
+
+export interface ButtonsPreviewType {
+    caption: string;
+    action: {} | null;
+    icon: { type: "glyph"; iconClass: string } | { type: "image"; imageUrl: string } | null;
+    buttonStyle: ButtonStyleEnum;
 }
 
 export interface FilterListPreviewType {
@@ -94,6 +111,7 @@ export interface DatagridContainerProps {
     defaultTrigger: DefaultTriggerEnum;
     onTrigger?: ListActionValue;
     selectionMode: SelectionModeEnum;
+    buttons: ButtonsType[];
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;
@@ -122,6 +140,7 @@ export interface DatagridPreviewProps {
     defaultTrigger: DefaultTriggerEnum;
     onTrigger: {} | null;
     selectionMode: SelectionModeEnum;
+    buttons: ButtonsPreviewType[];
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;

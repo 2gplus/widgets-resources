@@ -54,6 +54,7 @@ export function preview(props: PreviewProps): ReactElement {
 
     return (
         <Table
+            buttons={props.buttons.map(button => ({ caption: button.caption, buttonStyle: button.buttonStyle }))}
             cellRenderer={useCallback(
                 (renderWrapper, _, columnIndex) => {
                     const column = columns[columnIndex];

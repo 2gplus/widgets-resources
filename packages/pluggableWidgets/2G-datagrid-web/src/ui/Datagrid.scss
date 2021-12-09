@@ -1,4 +1,12 @@
+@import "../../../../modules//data-widgets/src/themesource/datawidgets/web/datagrid.scss";
+
 .table-actions {
     display: flex;
-    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.tr.selected {
+    .td {
+        background-color: ligthen($grid-border-color, 5%);
+    }
 }

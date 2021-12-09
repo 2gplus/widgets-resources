@@ -56,6 +56,7 @@ export function getProperties(
             ]);
         }
     });
+
     if (values.pagination !== "buttons") {
         hidePropertyIn(defaultProperties, values, "pagingPosition");
     }
@@ -202,6 +203,23 @@ export const getPreview = (values: DatagridPreviewProps): StructurePreviewProps 
             }
         ]
     };
+    // const buttonsHeader: RowLayoutProps = {
+    //     type: "RowLayout",
+    //     columnSize: "fixed",
+    //     borders: true,
+    //     borderWidth: 1,
+    //     children: values.buttons.map((button)=>{
+    //        return {
+    //             type: "Selectable",
+    //             object: button,
+    //             child: {
+    //                 type: 'Container'
+
+    //             }
+
+    //         }
+    //     });
+    // };
     const headerFilters = {
         type: "RowLayout",
         columnSize: "fixed",
@@ -288,6 +306,7 @@ export const getPreview = (values: DatagridPreviewProps): StructurePreviewProps 
         type: "Container",
         children: [
             titleHeader,
+            // buttonsHeader,
             ...(values.showHeaderFilters && values.filterList.length > 0 ? [headerFilters] : []),
             headers,
             ...Array.from({ length: 5 }).map(() => columns),

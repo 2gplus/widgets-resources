@@ -18,6 +18,8 @@ import { EditableValue, ObjectItem } from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
+import { ButtonsType } from "./../../typings/DatagridProps.d";
+import { executeAction } from "@mendix/piw-utils-internal";
 
 export type TableColumn = Omit<
     ColumnsPreviewType,
@@ -37,6 +39,7 @@ export interface TableProps<T extends ObjectItem> {
         columnIndex: number
     ) => ReactElement;
     className: string;
+    buttons: ButtonsType[];
     columns: TableColumn[];
     columnsFilterable: boolean;
     columnsSortable: boolean;
@@ -175,7 +178,13 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                       clickable: !!onTrigger,
                                       "hidden-column-preview": props.preview && props.columnsHidable && column.hidden
                                   })}
-                                  onClick={defaultTrigger === "singleClick" ? onTrigger : undefined}
+                                  onClick={
+                                      defaultTrigger === "singleClick"
+                                          ? onTrigger
+                                          : () => {
+                                                selection.length === 1 ? setSelection([]) : setSelection([value]);
+                                            }
+                                  }
                                   onDoubleClick={defaultTrigger === "doubleClick" ? onTrigger : undefined}
                                   onKeyDown={
                                       onTrigger
@@ -263,7 +272,27 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
 
     return (
         <div className={props.className} style={props.styles}>
-            <div className="table-actions"></div>
+            <div className="table-actions">
+                {props.buttons.map(button => {
+                    return (
+                        <button
+                            className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
+                            onClick={() => {
+                                executeAction(button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem)));
+                            }}
+                        >
+                            <span
+                                className={classNames(
+                                    "glyphicon",
+                                    button.icon ? (button.icon.value as any).iconClass : ""
+                                )}
+                                aria-hidden="true"
+                            ></span>
+                            {button.caption}
+                        </button>
+                    );
+                })}
+            </div>
             <div className="table" role="table">
                 <div className="table-header" role="rowgroup">
                     {props.pagingPosition === "top" && pagination}
@@ -344,7 +373,11 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                         return (
                             <div
                                 key={`row_${row.item.id}`}
-                                className={classNames("tr", props.rowClass?.(row.item))}
+                                className={classNames(
+                                    "tr",
+                                    props.rowClass?.(row.item),
+                                    row.item === selection[0] ? "selected" : ""
+                                )}
                                 role="row"
                             >
                                 {props.selectionMode === "multi" ? (

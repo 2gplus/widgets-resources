@@ -176,6 +176,7 @@ function mockTableProps(): TableProps<ObjectItem> {
     return {
         setPage: jest.fn(),
         page: 1,
+        buttons: [],
         hasMoreItems: false,
         pageSize: 10,
         columnsResizable: false,
