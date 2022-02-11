@@ -3,7 +3,7 @@ import { ColumnsType, DatagridContainerProps } from "../typings/DatagridProps";
 import { FilterCondition } from "mendix/filters";
 import { and } from "mendix/filters/builders";
 
-import { Table, TableColumn } from "./components/Table";
+import { RemoteSortConfig, Table, TableColumn } from "./components/Table";
 import classNames from "classnames";
 import {
     FilterFunction,
@@ -21,6 +21,10 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     const id = useRef(`DataGrid${generateUUID()}`);
 
     const [sortParameters, setSortParameters] = useState<{ columnIndex: number; desc: boolean } | undefined>(undefined);
+    const [remoteSortConfig, setRemoteSortConfig] = useState<RemoteSortConfig>({
+        ascending: props.sortAscending?.value,
+        property: props.sortAttribute?.value
+    });
     const isInfiniteLoad = props.pagination === "virtualScrolling";
     const currentPage = isInfiniteLoad
         ? props.datasource.limit / props.pageSize
@@ -42,6 +46,44 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             viewStateFilters.current = props.datasource.filter;
         }
     }, [props.datasource, props.configurationAttribute, filtered]);
+
+    useEffect(() => {
+        if (props.sortingType === "remote") {
+            if (
+                props.sortAscending?.value != remoteSortConfig.ascending ||
+                props.sortAttribute?.value != remoteSortConfig.property
+            ) {
+                setRemoteSortConfig({
+                    ascending: props.sortAscending?.value,
+                    property: props.sortAttribute?.value
+                });
+            }
+        }
+    }, [props.sortAscending, props.sortAttribute]);
+    useEffect(() => {
+        if (props.sortingType === "remote") {
+            let changed = false;
+            // check if any property is set
+            if (remoteSortConfig.property) {
+                if (remoteSortConfig.ascending != null && remoteSortConfig.ascending != props.sortAscending?.value) {
+                    props.sortAscending?.setValue(remoteSortConfig.ascending);
+                    changed = true;
+                }
+                if (remoteSortConfig.property && remoteSortConfig.property != props.sortAttribute?.value) {
+                    props.sortAttribute?.setValue(remoteSortConfig.property);
+                    changed = true;
+                }
+            } else {
+                if (props.sortAttribute?.value) {
+                    props.sortAttribute?.setValue(undefined);
+                    changed = true;
+                }
+            }
+            if (changed) {
+                props.onSortChangedAction?.execute();
+            }
+        }
+    }, [remoteSortConfig]);
 
     const setPage = useCallback(
         computePage => {
@@ -79,7 +121,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
         props.datasource.setFilter(viewStateFilters.current);
     }
 
-    if (sortParameters) {
+    if (sortParameters && props.sortingType === "local") {
         props.datasource.setSortOrder([
             [props.columns[sortParameters.columnIndex].attribute!.id, sortParameters.desc ? "desc" : "asc"]
         ]);
@@ -219,6 +261,8 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                 },
                 [props.columns]
             )}
+            remoteSortConfig={remoteSortConfig}
+            setRemoteSortConfig={setRemoteSortConfig}
         />
     );
 }

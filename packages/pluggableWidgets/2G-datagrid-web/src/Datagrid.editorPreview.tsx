@@ -32,7 +32,8 @@ export function preview(props: PreviewProps): ReactElement {
                       hidable: "no",
                       size: 1,
                       sortable: false,
-                      alignment: "left"
+                      alignment: "left",
+                      sortProperty: "Property"
                   }
               ];
 

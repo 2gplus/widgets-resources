@@ -17,6 +17,8 @@ import {
 } from "mendix";
 import { Big } from "big.js";
 
+export type SortingTypeEnum = "local" | "remote";
+
 export type ShowContentAsEnum = "attribute" | "dynamicText" | "customContent";
 
 export type HidableEnum = "yes" | "hidden" | "no";
@@ -31,6 +33,7 @@ export interface ColumnsType {
     content?: ListWidgetValue;
     dynamicText?: ListExpressionValue<string>;
     header?: DynamicValue<string>;
+    sortProperty: string;
     filter?: ReactNode;
     sortable: boolean;
     resizable: boolean;
@@ -71,6 +74,7 @@ export interface ColumnsPreviewType {
     content: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     dynamicText: string;
     header: string;
+    sortProperty: string;
     filter: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     sortable: boolean;
     resizable: boolean;
@@ -100,6 +104,10 @@ export interface DatagridContainerProps {
     tabIndex?: number;
     advanced: boolean;
     datasource: ListValue;
+    sortingType: SortingTypeEnum;
+    sortAttribute?: EditableValue<string>;
+    sortAscending?: EditableValue<boolean>;
+    onSortChangedAction?: ActionValue;
     columns: ColumnsType[];
     columnsFilterable: boolean;
     pageSize: number;
@@ -129,6 +137,10 @@ export interface DatagridPreviewProps {
     style: string;
     advanced: boolean;
     datasource: {} | { type: string } | null;
+    sortingType: SortingTypeEnum;
+    sortAttribute: string;
+    sortAscending: string;
+    onSortChangedAction: {} | null;
     columns: ColumnsPreviewType[];
     columnsFilterable: boolean;
     pageSize: number | null;

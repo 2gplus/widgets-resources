@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget
-        id="com.2gplus.widget.web.datagrid.Datagrid"
-        pluginWidget="true"
-        offlineCapable="true"
-        xmlns="http://www.mendix.com/widget/1.0/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../../../../node_modules/mendix/custom_widget.xsd">
+<widget id="com.2gplus.widget.web.datagrid.Datagrid" pluginWidget="true" offlineCapable="true"
+    xmlns="http://www.mendix.com/widget/1.0/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../../../../node_modules/mendix/custom_widget.xsd">
     <name>Data Grid 2G</name>
     <description />
     <studioProCategory>Data containers</studioProCategory>
@@ -13,34 +9,48 @@
     <properties>
         <propertyGroup caption="General">
             <propertyGroup caption="General">
-                <property
-                        key="advanced"
-                        type="boolean"
-                        defaultValue="false">
+                <property key="advanced" type="boolean" defaultValue="false">
                     <caption>Enable advanced options</caption>
                     <description />
                 </property>
-                <property
-                        key="datasource"
-                        type="datasource"
-                        isList="true">
+                <property key="datasource" type="datasource" isList="true">
                     <caption>Data source</caption>
+                    <description />
+                </property>
+                <property key="sortingType" type="enumeration" required="true"  defaultValue="local">
+                    <caption>Sort Type</caption>
+                    <description />
+                    <enumerationValues>
+                        <enumerationValue key="local">Local</enumerationValue>
+                        <enumerationValue key="remote">Remote</enumerationValue>
+                    </enumerationValues>
+                </property>
+                <property key="sortAttribute" type="attribute" required="false">
+                    <caption>Sort attribute</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="String" />
+                    </attributeTypes>
+                </property>
+                <property key="sortAscending" type="attribute" required="false">
+                    <caption>Sort ascending</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="Boolean" />
+                    </attributeTypes>
+                </property>
+                <property key="onSortChangedAction" type="action" required="false">
+                    <caption>Sort changed action</caption>
                     <description />
                 </property>
             </propertyGroup>
             <propertyGroup caption="Columns">
-                <property
-                        key="columns"
-                        type="object"
-                        isList="true">
+                <property key="columns" type="object" isList="true">
                     <caption>Columns</caption>
                     <description />
                     <properties>
                         <propertyGroup caption="General">
-                            <property
-                                    key="showContentAs"
-                                    type="enumeration"
-                                    defaultValue="attribute">
+                            <property key="showContentAs" type="enumeration" defaultValue="attribute">
                                 <caption>Show</caption>
                                 <description />
                                 <enumerationValues>
@@ -49,11 +59,7 @@
                                     <enumerationValue key="customContent">Custom content</enumerationValue>
                                 </enumerationValues>
                             </property>
-                            <property
-                                    key="attribute"
-                                    type="attribute"
-                                    dataSource="../datasource"
-                                    required="false">
+                            <property key="attribute" type="attribute" dataSource="../datasource" required="false">
                                 <caption>Attribute</caption>
                                 <description>Attribute is required if the column can be sorted or filtered</description>
                                 <attributeTypes>
@@ -67,63 +73,41 @@
                                     <attributeType name="Long" />
                                 </attributeTypes>
                             </property>
-                            <property
-                                    key="content"
-                                    type="widgets"
-                                    dataSource="../datasource"
-                                    required="false">
+                            <property key="content" type="widgets" dataSource="../datasource" required="false">
                                 <caption>Custom content</caption>
                                 <description />
                             </property>
-                            <property
-                                    key="dynamicText"
-                                    type="textTemplate"
-                                    dataSource="../datasource"
-                                    required="false">
+                            <property key="dynamicText" type="textTemplate" dataSource="../datasource" required="false">
                                 <caption>Dynamic text</caption>
                                 <description />
                             </property>
-                            <property
-                                    key="header"
-                                    type="textTemplate"
-                                    required="false">
+                            <property key="header" type="textTemplate" required="false">
                                 <caption>Caption</caption>
                                 <description />
                             </property>
-                            <property
-                                    key="filter"
-                                    type="widgets"
-                                    required="false">
+                            <property key="sortProperty" type="string" required="false">
+                                <caption>Sort property</caption>
+                                <description />
+                            </property>
+                            <property key="filter" type="widgets" required="false">
                                 <caption>Filter</caption>
                                 <description />
                             </property>
                         </propertyGroup>
                         <propertyGroup caption="Column capabilities">
-                            <property
-                                    key="sortable"
-                                    type="boolean"
-                                    defaultValue="true">
+                            <property key="sortable" type="boolean" defaultValue="true">
                                 <caption>Can sort</caption>
                                 <description />
                             </property>
-                            <property
-                                    key="resizable"
-                                    type="boolean"
-                                    defaultValue="true">
+                            <property key="resizable" type="boolean" defaultValue="true">
                                 <caption>Can resize</caption>
                                 <description />
                             </property>
-                            <property
-                                    key="draggable"
-                                    type="boolean"
-                                    defaultValue="true">
+                            <property key="draggable" type="boolean" defaultValue="true">
                                 <caption>Can reorder</caption>
                                 <description />
                             </property>
-                            <property
-                                    key="hidable"
-                                    type="enumeration"
-                                    defaultValue="yes">
+                            <property key="hidable" type="enumeration" defaultValue="yes">
                                 <caption>Can hide</caption>
                                 <description />
                                 <enumerationValues>
@@ -134,10 +118,7 @@
                             </property>
                         </propertyGroup>
                         <propertyGroup caption="Appearance">
-                            <property
-                                    key="width"
-                                    type="enumeration"
-                                    defaultValue="autoFill">
+                            <property key="width" type="enumeration" defaultValue="autoFill">
                                 <caption>Column width</caption>
                                 <description />
                                 <enumerationValues>
@@ -146,17 +127,11 @@
                                     <enumerationValue key="manual">Manual</enumerationValue>
                                 </enumerationValues>
                             </property>
-                            <property
-                                    key="size"
-                                    type="integer"
-                                    defaultValue="1">
+                            <property key="size" type="integer" defaultValue="1">
                                 <caption>Column size</caption>
                                 <description />
                             </property>
-                            <property
-                                    key="alignment"
-                                    type="enumeration"
-                                    defaultValue="left">
+                            <property key="alignment" type="enumeration" defaultValue="left">
                                 <caption>Alignment</caption>
                                 <description />
                                 <enumerationValues>
@@ -165,11 +140,7 @@
                                     <enumerationValue key="right">Right</enumerationValue>
                                 </enumerationValues>
                             </property>
-                            <property
-                                    key="columnClass"
-                                    type="expression"
-                                    required="false"
-                                    dataSource="../datasource">
+                            <property key="columnClass" type="expression" required="false" dataSource="../datasource">
                                 <caption>Dynamic cell class</caption>
                                 <description />
                                 <returnType type="String" />
@@ -177,27 +148,18 @@
                         </propertyGroup>
                     </properties>
                 </property>
-                <property
-                        key="columnsFilterable"
-                        type="boolean"
-                        defaultValue="true">
+                <property key="columnsFilterable" type="boolean" defaultValue="true">
                     <caption>Show column filters</caption>
                     <description />
                 </property>
             </propertyGroup>
 
             <propertyGroup caption="Rows">
-                <property
-                        key="pageSize"
-                        type="integer"
-                        defaultValue="20">
+                <property key="pageSize" type="integer" defaultValue="20">
                     <caption>Page size</caption>
                     <description />
                 </property>
-                <property
-                        key="pagination"
-                        type="enumeration"
-                        defaultValue="buttons">
+                <property key="pagination" type="enumeration" defaultValue="buttons">
                     <caption>Pagination</caption>
                     <description />
                     <enumerationValues>
@@ -205,10 +167,7 @@
                         <enumerationValue key="virtualScrolling">Virtual scrolling</enumerationValue>
                     </enumerationValues>
                 </property>
-                <property
-                        key="pagingPosition"
-                        type="enumeration"
-                        defaultValue="bottom">
+                <property key="pagingPosition" type="enumeration" defaultValue="bottom">
                     <caption>Position of paging buttons</caption>
                     <description />
                     <enumerationValues>
@@ -216,10 +175,7 @@
                         <enumerationValue key="top">Above grid</enumerationValue>
                     </enumerationValues>
                 </property>
-                <property
-                        key="showEmptyPlaceholder"
-                        type="enumeration"
-                        defaultValue="none">
+                <property key="showEmptyPlaceholder" type="enumeration" defaultValue="none">
                     <caption>Empty list message</caption>
                     <description />
                     <enumerationValues>
@@ -227,28 +183,18 @@
                         <enumerationValue key="custom">Custom</enumerationValue>
                     </enumerationValues>
                 </property>
-                <property
-                        key="emptyPlaceholder"
-                        type="widgets"
-                        required="false">
+                <property key="emptyPlaceholder" type="widgets" required="false">
                     <caption>Empty placeholder</caption>
                     <description />
                 </property>
-                <property
-                        key="rowClass"
-                        type="expression"
-                        required="false"
-                        dataSource="datasource">
+                <property key="rowClass" type="expression" required="false" dataSource="datasource">
                     <caption>Dynamic row class</caption>
                     <description />
                     <returnType type="String" />
                 </property>
             </propertyGroup>
             <propertyGroup caption="Events">
-                <property
-                        key="defaultTrigger"
-                        type="enumeration"
-                        defaultValue="doubleClick">
+                <property key="defaultTrigger" type="enumeration" defaultValue="doubleClick">
                     <caption>Default Trigger</caption>
 
                     <description />
@@ -257,18 +203,11 @@
                         <enumerationValue key="doubleClick">Double click</enumerationValue>
                     </enumerationValues>
                 </property>
-                <property
-                        key="onTrigger"
-                        type="action"
-                        required="false"
-                        dataSource="datasource">
+                <property key="onTrigger" type="action" required="false" dataSource="datasource">
                     <caption>On trigger action</caption>
                     <description />
                 </property>
-                <property
-                        key="selectionMode"
-                        type="enumeration"
-                        defaultValue="single">
+                <property key="selectionMode" type="enumeration" defaultValue="single">
                     <caption>Selection mode</caption>
                     <description />
                     <enumerationValues>
@@ -279,43 +218,28 @@
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Buttons">
-            <property
-                    key="buttons"
-                    type="object"
-                    isList="true"
-                    required="false">
+            <property key="buttons" type="object" isList="true" required="false">
                 <caption>
                             Buttons
-                        </caption>
+                </caption>
                 <description />
                 <properties>
                     <propertyGroup caption="General">
-                        <property
-                                key="caption"
-                                type="string">
+                        <property key="caption" type="string">
                             <caption>Caption</caption>
                             <description />
                         </property>
-                        <property
-                                key="action"
-                                dataSource="../datasource"
-                                type="action">
+                        <property key="action" dataSource="../datasource" type="action">
                             <caption>Action</caption>
                             <description />
                         </property>
-                        <property
-                                key="icon"
-                                type="icon"
-                                required="false">
+                        <property key="icon" type="icon" required="false">
                             <caption>Icon</caption>
                             <description />
                         </property>
                     </propertyGroup>
                     <propertyGroup caption="Appearance">
-                        <property
-                                key="buttonStyle"
-                                type="enumeration"
-                                defaultValue="default">
+                        <property key="buttonStyle" type="enumeration" defaultValue="default">
                             <caption>Button style</caption>
                             <description />
                             <enumerationValues>
@@ -334,50 +258,32 @@
         </propertyGroup>
         <propertyGroup caption="Personalization">
             <propertyGroup caption="Column capabilities">
-                <property
-                        key="columnsSortable"
-                        type="boolean"
-                        defaultValue="true">
+                <property key="columnsSortable" type="boolean" defaultValue="true">
                     <caption>Sorting</caption>
                     <description>Enable sorting for all columns unless specified otherwise in the column setting</description>
                 </property>
-                <property
-                        key="columnsResizable"
-                        type="boolean"
-                        defaultValue="true">
+                <property key="columnsResizable" type="boolean" defaultValue="true">
                     <caption>Resizing</caption>
                     <description>Enable resizing for all columns unless specified otherwise in the column setting</description>
                 </property>
-                <property
-                        key="columnsDraggable"
-                        type="boolean"
-                        defaultValue="true">
+                <property key="columnsDraggable" type="boolean" defaultValue="true">
                     <caption>Reordering</caption>
                     <description>Enable reordering for all columns unless specified otherwise in the column setting</description>
                 </property>
-                <property
-                        key="columnsHidable"
-                        type="boolean"
-                        defaultValue="true">
+                <property key="columnsHidable" type="boolean" defaultValue="true">
                     <caption>Hiding</caption>
                     <description>Enable hiding for all columns unless specified otherwise in the column setting</description>
                 </property>
             </propertyGroup>
             <propertyGroup caption="Configuration">
-                <property
-                        key="configurationAttribute"
-                        type="attribute"
-                        required="false"
-                        onChange="onConfigurationChange">
+                <property key="configurationAttribute" type="attribute" required="false" onChange="onConfigurationChange">
                     <caption>Attribute</caption>
                     <description>Attribute containing the personalized configuration of the capabilities. This configuration is automatically stored and loaded. The attribute requires Unlimited String.</description>
                     <attributeTypes>
                         <attributeType name="String" />
                     </attributeTypes>
                 </property>
-                <property
-                        key="onConfigurationChange"
-                        type="action">
+                <property key="onConfigurationChange" type="action">
                     <caption>On change</caption>
                     <description />
                 </property>
@@ -385,26 +291,16 @@
         </propertyGroup>
         <propertyGroup caption="Filtering">
             <propertyGroup caption="Filters">
-                <property
-                        key="showHeaderFilters"
-                        type="boolean"
-                        defaultValue="false">
+                <property key="showHeaderFilters" type="boolean" defaultValue="false">
                     <caption>Show header filters</caption>
                     <description />
                 </property>
-                <property
-                        key="filterList"
-                        type="object"
-                        isList="true"
-                        required="false">
+                <property key="filterList" type="object" isList="true" required="false">
                     <caption>Filters</caption>
                     <description />
                     <properties>
                         <propertyGroup caption="General">
-                            <property
-                                    key="filter"
-                                    type="attribute"
-                                    dataSource="../datasource">
+                            <property key="filter" type="attribute" dataSource="../datasource">
                                 <caption>Filter attribute</caption>
                                 <description />
                                 <attributeTypes>
@@ -421,10 +317,7 @@
                         </propertyGroup>
                     </properties>
                 </property>
-                <property
-                        key="filtersPlaceholder"
-                        type="widgets"
-                        required="false">
+                <property key="filtersPlaceholder" type="widgets" required="false">
                     <caption>Filters placeholder</caption>
                     <description />
                 </property>
@@ -432,10 +325,7 @@
         </propertyGroup>
         <propertyGroup caption="Accessibility">
             <propertyGroup caption="Accessibility">
-                <property
-                        key="filterSectionTitle"
-                        type="textTemplate"
-                        required="false">
+                <property key="filterSectionTitle" type="textTemplate" required="false">
                     <caption>Filter section title</caption>
                     <description>Assistive technology will read this upon reaching a filtering or sorting section.</description>
                 </property>

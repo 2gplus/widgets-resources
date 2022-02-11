@@ -26,6 +26,11 @@ export type TableColumn = Omit<
     "attribute" | "columnClass" | "content" | "dynamicText" | "filter" | "showContentAs"
 >;
 
+export interface RemoteSortConfig {
+    property?: string;
+    ascending?: boolean;
+}
+
 export interface TableProps<T extends ObjectItem> {
     selectionMode: any;
     cellRenderer: (
@@ -67,6 +72,8 @@ export interface TableProps<T extends ObjectItem> {
     settings?: EditableValue<string>;
     styles?: CSSProperties;
     valueForSort: (value: T, columnIndex: number) => string | Big | boolean | Date | undefined;
+    remoteSortConfig?: RemoteSortConfig;
+    setRemoteSortConfig?: (config: RemoteSortConfig) => void;
 }
 
 export interface ColumnWidth {
@@ -104,6 +111,31 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     const [columnsWidth, setColumnsWidth] = useState<ColumnWidth>(
         Object.fromEntries(props.columns.map((_c, index) => [index.toString(), undefined]))
     );
+    useEffect(() => {
+        if (props.remoteSortConfig && props.remoteSortConfig.property) {
+            const column = props.columns.find(c => c.sortProperty === props.remoteSortConfig?.property);
+            if (column) {
+                const index = props.columns.indexOf(column).toString();
+                const desc = !(props.remoteSortConfig.ascending ?? false);
+                if (!(sortBy.length == 1 && sortBy[0].desc === desc && sortBy[0].id === index)) {
+                    setSortBy([{ id: index, desc: desc }]);
+                }
+            }
+        }
+    }, [props.remoteSortConfig]);
+
+    useEffect(() => {
+        if (props.setRemoteSortConfig) {
+            if (sortBy.length > 0) {
+                props.setRemoteSortConfig({
+                    ascending: !sortBy[0].desc,
+                    property: props.columns[Number.parseInt(sortBy[0].id)].sortProperty
+                });
+            } else {
+                props.setRemoteSortConfig({});
+            }
+        }
+    }, [sortBy]);
 
     const { updateSettings } = useSettings(
         props.settings,
@@ -182,7 +214,11 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                       defaultTrigger === "singleClick"
                                           ? onTrigger
                                           : () => {
-                                                selection.length === 1 ? setSelection([]) : setSelection([value]);
+                                                if (selection.length === 1 && selection[0] === value) {
+                                                    setSelection([]);
+                                                } else {
+                                                    setSelection([value]);
+                                                }
                                             }
                                   }
                                   onDoubleClick={defaultTrigger === "doubleClick" ? onTrigger : undefined}
@@ -207,7 +243,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                       Number(column.id)
                   )
                 : null,
-        [props.cellRenderer, props.columnsHidable, props.preview, visibleColumns]
+        [props.cellRenderer, props.columnsHidable, props.preview, visibleColumns, selection]
     );
 
     const rows = useMemo(() => props.data.map(item => ({ item })), [props.data]);
