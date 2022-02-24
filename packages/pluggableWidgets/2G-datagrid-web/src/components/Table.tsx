@@ -278,6 +278,11 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             page={props.page}
             pageSize={props.pageSize}
             previousPage={() => props.setPage && props.setPage(prev => prev - 1)}
+            labelFirstPage={"Naar eerste pagina"}
+            labelNextPage={"Volgende pagina"}
+            labelLastPage={"Laatste pagina"}
+            labelPreviousPage={"Vorige pagina"}
+
         />
     ) : null;
 

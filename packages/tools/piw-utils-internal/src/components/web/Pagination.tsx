@@ -36,9 +36,22 @@ export function Pagination(props: PaginationProps): ReactElement | null {
         return null;
     }
 
-    const pagingStatus = `${initialItem} to ${lastItem} ${
-        hasLastPage ? `of ${props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize}` : ""
+    let pagingStatus = `${initialItem} "to" ${lastItem} ${
+        hasLastPage ? ` "of" ${props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize}` : ""
     }`;
+
+    // @ts-ignore
+    if (window.metaModel) {
+        // @ts-ignore
+        const languageId = window.metaModel.languages.indexOf(mx.session.sessionData.locale.code);
+        // @ts-ignore
+        const pagination = window.metaModel.systemTexts["mendix.lib.MxDataSource.status"][languageId];
+        console.log(pagination);
+        pagingStatus = pagination
+            .replace("{1}", initialItem)
+            .replace("{2}", lastItem)
+            .replace("{3}", props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize);
+    }
 
     return (
         <div aria-label={props.labelPagination ?? "Pagination"} className="pagination-bar" role="pagination">
