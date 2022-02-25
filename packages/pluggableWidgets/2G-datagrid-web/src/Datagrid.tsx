@@ -176,6 +176,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             )}
             className={props.class}
             buttons={props.buttons}
+            tableLabel={props.tableLabel}
             columns={columns}
             columnsDraggable={props.columnsDraggable}
             columnsFilterable={props.columnsFilterable}

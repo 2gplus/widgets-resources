@@ -47,7 +47,6 @@ export function Pagination(props: PaginationProps): ReactElement | null {
             const metaModel = await fetch(`metamodel.json?${mx.server.getCacheBust()}`).then(x => x.json());
             const languageId = metaModel.languages.indexOf(mx.session.sessionData.locale.code);
             const pagination = metaModel.systemTexts["mendix.lib.MxDataSource.status"][languageId];
-            console.log(pagination);
             setPaginationStatus(
                 pagination
                     .replace("{1}", initialItem)

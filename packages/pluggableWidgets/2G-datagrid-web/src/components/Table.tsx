@@ -14,7 +14,7 @@ import { Header } from "./Header";
 import { AlignmentEnum, ColumnsPreviewType, DefaultTriggerEnum, WidthEnum } from "../../typings/DatagridProps";
 import { Big } from "big.js";
 import classNames from "classnames";
-import { EditableValue, ObjectItem } from "mendix";
+import { DynamicValue, EditableValue, ObjectItem } from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
@@ -74,6 +74,7 @@ export interface TableProps<T extends ObjectItem> {
     valueForSort: (value: T, columnIndex: number) => string | Big | boolean | Date | undefined;
     remoteSortConfig?: RemoteSortConfig;
     setRemoteSortConfig?: (config: RemoteSortConfig) => void;
+    tableLabel?: DynamicValue<string>;
 }
 
 export interface ColumnWidth {
@@ -250,7 +251,6 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>, item?: T) => {
         const { name, checked } = e.target;
-        console.log(item);
         if (checked) {
             if (name === "allSelect") {
                 setSelection(props.data);
@@ -261,7 +261,6 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             if (name === "allSelect") {
                 setSelection([]);
             } else if (item !== undefined) {
-                console.log(item.id);
                 const s = selection.filter(s => s.id !== item.id);
                 setSelection(s);
             }
@@ -312,30 +311,64 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
 
     return (
         <div className={props.className}>
-            <div className="table-actions">
-                {props.buttons.map(button => {
-                    return (
-                        <button
-                            key={null}
-                            className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
-                            onClick={() => {
-                                executeAction(button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem)));
-                            }}
-                        >
-                            <span
-                                className={classNames(
-                                    "glyphicon",
-                                    button.icon ? (button.icon.value as any).iconClass : ""
-                                )}
-                                aria-hidden="true"
-                            ></span>
-                            {button.caption ? button.caption : ""}
-                        </button>
-                    );
-                })}
-            </div>
             <div className="table" role="table">
                 <div className="table-header" role="rowgroup">
+                    {props.tableLabel ? (
+                        <div className={"table-label"}>
+                            <h4>{props.tableLabel?.value}</h4>
+                        </div>
+                    ) : (
+                        ""
+                    )}
+                    <div className="table-actions">
+                        {props.buttons.map(button => {
+                            switch (button.renderMode) {
+                                case "link":
+                                    return (
+                                        <a
+                                            key={null}
+                                            className={classNames("", "mx-link")}
+                                            onClick={() => {
+                                                executeAction(
+                                                    button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
+                                                );
+                                            }}
+                                            href={"#"}
+                                        >
+                                            <span
+                                                className={classNames(
+                                                    "glyphicon",
+                                                    button.icon ? (button.icon.value as any).iconClass : ""
+                                                )}
+                                                aria-hidden="true"
+                                            />
+                                            {button.caption ? button.caption : ""}
+                                        </a>
+                                    );
+                                case "button":
+                                    return (
+                                        <button
+                                            key={null}
+                                            className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
+                                            onClick={() => {
+                                                executeAction(
+                                                    button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
+                                                );
+                                            }}
+                                        >
+                                            <span
+                                                className={classNames(
+                                                    "glyphicon",
+                                                    button.icon ? (button.icon.value as any).iconClass : ""
+                                                )}
+                                                aria-hidden="true"
+                                            />
+                                            {button.caption ? button.caption : ""}
+                                        </button>
+                                    );
+                            }
+                        })}
+                    </div>
                     {props.pagingPosition === "top" && pagination}
                 </div>
                 {props.headerFilters && (

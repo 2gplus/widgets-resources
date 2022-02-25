@@ -55,12 +55,15 @@ export type DefaultTriggerEnum = "singleClick" | "doubleClick";
 
 export type SelectionModeEnum = "single" | "multi";
 
+export type RenderModeEnum = "link" | "button";
+
 export type ButtonStyleEnum = "default" | "inverse" | "primary" | "info" | "success" | "warning" | "danger";
 
 export interface ButtonsType {
     caption: string;
     action?: ListActionValue;
     icon?: DynamicValue<WebIcon>;
+    renderMode: RenderModeEnum;
     buttonStyle: ButtonStyleEnum;
 }
 
@@ -90,6 +93,7 @@ export interface ButtonsPreviewType {
     caption: string;
     action: {} | null;
     icon: { type: "glyph"; iconClass: string } | { type: "image"; imageUrl: string } | null;
+    renderMode: RenderModeEnum;
     buttonStyle: ButtonStyleEnum;
 }
 
@@ -119,6 +123,7 @@ export interface DatagridContainerProps {
     defaultTrigger: DefaultTriggerEnum;
     onTrigger?: ListActionValue;
     selectionMode: SelectionModeEnum;
+    tableLabel?: DynamicValue<string>;
     buttons: ButtonsType[];
     columnsSortable: boolean;
     columnsResizable: boolean;
@@ -152,6 +157,7 @@ export interface DatagridPreviewProps {
     defaultTrigger: DefaultTriggerEnum;
     onTrigger: {} | null;
     selectionMode: SelectionModeEnum;
+    tableLabel: string;
     buttons: ButtonsPreviewType[];
     columnsSortable: boolean;
     columnsResizable: boolean;

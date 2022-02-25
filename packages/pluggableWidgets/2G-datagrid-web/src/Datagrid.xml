@@ -218,6 +218,10 @@
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Buttons">
+            <property key="tableLabel" type="textTemplate" required="false">
+                <caption>Table label</caption>
+                <description>Label to show at the top of the datagrid</description>
+            </property>
             <property key="buttons" type="object" isList="true" required="false">
                 <caption>
                             Buttons
@@ -225,7 +229,7 @@
                 <description />
                 <properties>
                     <propertyGroup caption="General">
-                        <property key="caption" type="string">
+                        <property key="caption" type="string" required="false">
                             <caption>Caption</caption>
                             <description />
                         </property>
@@ -239,7 +243,15 @@
                         </property>
                     </propertyGroup>
                     <propertyGroup caption="Appearance">
-                        <property key="buttonStyle" type="enumeration" defaultValue="default">
+                        <property key="renderMode" type="enumeration" defaultValue="button">
+                            <caption>Render mode</caption>
+                            <description/>
+                            <enumerationValues>
+                                <enumerationValue key="link">Link</enumerationValue>
+                                <enumerationValue key="button">Button</enumerationValue>
+                            </enumerationValues>
+                        </property>
+                        <property key="buttonStyle" type="enumeration" defaultValue="default"  >
                             <caption>Button style</caption>
                             <description />
                             <enumerationValues>
