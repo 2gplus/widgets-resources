@@ -284,6 +284,67 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         />
     ) : null;
 
+    const header = props.buttons?.length > 0 || props.tableLabel?.value ?   <div className="table-header" role="rowgroup">
+        {props.tableLabel?.value ? (
+            <div className={"table-label"}>
+                <h4>{props.tableLabel?.value}</h4>
+            </div>
+        ) : (
+            ""
+        )}
+        <div className="table-actions">
+            {props.buttons.map(button => {
+                switch (button.renderMode) {
+                    case "link":
+                        return (
+                            <a
+                                key={null}
+                                className={classNames("", "mx-link")}
+                                onClick={() => {
+                                    executeAction(
+                                        button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
+                                    );
+                                }}
+                                href={"#"}
+                            >
+                                            <span
+                                                className={classNames(
+                                                    "glyphicon",
+                                                    button.icon ? (button.icon.value as any).iconClass : ""
+                                                )}
+                                                aria-hidden="true"
+                                            />
+                                {button.caption ? button.caption : ""}
+                            </a>
+                        );
+                    case "button":
+                        return (
+                            <button
+                                key={null}
+                                className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
+                                onClick={() => {
+                                    executeAction(
+                                        button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
+                                    );
+                                }}
+                            >
+                                            <span
+                                                className={classNames(
+                                                    "glyphicon",
+                                                    button.icon ? (button.icon.value as any).iconClass : ""
+                                                )}
+                                                aria-hidden="true"
+                                            />
+                                {button.caption ? button.caption : ""}
+                            </button>
+                        );
+                }
+            })}
+        </div>
+        {props.pagingPosition === "top" && pagination}
+    </div>
+        :"";
+
     const cssGridStyles = useMemo(() => {
         const columnSizes = visibleColumns
             .map(c => {
@@ -312,65 +373,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     return (
         <div className={props.className}>
             <div className="table" role="table">
-                <div className="table-header" role="rowgroup">
-                    {props.tableLabel ? (
-                        <div className={"table-label"}>
-                            <h4>{props.tableLabel?.value}</h4>
-                        </div>
-                    ) : (
-                        ""
-                    )}
-                    <div className="table-actions">
-                        {props.buttons.map(button => {
-                            switch (button.renderMode) {
-                                case "link":
-                                    return (
-                                        <a
-                                            key={null}
-                                            className={classNames("", "mx-link")}
-                                            onClick={() => {
-                                                executeAction(
-                                                    button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
-                                                );
-                                            }}
-                                            href={"#"}
-                                        >
-                                            <span
-                                                className={classNames(
-                                                    "glyphicon",
-                                                    button.icon ? (button.icon.value as any).iconClass : ""
-                                                )}
-                                                aria-hidden="true"
-                                            />
-                                            {button.caption ? button.caption : ""}
-                                        </a>
-                                    );
-                                case "button":
-                                    return (
-                                        <button
-                                            key={null}
-                                            className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
-                                            onClick={() => {
-                                                executeAction(
-                                                    button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
-                                                );
-                                            }}
-                                        >
-                                            <span
-                                                className={classNames(
-                                                    "glyphicon",
-                                                    button.icon ? (button.icon.value as any).iconClass : ""
-                                                )}
-                                                aria-hidden="true"
-                                            />
-                                            {button.caption ? button.caption : ""}
-                                        </button>
-                                    );
-                            }
-                        })}
-                    </div>
-                    {props.pagingPosition === "top" && pagination}
-                </div>
+                {header}
                 {props.headerFilters && (
                     <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
                         {props.headerFilters}

@@ -4,17 +4,7 @@
  * @author Mendix UI Content Team
  */
 import { ComponentType, CSSProperties, ReactNode } from "react";
-import {
-    ActionValue,
-    DynamicValue,
-    EditableValue,
-    ListValue,
-    ListActionValue,
-    ListAttributeValue,
-    ListExpressionValue,
-    ListWidgetValue,
-    WebIcon
-} from "mendix";
+import { ActionValue, DynamicValue, EditableValue, ListValue, ListActionValue, ListAttributeValue, ListExpressionValue, ListWidgetValue, WebIcon } from "mendix";
 import { Big } from "big.js";
 
 export type SortingTypeEnum = "local" | "remote";
@@ -92,7 +82,7 @@ export interface ColumnsPreviewType {
 export interface ButtonsPreviewType {
     caption: string;
     action: {} | null;
-    icon: { type: "glyph"; iconClass: string } | { type: "image"; imageUrl: string } | null;
+    icon: { type: "glyph"; iconClass: string; } | { type: "image"; imageUrl: string; } | null;
     renderMode: RenderModeEnum;
     buttonStyle: ButtonStyleEnum;
 }
