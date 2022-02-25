@@ -173,6 +173,7 @@
                     <enumerationValues>
                         <enumerationValue key="bottom">Below grid</enumerationValue>
                         <enumerationValue key="top">Above grid</enumerationValue>
+                        <enumerationValue key="hide">Don't show</enumerationValue>
                     </enumerationValues>
                 </property>
                 <property key="showEmptyPlaceholder" type="enumeration" defaultValue="none">

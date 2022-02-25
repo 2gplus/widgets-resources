@@ -267,7 +267,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         }
     };
 
-    const pagination = props.paging ? (
+    const pagination = props.paging && props.pagingPosition !== "hide" ? (
         <Pagination
             canNextPage={props.hasMoreItems}
             canPreviousPage={props.page !== 0}
@@ -284,7 +284,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         />
     ) : null;
 
-    const header = props.buttons?.length > 0 || props.tableLabel?.value ?   <div className="table-header" role="rowgroup">
+    const header = props.buttons?.length > 0 || props.tableLabel?.value || props.pagingPosition === 'top' ?   <div className="table-header" role="rowgroup">
         {props.tableLabel?.value ? (
             <div className={"table-label"}>
                 <h4>{props.tableLabel?.value}</h4>
@@ -342,6 +342,11 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             })}
         </div>
         {props.pagingPosition === "top" && pagination}
+            {props.tableLabel?.value ? (
+                <hr className={"table-header-line"}/>
+            ) : (
+                ""
+            )}
     </div>
         :"";
 

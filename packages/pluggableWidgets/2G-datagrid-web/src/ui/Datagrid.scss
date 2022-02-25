@@ -44,12 +44,11 @@ div[class^="mx-name-dataGrid2G"]{
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
-        outline: 1px solid #ced0d3;
-        outline-offset: 8px;
+        //outline: 1px solid #ced0d3;
+        //outline-offset: 8px;
         margin-left: 0;
         margin-right: 0;
-        margin-bottom: 16px;
-
+        padding-bottom:8px;
         .pagination-bar
         {
             margin-bottom: 0;
@@ -94,6 +93,12 @@ div[class^="mx-name-dataGrid2G"]{
     .pagination-bar .pagination-button
     {
         padding:0 !important;
+    }
+    .table-header-line
+    {
+        border-bottom: 1px solid #ced0d3;;
+        flex-basis: 100%;
+        margin: 8px 4px 0;
     }
 }
 
