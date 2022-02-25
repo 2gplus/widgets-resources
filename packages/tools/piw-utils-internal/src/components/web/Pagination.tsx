@@ -1,4 +1,4 @@
-import { createElement, Dispatch, HTMLAttributes, ReactElement, SetStateAction } from "react";
+import { createElement, Dispatch, HTMLAttributes, ReactElement, SetStateAction, useEffect, useState } from "react";
 
 export interface PaginationProps {
     canNextPage: boolean;
@@ -36,22 +36,26 @@ export function Pagination(props: PaginationProps): ReactElement | null {
         return null;
     }
 
-    let pagingStatus = `${initialItem} "to" ${lastItem} ${
-        hasLastPage ? ` "of" ${props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize}` : ""
-    }`;
+    const [paginationStatus, setPaginationStatus] = useState<string>(
+        `${initialItem} "to" ${lastItem} ${
+            hasLastPage ? ` "of" ${props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize}` : ""
+        }`
+    );
 
-    // @ts-ignore
-    if (window.metaModel) {
-        // @ts-ignore
-        const languageId = window.metaModel.languages.indexOf(mx.session.sessionData.locale.code);
-        // @ts-ignore
-        const pagination = window.metaModel.systemTexts["mendix.lib.MxDataSource.status"][languageId];
-        console.log(pagination);
-        pagingStatus = pagination
-            .replace("{1}", initialItem)
-            .replace("{2}", lastItem)
-            .replace("{3}", props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize);
-    }
+    useEffect(() => {
+        (async () => {
+            const metaModel = await fetch(`metamodel.json?${mx.server.getCacheBust()}`).then(x => x.json());
+            const languageId = metaModel.languages.indexOf(mx.session.sessionData.locale.code);
+            const pagination = metaModel.systemTexts["mendix.lib.MxDataSource.status"][languageId];
+            console.log(pagination);
+            setPaginationStatus(
+                pagination
+                    .replace("{1}", initialItem)
+                    .replace("{2}", lastItem)
+                    .replace("{3}", props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize)
+            );
+        })();
+    }, []);
 
     return (
         <div aria-label={props.labelPagination ?? "Pagination"} className="pagination-bar" role="pagination">
@@ -78,10 +82,10 @@ export function Pagination(props: PaginationProps): ReactElement | null {
                 <span aria-hidden className="glyphicon glyphicon-backward" />
             </button>
             <span className="sr-only sr-only-focusable">
-                {props.labelPagingStatus ?? "Currently showing"} {pagingStatus}
+                {props.labelPagingStatus ?? "Currently showing"} {paginationStatus}
             </span>
             <div aria-hidden className="paging-status">
-                {pagingStatus}
+                {paginationStatus}
             </div>
             <button
                 aria-label={props.labelNextPage ?? "Go to next page"}

@@ -117,8 +117,8 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             if (column) {
                 const index = props.columns.indexOf(column).toString();
                 const desc = !(props.remoteSortConfig.ascending ?? false);
-                if (!(sortBy.length == 1 && sortBy[0].desc === desc && sortBy[0].id === index)) {
-                    setSortBy([{ id: index, desc: desc }]);
+                if (!(sortBy.length === 1 && sortBy[0].desc === desc && sortBy[0].id === index)) {
+                    setSortBy([{ id: index, desc }]);
                 }
             }
         }
@@ -129,7 +129,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             if (sortBy.length > 0) {
                 props.setRemoteSortConfig({
                     ascending: !sortBy[0].desc,
-                    property: props.columns[Number.parseInt(sortBy[0].id)].sortProperty
+                    property: props.columns[Number.parseInt(sortBy[0].id, 10)].sortProperty
                 });
             } else {
                 props.setRemoteSortConfig({});
@@ -262,7 +262,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                 setSelection([]);
             } else if (item !== undefined) {
                 console.log(item.id);
-                let s = selection.filter(s => s.id !== item.id);
+                const s = selection.filter(s => s.id !== item.id);
                 setSelection(s);
             }
         }
@@ -282,7 +282,6 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             labelNextPage={"Volgende pagina"}
             labelLastPage={"Laatste pagina"}
             labelPreviousPage={"Vorige pagina"}
-
         />
     ) : null;
 
@@ -312,11 +311,12 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     }, [columnsWidth, visibleColumns, props.columnsHidable]);
 
     return (
-        <div className={props.className} style={props.styles}>
+        <div className={props.className}>
             <div className="table-actions">
                 {props.buttons.map(button => {
                     return (
                         <button
+                            key={null}
                             className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
                             onClick={() => {
                                 executeAction(button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem)));
@@ -329,7 +329,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                 )}
                                 aria-hidden="true"
                             ></span>
-                            {button.caption}
+                            {button.caption ? button.caption : ""}
                         </button>
                     );
                 })}
