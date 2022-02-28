@@ -5,12 +5,16 @@ div[class^="mx-name-dataGrid2G"]{
         margin-bottom: 0;
     }
 
-    .tr.selected {
-        .td {
-            background-color: ligthen($grid-border-color, 5%);
+    .tr {
+        &:hover, &.selected {
+            .td {
+                background-color: lighten($grid-border-color, 5%);
+            }
+        }
+        &.selected:hover .td {
+            background-color: lighten($grid-border-color, 2.5%);
         }
     }
-
     .table-actions {
         margin-bottom: 0;
 
@@ -19,12 +23,6 @@ div[class^="mx-name-dataGrid2G"]{
     .table {
         .th {
             padding: 8px;
-        }
-    }
-
-    .tr.selected {
-        .td {
-            background-color: lighten($grid-border-color, 5%);
         }
     }
     .white-space-pre
