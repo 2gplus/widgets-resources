@@ -1,0 +1,1017 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table renders the structure correctly 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly for preview when no header is provided 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label=""
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title=""
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-center"
+              id="0"
+            >
+              <span>
+                 
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with column alignments 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr 1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-center"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-label="Test 2"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test 2"
+        >
+          <div
+            class="column-container"
+            id="1"
+          >
+            <div
+              class="column-header align-column-right"
+              id="1"
+            >
+              <span>
+                Test 2
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test 2
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with custom filtering 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+            <input
+              type="text"
+              value="dummy"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with dragging 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with dynamic row class 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr myclass"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with empty placeholder 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with filtering 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+            <input
+              type="text"
+              value="dummy"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with header filters and a11y 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      aria-label="filter title"
+      class="header-filters"
+      role="rowgroup"
+    >
+      <div
+        class="my-custom-filters"
+      >
+        <span />
+      </div>
+    </div>
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with header wrapper 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="my-custom-header"
+        >
+          <div
+            aria-label="Test"
+            class="th"
+            role="columnheader"
+            style="cursor:unset"
+            title="Test"
+          >
+            <div
+              class="column-container"
+              id="0"
+            >
+              <div
+                class="column-header align-column-left"
+                id="0"
+              >
+                <span>
+                  Test
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with hiding 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr fit-content(50px)"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-label="Column selector"
+          class="th column-selector"
+          role="columnheader"
+          title="Column selector"
+        >
+          <div
+            class="column-selector-content"
+          >
+            <button
+              aria-controls="undefined-column-selectors"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="Column selector"
+              class="btn btn-default column-selector-button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-eye fa-w-18 "
+                data-icon="eye"
+                data-prefix="far"
+                focusable="false"
+                role="img"
+                viewBox="0 0 576 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+        <div
+          aria-hidden="true"
+          class="td column-selector td-borders"
+        />
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with paging 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    >
+      <div
+        aria-label="Pagination"
+        class="pagination-bar"
+        role="pagination"
+      >
+        <button
+          aria-label="Go to first page"
+          class="btn pagination-button"
+        >
+          <span
+            aria-hidden="true"
+            class="glyphicon glyphicon-step-backward"
+          />
+        </button>
+        <button
+          aria-label="Go to previous page"
+          class="btn pagination-button"
+        >
+          <span
+            aria-hidden="true"
+            class="glyphicon glyphicon-backward"
+          />
+        </button>
+        <span
+          class="sr-only sr-only-focusable"
+        >
+          Currently showing 11 to 20 
+        </span>
+        <div
+          aria-hidden="true"
+          class="paging-status"
+        >
+          11 to 20 
+        </div>
+        <button
+          aria-label="Go to next page"
+          class="btn pagination-button"
+          disabled=""
+        >
+          <span
+            aria-hidden="true"
+            class="glyphicon glyphicon-forward"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with resizing 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
+
+exports[`Table renders the structure correctly with sorting 1`] = `
+<div
+  class="test"
+>
+  <div
+    class="table"
+    role="table"
+  >
+    <div
+      class="table-header"
+      role="rowgroup"
+    />
+    <div
+      class="table-content infinite-loading"
+      role="rowgroup"
+      style="grid-template-columns:1fr"
+    >
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          aria-label="Test"
+          class="th"
+          role="columnheader"
+          style="cursor:unset"
+          title="Test"
+        >
+          <div
+            class="column-container"
+            id="0"
+          >
+            <div
+              class="column-header align-column-left"
+              id="0"
+            >
+              <span>
+                Test
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tr"
+        role="row"
+      >
+        <div
+          class="td td-borders"
+          role="cell"
+        >
+          Test
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-footer"
+      role="rowgroup"
+    />
+  </div>
+</div>
+`;
