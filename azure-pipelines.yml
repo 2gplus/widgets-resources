@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
+  - task: Npm@1
+    inputs:
+      command: 'install'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      workingDir: '/packages/pluggableWidgets/datagrid-web'
+      customCommand: 'run build'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '/packages/pluggableWidgets/datagrid-web/dist/*/*.mpk'
+      ArtifactName: 'com.mendix.widget.web.Datagrid.mpk'
+      publishLocation: 'Container'
+
+
