@@ -20,9 +20,11 @@ steps:
     inputs:
       version: '14.x'
   - task: Npm@1
+    displayName: 'npm install'
     inputs:
       command: 'install'
   - task: Npm@1
+    displayName: 'Update build number'
     inputs:
       command: 'custom'
       customCommand: '--no-git-tag-version version $(Build.BuildNumber)'
