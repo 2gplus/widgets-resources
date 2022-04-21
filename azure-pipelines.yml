@@ -14,12 +14,6 @@ steps:
       script: |
         $version = node -p "require('./packages/pluggableWidgets/datagrid-web/package.json').version"
         Write-Host "##vso[task.setvariable variable=packageVersion;]$version"
-        Write-Host "$version"
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        Write-Host "$(packageVersion)"
   - task: Npm@1
     displayName: 'npm install'
     inputs:
@@ -30,10 +24,11 @@ steps:
       command: 'custom'
       workingDir: 'packages/pluggableWidgets/datagrid-web'
       customCommand: 'run build'
-  - task: PublishBuildArtifacts@1
+  - task: 2G-ProgetFeedUpload@0
     inputs:
-      PathtoPublish: 'packages/pluggableWidgets/datagrid-web/dist/$(packageVersion)/com.mendix.widget.web.Datagrid.mpk'
-      ArtifactName: 'com.mendix.widget.web.Datagrid.mpk'
-      publishLocation: 'Container'
+      progetServiceName: '2G Proget'
+      progetFeedName: 'mendix-widgets'
+      pathToPublish: 'packages/pluggableWidgets/datagrid-web/dist/$(packageVersion)'
+      packageNameVersionRegex: '*.mpk'
 
 
