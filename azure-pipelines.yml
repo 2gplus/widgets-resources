@@ -17,11 +17,11 @@ steps:
     displayName: 'npm run build'
     inputs:
       command: 'custom'
-      workingDir: '/packages/pluggableWidgets/datagrid-web'
+      workingDir: 'packages/pluggableWidgets/datagrid-web'
       customCommand: 'run build'
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '/packages/pluggableWidgets/datagrid-web/dist/*/*.mpk'
+      PathtoPublish: 'packages/pluggableWidgets/datagrid-web/dist/*/*.mpk'
       ArtifactName: 'com.mendix.widget.web.Datagrid.mpk'
       publishLocation: 'Container'
 
