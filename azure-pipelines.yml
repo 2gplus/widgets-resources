@@ -8,6 +8,17 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '14.x'
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        $version = node -p "require('./package.json').version"
+        Write-Host "##vso[task.setvariable variable=packageVersion;]$version"
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        Write-Host "$(packageVersion)"
   - task: Npm@1
     displayName: 'npm install'
     inputs:
@@ -20,7 +31,7 @@ steps:
       customCommand: 'run build'
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: 'packages/pluggableWidgets/datagrid-web/dist/*/*.mpk'
+      PathtoPublish: 'packages/pluggableWidgets/datagrid-web/dist/$(packageVersion)/com.mendix.widget.web.Datagrid.mpk'
       ArtifactName: 'com.mendix.widget.web.Datagrid.mpk'
       publishLocation: 'Container'
 
