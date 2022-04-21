@@ -28,7 +28,7 @@ steps:
     inputs:
       progetServiceName: '2G Proget'
       progetFeedName: 'mendix-widgets'
-      pathToPublish: 'packages/pluggableWidgets/datagrid-web/dist/$(packageVersion)'
-      packageNameVersionRegex: '*.mpk'
+      pathToPublish: 'packages/pluggableWidgets'
+      packageNameVersionRegex: '(datagrid-web)\/dist\/(\d+.\d+.\d)\/.*.mpk'
 
 
