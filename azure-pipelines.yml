@@ -2,33 +2,58 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+
+variables:
+  projectName: 'Mendix.Widgets.Datagrid-web'
 pool: Windows Build
 
+
 steps:
-  - task: NodeTool@0
+  - task: BuildServer@0
+    displayName: 'Get version'
     inputs:
-      versionSpec: '14.x'
-  - task: PowerShell@2
+      buildServerServiceName: 'BuildServer 2G'
+      buildServerProject: $(projectName)
+      buildType: 'milestone'
+      command: start
+  - task: UseNode@1
     inputs:
-      targetType: 'inline'
-      script: |
-        $version = node -p "require('./packages/pluggableWidgets/datagrid-web/package.json').version"
-        Write-Host "##vso[task.setvariable variable=packageVersion;]$version"
+      version: '14.x'
   - task: Npm@1
-    displayName: 'npm install'
     inputs:
       command: 'install'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: '--no-git-tag-version version $(Build.BuildNumber)'
   - task: Npm@1
     displayName: 'npm run build'
     inputs:
       command: 'custom'
       workingDir: 'packages/pluggableWidgets/datagrid-web'
       customCommand: 'run build'
+  - task: BuildServer@0
+    condition: failed()
+    displayName: 'Abort version'
+    inputs:
+      buildServerServiceName: 'BuildServer 2G'
+      buildServerProject: $(projectName)
+      buildType: 'milestone'
+      command: abort
+  - task: BuildServer@0
+    condition: succeeded()
+    displayName: 'Commit version'
+    inputs:
+      buildServerServiceName: 'BuildServer 2G'
+      buildServerProject: $(projectName)
+      buildType: 'milestone'
+      command: 'commit'
+ 
   - task: 2G-ProgetFeedUpload@0
     inputs:
       progetServiceName: '2G Proget'
       progetFeedName: 'upack/mendix-widgets'
-      pathToPublish: 'packages/pluggableWidgets/datagrid-web/dist/$(packageVersion)/com.mendix.widget.web.Datagrid.mpk'
+      pathToPublish: 'packages/pluggableWidgets/datagrid-web/dist/$(Build.BuildNumber)/com.mendix.widget.web.Datagrid.mpk'
       packageNameVersionRegex: 'datagrid-web\/dist\/(?<version>\d+.\d+.\d)\/(?<name>.*).mpk'
 
 
