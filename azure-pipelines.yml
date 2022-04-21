@@ -12,7 +12,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        $version = node -p "require('./package.json').version"
+        $version = node -p "require('./packages/pluggableWidgets/datagrid-web/package.json').version"
         Write-Host "##vso[task.setvariable variable=packageVersion;]$version"
         Write-Host "$version"
   - task: PowerShell@2
