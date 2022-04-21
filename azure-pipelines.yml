@@ -27,6 +27,7 @@ steps:
     displayName: 'Update build number'
     inputs:
       command: 'custom'
+      workingDir: 'packages/pluggableWidgets/datagrid-web'
       customCommand: '--no-git-tag-version version $(Build.BuildNumber)'
   - task: Npm@1
     displayName: 'npm run build'
