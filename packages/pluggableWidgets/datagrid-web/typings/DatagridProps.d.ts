@@ -55,6 +55,8 @@ export type PagingPositionEnum = "bottom" | "top";
 
 export type ShowEmptyPlaceholderEnum = "none" | "custom";
 
+export type DefaultTriggerEnum = "singleClick" | "doubleClick";
+
 export interface FilterListType {
     filter: ListAttributeValue<string | Big | boolean | Date>;
 }
@@ -126,6 +128,7 @@ export interface DatagridContainerProps {
     emptyPlaceholder?: ReactNode;
     rowClass?: ListExpressionValue<string>;
     onClick?: ListActionValue;
+    defaultTrigger: DefaultTriggerEnum;
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;
@@ -160,6 +163,7 @@ export interface DatagridPreviewProps {
     emptyPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     rowClass: string;
     onClick: {} | null;
+    defaultTrigger: DefaultTriggerEnum;
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;

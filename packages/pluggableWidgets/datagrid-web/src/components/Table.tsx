@@ -14,6 +14,7 @@ import {
     AlignmentEnum,
     ButtonsType,
     ColumnsPreviewType,
+    DefaultTriggerEnum,
     SelectionModeEnum,
     WidthEnum
 } from "../../typings/DatagridProps";
@@ -69,7 +70,7 @@ export interface TableProps<T extends ObjectItem> {
     /**
      * Custom 2G props
      */
-
+    defaultTrigger: DefaultTriggerEnum;
     buttons: ButtonsType[];
     selectionMode: SelectionModeEnum;
     remoteSortConfig?: RemoteSortConfig;
@@ -185,6 +186,15 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             visibleColumns.find(c => c.id === column.id) || props.preview
                 ? props.cellRenderer(
                       (children, className, onClick) => {
+                          let singleClick;
+                          let doubleClick;
+                          switch (props.defaultTrigger) {
+                              case "singleClick":
+                                  singleClick = onClick;
+                                  break;
+                              case "doubleClick":
+                                  doubleClick = onClick;
+                          }
                           return (
                               <div
                                   key={`row_${value.id}_cell_${column.id}`}
@@ -192,7 +202,8 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                       clickable: !!onClick,
                                       "hidden-column-preview": props.preview && props.columnsHidable && column.hidden
                                   })}
-                                  onClick={onClick}
+                                  onClick={singleClick}
+                                  onDoubleClick={doubleClick}
                                   onKeyDown={
                                       onClick
                                           ? e => {

@@ -131,6 +131,7 @@ export function preview(props: DatagridPreviewProps): ReactElement {
             valueForSort={useCallback(() => undefined, [])}
             buttons={[]}
             selectionMode={"single"}
+            defaultTrigger={"singleClick"}
         />
     );
 }

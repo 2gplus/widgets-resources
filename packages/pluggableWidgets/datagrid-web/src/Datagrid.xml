@@ -212,6 +212,15 @@
                     <caption>On click action</caption>
                     <description />
                 </property>
+
+                <property key="defaultTrigger" type="enumeration" defaultValue="doubleClick">
+                    <caption>Default Trigger</caption>
+                    <description />
+                    <enumerationValues>
+                        <enumerationValue key="singleClick">Single click</enumerationValue>
+                        <enumerationValue key="doubleClick">Double click</enumerationValue>
+                    </enumerationValues>
+                </property>
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Personalization">

@@ -279,6 +279,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             tableLabel={props.tableLabel}
             remoteSortConfig={remoteSortConfig}
             setRemoteSortConfig={setRemoteSortConfig}
+            defaultTrigger={props.defaultTrigger}
         />
     );
 }
