@@ -3,7 +3,7 @@ import { ColumnsType, DatagridContainerProps } from "../typings/DatagridProps";
 import { FilterCondition } from "mendix/filters";
 import { and } from "mendix/filters/builders";
 
-import { Table, TableColumn } from "./components/Table";
+import { RemoteSortConfig, Table, TableColumn } from "./components/Table";
 import {
     FilterFunction,
     FilterType,
@@ -14,6 +14,8 @@ import {
 import { isAvailable } from "@mendix/piw-utils-internal";
 import { extractFilters } from "./utils/filters";
 import { useCellRenderer } from "./utils/useCellRenderer";
+
+import "./ui/Datagrid.scss";
 
 export default function Datagrid(props: DatagridContainerProps): ReactElement {
     const id = useRef(`DataGrid${generateUUID()}`);
@@ -31,6 +33,9 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
 
     useEffect(() => {
         props.datasource.requestTotalCount(true);
+        if (props.datasource.totalCount) {
+            setTotalCount(props.datasource.totalCount);
+        }
         if (props.datasource.limit === Number.POSITIVE_INFINITY) {
             props.datasource.setLimit(props.pageSize);
         }
@@ -43,7 +48,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     }, [props.datasource, props.configurationAttribute, filtered]);
 
     const setPage = useCallback(
-        computePage => {
+        (computePage: any) => {
             const newPage = computePage(currentPage);
             if (isInfiniteLoad) {
                 props.datasource.setLimit(newPage * props.pageSize);
@@ -74,7 +79,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
         props.datasource.setFilter(viewStateFilters.current);
     }
 
-    if (sortParameters) {
+    if (props.sortingType === "local" && sortParameters) {
         props.datasource.setSortOrder([
             [props.columns[sortParameters.columnIndex].attribute!.id, sortParameters.desc ? "desc" : "asc"]
         ]);
@@ -102,7 +107,83 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             ),
         [props.filterList, viewStateFilters.current]
     );
+    /** Remote sorting
+     *
+     */
+    const [remoteSortConfig, setRemoteSortConfig] = useState<RemoteSortConfig>({
+        ascending: props.sortAscending?.value,
+        property: props.sortAttribute?.value
+    });
+    useEffect(() => {
+        if (props.sortingType === "remote") {
+            if (
+                props.sortAscending?.value !== remoteSortConfig.ascending ||
+                props.sortAttribute?.value !== remoteSortConfig.property
+            ) {
+                setRemoteSortConfig({
+                    ascending: props.sortAscending?.value,
+                    property: props.sortAttribute?.value
+                });
+            }
+        }
+    }, [props.sortAscending, props.sortAttribute]);
+    useEffect(() => {
+        if (props.sortingType === "remote") {
+            let changed = false;
+            // check if any property is set
+            if (remoteSortConfig.property) {
+                if (remoteSortConfig.ascending != null && remoteSortConfig.ascending !== props.sortAscending?.value) {
+                    props.sortAscending?.setValue(remoteSortConfig.ascending);
+                    changed = true;
+                }
+                if (remoteSortConfig.property && remoteSortConfig.property !== props.sortAttribute?.value) {
+                    props.sortAttribute?.setValue(remoteSortConfig.property);
+                    changed = true;
+                }
+            } else {
+                if (props.sortAttribute?.value) {
+                    props.sortAttribute?.setValue(undefined);
+                    changed = true;
+                }
+            }
+            if (changed) {
+                props.onSortChangedAction?.execute();
+            }
+        }
+    }, [remoteSortConfig]);
+    /**
+     * End Remote Sorting
+     */
+    const [totalCount, setTotalCount] = useState<number>();
 
+    // /**
+    //  * 2G custom button state
+    //  */
+    // const [selection, setSelection] = useState<ObjectItem[]>([]);
+    // /**
+    //  * Update the selected ObjectItme list.
+    //  * @param item
+    //  */
+    // const updateSelection = (item: ObjectItem): void => {
+    //     switch (props.selectionMode) {
+    //         case "single":
+    //             setSelection([item]);
+    //             break;
+    //         case "multi":
+    //             const selectedItem = selection.indexOf(item);
+    //             let newSelection: ObjectItem[] = [];
+    //             if (selectedItem > -1) {
+    //                 newSelection = selection.filter(x => x.id !== item.id);
+    //             } else {
+    //                 newSelection = [...selection, item];
+    //             }
+    //             for (const select of newSelection) {
+    //                 console.log(select.id);
+    //             }
+    //             setSelection(newSelection);
+    //             break;
+    //     }
+    // };
     return (
         <Table
             cellRenderer={cellRenderer}
@@ -115,7 +196,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             columnsSortable={props.columnsSortable}
             data={props.datasource.items ?? []}
             emptyPlaceholderRenderer={useCallback(
-                renderWrapper =>
+                (renderWrapper: any) =>
                     props.showEmptyPlaceholder === "custom" ? renderWrapper(props.emptyPlaceholder) : <div />,
                 [props.emptyPlaceholder, props.showEmptyPlaceholder]
             )}
@@ -173,12 +254,12 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                 [FilterContext, customFiltersState, filterList, multipleInitialFilters, props.filtersPlaceholder]
             )}
             id={id.current}
-            numberOfItems={props.datasource.totalCount}
+            numberOfItems={totalCount}
             page={currentPage}
             pageSize={props.pageSize}
             paging={props.pagination === "buttons"}
             pagingPosition={props.pagingPosition}
-            rowClass={useCallback(value => props.rowClass?.get(value)?.value ?? "", [props.rowClass])}
+            rowClass={useCallback((value: any) => props.rowClass?.get(value)?.value ?? "", [props.rowClass])}
             setPage={setPage}
             setSortParameters={setSortParameters}
             settings={props.configurationAttribute}
@@ -190,6 +271,14 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                 },
                 [props.columns]
             )}
+            /**
+             * Custom 2G props
+             */
+            buttons={props.buttons}
+            selectionMode={props.selectionMode}
+            tableLabel={props.tableLabel}
+            remoteSortConfig={remoteSortConfig}
+            setRemoteSortConfig={setRemoteSortConfig}
         />
     );
 }

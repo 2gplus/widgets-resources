@@ -22,3 +22,15 @@ svg {
         }
     }
 }
+.table {
+    .table-content {
+        .tr {
+            &.selected {
+                background: $gray-lighter;
+            }
+            &:hover {
+                background: $gray-primary;
+            }
+        }
+    }
+}

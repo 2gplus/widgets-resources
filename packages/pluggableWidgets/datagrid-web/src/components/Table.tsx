@@ -1,22 +1,30 @@
 import {
-    createElement,
     CSSProperties,
     ReactElement,
     ReactNode,
     useCallback,
     useEffect,
     useMemo,
-    useState
+    useState,
+    createElement
 } from "react";
 import { ColumnSelector } from "./ColumnSelector";
 import { Header } from "./Header";
-import { AlignmentEnum, ColumnsPreviewType, WidthEnum } from "../../typings/DatagridProps";
+import {
+    AlignmentEnum,
+    ButtonsType,
+    ColumnsPreviewType,
+    SelectionModeEnum,
+    WidthEnum
+} from "../../typings/DatagridProps";
 import { Big } from "big.js";
 import classNames from "classnames";
-import { EditableValue, ObjectItem } from "mendix";
+import { EditableValue, ObjectItem, DynamicValue } from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
+import { Button } from "../utils/Button";
+import { executeAction } from "@mendix/piw-utils-internal/dist/functions";
 
 export type TableColumn = Omit<
     ColumnsPreviewType,
@@ -58,6 +66,19 @@ export interface TableProps<T extends ObjectItem> {
     settings?: EditableValue<string>;
     styles?: CSSProperties;
     valueForSort: (value: T, columnIndex: number) => string | Big | boolean | Date | undefined;
+    /**
+     * Custom 2G props
+     */
+
+    buttons: ButtonsType[];
+    selectionMode: SelectionModeEnum;
+    remoteSortConfig?: RemoteSortConfig;
+    setRemoteSortConfig?: (config: RemoteSortConfig) => void;
+    tableLabel?: DynamicValue<string>;
+}
+export interface RemoteSortConfig {
+    property?: string;
+    ascending?: boolean;
 }
 
 export interface ColumnWidth {
@@ -94,6 +115,10 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     const [columnsWidth, setColumnsWidth] = useState<ColumnWidth>(
         Object.fromEntries(props.columns.map((_c, index) => [index.toString(), undefined]))
     );
+    /**
+     * 2G custom button state
+     */
+    const [selection, setSelection] = useState<ObjectItem[]>([]);
 
     const { updateSettings } = useSettings(
         props.settings,
@@ -228,12 +253,54 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             gridTemplateColumns: columnSizes + (props.columnsHidable ? " fit-content(50px)" : "")
         };
     }, [columnsWidth, visibleColumns, props.columnsHidable]);
-
+    /**
+     * Update the selected ObjectItme list.
+     * @param item
+     */
+    const updateSelection = (item: ObjectItem): void => {
+        switch (props.selectionMode) {
+            case "single":
+                setSelection([item]);
+                break;
+            case "multi":
+                const selectedItem = selection.indexOf(item);
+                let newSelection: ObjectItem[] = [];
+                if (selectedItem > -1) {
+                    newSelection = selection.filter(x => x.id !== item.id);
+                } else {
+                    newSelection = [...selection, item];
+                }
+                for (const select of newSelection) {
+                    console.log(select.id);
+                }
+                setSelection(newSelection);
+                break;
+        }
+    };
+    const tableLabel = (): ReactNode => {
+        if (props.tableLabel?.value) {
+            return (
+                <div className={"table-label"}>
+                    <h4>{props.tableLabel?.value}</h4>
+                </div>
+            );
+        }
+        return null;
+    };
+    const tableLine = (): ReactNode => {
+        if (props.tableLabel?.value) {
+            return <hr className={"table-header-line"} />;
+        }
+        return null;
+    };
     return (
         <div className={props.className} style={props.styles}>
             <div className="table" role="table">
                 <div className="table-header" role="rowgroup">
+                    {tableLabel()}
+                    {mapButtons(props.buttons, selection)}
                     {props.pagingPosition === "top" && pagination}
+                    {tableLine()}
                 </div>
                 {props.headerFilters && (
                     <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
@@ -296,8 +363,13 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                     {rows.map((row, rowIndex) => {
                         return (
                             <div
+                                onClick={() => updateSelection(row.item)}
                                 key={`row_${row.item.id}`}
-                                className={classNames("tr", props.rowClass?.(row.item))}
+                                className={classNames(
+                                    "tr",
+                                    props.rowClass?.(row.item),
+                                    selection.find(x => x.id === row.item.id) ? "selected" : ""
+                                )}
                                 role="row"
                             >
                                 {visibleColumns.map(cell => renderCell(cell, row.item, rowIndex))}
@@ -341,4 +413,30 @@ function sortColumns(columnsOrder: string[], columnA: ColumnProperty, columnB: C
         columnBValue = Number(columnB.id);
     }
     return columnAValue < columnBValue ? -1 : columnAValue > columnBValue ? 1 : 0;
+}
+
+function mapButtons(buttons: ButtonsType[], selection: ObjectItem[]): ReactNode {
+    return (
+        <div className="table-actions">
+            {buttons.map(btn => {
+                const action = btn.action;
+                if (action) {
+                    return Button(btn, () => {
+                        if (selection && selection.length > 0) {
+                            for (const entry of selection) {
+                                executeAction(action.get(entry));
+                            }
+                        }
+                    });
+                }
+                const actionNoContext = btn.actionNoContext;
+                if (actionNoContext) {
+                    return Button(btn, () => {
+                        executeAction(actionNoContext);
+                    });
+                }
+                return null;
+            })}
+        </div>
+    );
 }

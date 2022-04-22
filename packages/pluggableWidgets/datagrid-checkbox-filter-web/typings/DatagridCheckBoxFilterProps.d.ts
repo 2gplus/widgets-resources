@@ -25,8 +25,10 @@ export interface DatagridCheckBoxFilterContainerProps {
 }
 
 export interface DatagridCheckBoxFilterPreviewProps {
-    class: string;
+    className: string;
     style: string;
+    styleObject?: CSSProperties;
+    readOnly: boolean;
     advanced: boolean;
     defaultValue: string;
     defaultFilter: DefaultFilterEnum;

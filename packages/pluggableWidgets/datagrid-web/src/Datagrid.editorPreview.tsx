@@ -31,7 +31,8 @@ export function preview(props: DatagridPreviewProps): ReactElement {
                       size: 1,
                       sortable: false,
                       alignment: "left",
-                      wrapText: false
+                      wrapText: false,
+                      sortProperty: "property"
                   }
               ];
 
@@ -128,6 +129,8 @@ export function preview(props: DatagridPreviewProps): ReactElement {
             preview
             styles={parseStyle(props.style)}
             valueForSort={useCallback(() => undefined, [])}
+            buttons={[]}
+            selectionMode={"single"}
         />
     );
 }

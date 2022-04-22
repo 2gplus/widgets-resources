@@ -31,6 +31,7 @@ export function Pagination(props: PaginationProps): ReactElement | null {
             props.setPaginationIndex(page);
         }
     };
+    let pagination = "";
 
     if (props.numberOfItems === 0) {
         return null;
@@ -41,20 +42,21 @@ export function Pagination(props: PaginationProps): ReactElement | null {
             hasLastPage ? ` "of" ${props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize}` : ""
         }`
     );
-
     useEffect(() => {
-        (async () => {
-            const metaModel = await fetch(`metamodel.json?${mx.server.getCacheBust()}`).then(x => x.json());
+        const metaModel = async (): Promise<void> => {
+            const response = await fetch(`metamodel.json?${mx.server.getCacheBust()}`);
+            const metaModel = await response.json();
             const languageId = metaModel.languages.indexOf(mx.session.sessionData.locale.code);
-            const pagination = metaModel.systemTexts["mendix.lib.MxDataSource.status"][languageId];
+            pagination = metaModel.systemTexts["mendix.lib.MxDataSource.status"][languageId];
             setPaginationStatus(
                 pagination
-                    .replace("{1}", initialItem)
-                    .replace("{2}", lastItem)
-                    .replace("{3}", props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize)
+                    .replace("{1}", String(initialItem))
+                    .replace("{2}", String(lastItem))
+                    .replace("{3}", String(props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize))
             );
-        })();
-    }, []);
+        };
+        metaModel().catch(console.error);
+    }, [props.numberOfItems, props.pageSize, numberOfPages, props.page]);
 
     return (
         <div aria-label={props.labelPagination ?? "Pagination"} className="pagination-bar" role="pagination">

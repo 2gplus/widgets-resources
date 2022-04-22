@@ -148,7 +148,8 @@ export const getPreview = (values: DatagridPreviewProps, isDarkMode: boolean): S
                   size: 1,
                   sortable: false,
                   alignment: "left",
-                  wrapText: false
+                  wrapText: false,
+                  sortProperty: "property"
               }
           ];
     const columns: RowLayoutProps = {

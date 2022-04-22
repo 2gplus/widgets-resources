@@ -130,7 +130,6 @@ export interface DatagridContainerProps {
     columnsDraggable: boolean;
     columnsHidable: boolean;
     configurationAttribute?: EditableValue<string>;
-    onConfigurationChange?: ActionValue;
     showHeaderFilters: boolean;
     filterList: FilterListType[];
     filtersPlaceholder?: ReactNode;
@@ -138,8 +137,10 @@ export interface DatagridContainerProps {
 }
 
 export interface DatagridPreviewProps {
-    class: string;
+    className: string;
     style: string;
+    styleObject?: CSSProperties;
+    readOnly: boolean;
     advanced: boolean;
     datasource: {} | { type: string } | null;
     sortingType: SortingTypeEnum;
