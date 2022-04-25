@@ -9,6 +9,7 @@ import {
     Properties,
     RowLayoutProps,
     StructurePreviewProps,
+    TextProps,
     transformGroupsIntoTabs
 } from "@mendix/piw-utils-internal";
 import { ColumnsPreviewType, DatagridPreviewProps } from "../typings/DatagridProps";
@@ -292,6 +293,47 @@ export const getPreview = (values: DatagridPreviewProps, isDarkMode: boolean): S
                 : content;
         })
     };
+    const button: RowLayoutProps = {
+        type: "RowLayout",
+        columnSize: "grow",
+        backgroundColor: isDarkMode ? "#3B5C8F" : "#DAEFFB",
+        borders: true,
+        borderWidth: 1,
+        children: []
+    };
+    button.children = values.buttons.map(btn => {
+        const container = {
+            type: "Container",
+            borders: true,
+            backgroundColor: isDarkMode ? "#4F4F4F" : "#DCDCDC",
+            children: [] as StructurePreviewProps[]
+        };
+        // if (btn.icon) {
+        //     const iconProp = {
+        //         type: "Image",
+        //     } as ImageProps;
+        //
+        //     switch (btn.icon.type) {
+        //         case "image":
+        //             iconProp.data = btn.icon.imageUrl;
+        //             break;
+        //         case "glyph":
+        //             iconProp.document = btn.icon.iconClass;
+        //             break;
+        //     }
+        //     container.children.push(iconProp);
+        // }
+        container.children.push({
+            type: "Text",
+            bold: true,
+            fontSize: 10,
+            content: `${btn.icon ? "I" : ""} ${btn.caption ? btn.caption : "(No caption)"}`,
+            fontColor: isDarkMode ? "#DCDCDC" : "#4F4F4F"
+        } as TextProps);
+
+        return container;
+    }) as StructurePreviewProps[];
+
     const footer =
         values.showEmptyPlaceholder === "custom"
             ? [
@@ -313,6 +355,7 @@ export const getPreview = (values: DatagridPreviewProps, isDarkMode: boolean): S
         type: "Container",
         children: [
             titleHeader,
+            button,
             ...(values.showHeaderFilters && values.filterList.length > 0 ? [headerFilters] : []),
             headers,
             ...Array.from({ length: 5 }).map(() => columns),
