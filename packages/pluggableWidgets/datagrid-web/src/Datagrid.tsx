@@ -1,5 +1,5 @@
 import { createElement, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ColumnsType, DatagridContainerProps } from "../typings/DatagridProps";
+import { ButtonsType, ColumnsType, DatagridContainerProps } from "../typings/DatagridProps";
 import { FilterCondition } from "mendix/filters";
 import { and } from "mendix/filters/builders";
 
@@ -274,7 +274,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             /**
              * Custom 2G props
              */
-            buttons={props.buttons}
+            buttons={transformButtonsType(props.buttons)}
             selectionMode={props.selectionMode}
             tableLabel={props.tableLabel}
             remoteSortConfig={remoteSortConfig}
@@ -282,6 +282,23 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             defaultTrigger={props.defaultTrigger}
         />
     );
+}
+
+export interface ButtonsTypeExt extends ButtonsType {
+    key: number;
+}
+function transformButtonsType(buttons: ButtonsType[]): ButtonsTypeExt[] {
+    return buttons.map(btn => {
+        return {
+            key: buttons.indexOf(btn),
+            action: btn.action,
+            buttonStyle: btn.buttonStyle,
+            caption: btn.caption,
+            actionNoContext: btn.actionNoContext,
+            icon: btn.icon,
+            renderMode: btn.renderMode
+        } as ButtonsTypeExt;
+    });
 }
 
 function transformColumnProps(props: ColumnsType[]): TableColumn[] {

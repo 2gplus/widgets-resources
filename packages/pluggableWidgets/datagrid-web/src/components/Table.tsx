@@ -12,7 +12,6 @@ import { ColumnSelector } from "./ColumnSelector";
 import { Header } from "./Header";
 import {
     AlignmentEnum,
-    ButtonsType,
     ColumnsPreviewType,
     DefaultTriggerEnum,
     SelectionModeEnum,
@@ -26,6 +25,7 @@ import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
 import { Button } from "../utils/Button";
 import { executeAction } from "@mendix/piw-utils-internal/dist/functions";
+import { ButtonsTypeExt } from "../Datagrid";
 
 export type TableColumn = Omit<
     ColumnsPreviewType,
@@ -71,7 +71,7 @@ export interface TableProps<T extends ObjectItem> {
      * Custom 2G props
      */
     defaultTrigger: DefaultTriggerEnum;
-    buttons: ButtonsType[];
+    buttons: ButtonsTypeExt[];
     selectionMode: SelectionModeEnum;
     remoteSortConfig?: RemoteSortConfig;
     setRemoteSortConfig?: (config: RemoteSortConfig) => void;
@@ -426,7 +426,7 @@ function sortColumns(columnsOrder: string[], columnA: ColumnProperty, columnB: C
     return columnAValue < columnBValue ? -1 : columnAValue > columnBValue ? 1 : 0;
 }
 
-function mapButtons(buttons: ButtonsType[], selection: ObjectItem[]): ReactNode {
+function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNode {
     return (
         <div className="table-actions">
             {buttons.map(btn => {

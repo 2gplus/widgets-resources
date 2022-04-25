@@ -48,12 +48,15 @@ export function Pagination(props: PaginationProps): ReactElement | null {
             const metaModel = await response.json();
             const languageId = metaModel.languages.indexOf(mx.session.sessionData.locale.code);
             pagination = metaModel.systemTexts["mendix.lib.MxDataSource.status"][languageId];
-            setPaginationStatus(
-                pagination
+            if (props.numberOfItems && props.numberOfItems > 0) {
+                pagination = pagination
                     .replace("{1}", String(initialItem))
                     .replace("{2}", String(lastItem))
-                    .replace("{3}", String(props.numberOfItems ?? (numberOfPages ?? 1) * props.pageSize))
-            );
+                    .replace("{3}", String((numberOfPages ?? 1) * props.pageSize));
+            } else {
+                pagination = pagination.replace("{1}", String(0)).replace("{2}", String(0)).replace("{3}", String(0));
+            }
+            setPaginationStatus(pagination);
         };
         metaModel().catch(console.error);
     }, [props.numberOfItems, props.pageSize, numberOfPages, props.page]);
