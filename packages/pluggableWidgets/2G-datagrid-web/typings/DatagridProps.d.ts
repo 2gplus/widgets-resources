@@ -17,6 +17,8 @@ import {
 } from "mendix";
 import { Big } from "big.js";
 
+export type SelectionModeEnum = "single" | "multi";
+
 export type SortingTypeEnum = "local" | "remote";
 
 export type ShowContentAsEnum = "attribute" | "dynamicText" | "customContent";
@@ -33,8 +35,9 @@ export interface ColumnsType {
     content?: ListWidgetValue;
     dynamicText?: ListExpressionValue<string>;
     header?: DynamicValue<string>;
-    sortProperty: string;
+    tooltip?: ListExpressionValue<string>;
     filter?: ReactNode;
+    sortProperty: string;
     sortable: boolean;
     resizable: boolean;
     draggable: boolean;
@@ -43,17 +46,20 @@ export interface ColumnsType {
     size: number;
     alignment: AlignmentEnum;
     columnClass?: ListExpressionValue<string>;
+    wrapText: boolean;
 }
 
 export type PaginationEnum = "buttons" | "virtualScrolling";
 
-export type PagingPositionEnum = "bottom" | "top" | "hide";
+export type PagingPositionEnum = "bottom" | "top";
 
 export type ShowEmptyPlaceholderEnum = "none" | "custom";
 
 export type DefaultTriggerEnum = "singleClick" | "doubleClick";
 
-export type SelectionModeEnum = "single" | "multi";
+export interface FilterListType {
+    filter: ListAttributeValue<string | Big | boolean | Date>;
+}
 
 export type RenderModeEnum = "link" | "button";
 
@@ -62,13 +68,10 @@ export type ButtonStyleEnum = "default" | "inverse" | "primary" | "info" | "succ
 export interface ButtonsType {
     caption: string;
     action?: ListActionValue;
+    actionNoContext?: ActionValue;
     icon?: DynamicValue<WebIcon>;
     renderMode: RenderModeEnum;
     buttonStyle: ButtonStyleEnum;
-}
-
-export interface FilterListType {
-    filter: ListAttributeValue<string | Big | boolean | Date>;
 }
 
 export interface ColumnsPreviewType {
@@ -77,8 +80,9 @@ export interface ColumnsPreviewType {
     content: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     dynamicText: string;
     header: string;
-    sortProperty: string;
+    tooltip: string;
     filter: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
+    sortProperty: string;
     sortable: boolean;
     resizable: boolean;
     draggable: boolean;
@@ -87,18 +91,20 @@ export interface ColumnsPreviewType {
     size: number | null;
     alignment: AlignmentEnum;
     columnClass: string;
+    wrapText: boolean;
+}
+
+export interface FilterListPreviewType {
+    filter: string;
 }
 
 export interface ButtonsPreviewType {
     caption: string;
     action: {} | null;
+    actionNoContext: {} | null;
     icon: { type: "glyph"; iconClass: string } | { type: "image"; imageUrl: string } | null;
     renderMode: RenderModeEnum;
     buttonStyle: ButtonStyleEnum;
-}
-
-export interface FilterListPreviewType {
-    filter: string;
 }
 
 export interface DatagridContainerProps {
@@ -108,6 +114,7 @@ export interface DatagridContainerProps {
     tabIndex?: number;
     advanced: boolean;
     datasource: ListValue;
+    selectionMode: SelectionModeEnum;
     sortingType: SortingTypeEnum;
     sortAttribute?: EditableValue<string>;
     sortAscending?: EditableValue<boolean>;
@@ -120,11 +127,8 @@ export interface DatagridContainerProps {
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder?: ReactNode;
     rowClass?: ListExpressionValue<string>;
+    onClick?: ListActionValue;
     defaultTrigger: DefaultTriggerEnum;
-    onTrigger?: ListActionValue;
-    selectionMode: SelectionModeEnum;
-    tableLabel?: DynamicValue<string>;
-    buttons: ButtonsType[];
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;
@@ -134,6 +138,8 @@ export interface DatagridContainerProps {
     filterList: FilterListType[];
     filtersPlaceholder?: ReactNode;
     filterSectionTitle?: DynamicValue<string>;
+    tableLabel?: DynamicValue<string>;
+    buttons: ButtonsType[];
 }
 
 export interface DatagridPreviewProps {
@@ -143,6 +149,7 @@ export interface DatagridPreviewProps {
     readOnly: boolean;
     advanced: boolean;
     datasource: {} | { type: string } | null;
+    selectionMode: SelectionModeEnum;
     sortingType: SortingTypeEnum;
     sortAttribute: string;
     sortAscending: string;
@@ -155,11 +162,8 @@ export interface DatagridPreviewProps {
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     rowClass: string;
+    onClick: {} | null;
     defaultTrigger: DefaultTriggerEnum;
-    onTrigger: {} | null;
-    selectionMode: SelectionModeEnum;
-    tableLabel: string;
-    buttons: ButtonsPreviewType[];
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;
@@ -170,4 +174,6 @@ export interface DatagridPreviewProps {
     filterList: FilterListPreviewType[];
     filtersPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     filterSectionTitle: string;
+    tableLabel: string;
+    buttons: ButtonsPreviewType[];
 }

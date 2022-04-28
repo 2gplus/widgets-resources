@@ -15,6 +15,14 @@
                     <caption>Data source</caption>
                     <description />
                 </property>
+                <property key="selectionMode" type="enumeration" defaultValue="single">
+                    <caption>Selection mode</caption>
+                    <description />
+                    <enumerationValues>
+                        <enumerationValue key="single">Single selection</enumerationValue>
+                        <enumerationValue key="multi">Multi selection</enumerationValue>
+                    </enumerationValues>
+                </property>
                 <property key="sortingType" type="enumeration" required="true" defaultValue="local">
                     <caption>Sort Type</caption>
                     <description />
@@ -83,12 +91,16 @@
                                 <caption>Caption</caption>
                                 <description />
                             </property>
-                            <property key="sortProperty" type="string" required="false">
-                                <caption>Sort property</caption>
+                            <property key="tooltip" type="textTemplate" required="false" dataSource="../datasource">
+                                <caption>Tooltip</caption>
                                 <description />
                             </property>
                             <property key="filter" type="widgets" required="false">
                                 <caption>Filter</caption>
+                                <description />
+                            </property>
+                            <property key="sortProperty" type="string" required="false">
+                                <caption>Sort property</caption>
                                 <description />
                             </property>
                         </propertyGroup>
@@ -143,6 +155,10 @@
                                 <description />
                                 <returnType type="String" />
                             </property>
+                            <property key="wrapText" type="boolean" defaultValue="false">
+                                <caption>Wrap text</caption>
+                                <description />
+                            </property>
                         </propertyGroup>
                     </properties>
                 </property>
@@ -151,7 +167,6 @@
                     <description />
                 </property>
             </propertyGroup>
-
             <propertyGroup caption="Rows">
                 <property key="pageSize" type="integer" defaultValue="20">
                     <caption>Page size</caption>
@@ -171,7 +186,6 @@
                     <enumerationValues>
                         <enumerationValue key="bottom">Below grid</enumerationValue>
                         <enumerationValue key="top">Above grid</enumerationValue>
-                        <enumerationValue key="hide">Don't show</enumerationValue>
                     </enumerationValues>
                 </property>
                 <property key="showEmptyPlaceholder" type="enumeration" defaultValue="none">
@@ -193,77 +207,20 @@
                 </property>
             </propertyGroup>
             <propertyGroup caption="Events">
+                <property key="onClick" type="action" required="false" dataSource="datasource">
+                    <caption>On click action</caption>
+                    <description />
+                </property>
+
                 <property key="defaultTrigger" type="enumeration" defaultValue="doubleClick">
                     <caption>Default Trigger</caption>
-
                     <description />
                     <enumerationValues>
                         <enumerationValue key="singleClick">Single click</enumerationValue>
                         <enumerationValue key="doubleClick">Double click</enumerationValue>
                     </enumerationValues>
                 </property>
-                <property key="onTrigger" type="action" required="false" dataSource="datasource">
-                    <caption>On trigger action</caption>
-                    <description />
-                </property>
-                <property key="selectionMode" type="enumeration" defaultValue="single">
-                    <caption>Selection mode</caption>
-                    <description />
-                    <enumerationValues>
-                        <enumerationValue key="single">Single selection</enumerationValue>
-                        <enumerationValue key="multi">Multi selection</enumerationValue>
-                    </enumerationValues>
-                </property>
             </propertyGroup>
-        </propertyGroup>
-        <propertyGroup caption="Buttons">
-            <property key="tableLabel" type="textTemplate" required="false">
-                <caption>Table label</caption>
-                <description>Label to show at the top of the datagrid</description>
-            </property>
-            <property key="buttons" type="object" isList="true" required="false">
-                <caption>Buttons</caption>
-                <description />
-                <properties>
-                    <propertyGroup caption="General">
-                        <property key="caption" type="string" required="false">
-                            <caption>Caption</caption>
-                            <description />
-                        </property>
-                        <property key="action" dataSource="../datasource" type="action">
-                            <caption>Action</caption>
-                            <description />
-                        </property>
-                        <property key="icon" type="icon" required="false">
-                            <caption>Icon</caption>
-                            <description />
-                        </property>
-                    </propertyGroup>
-                    <propertyGroup caption="Appearance">
-                        <property key="renderMode" type="enumeration" defaultValue="button">
-                            <caption>Render mode</caption>
-                            <description />
-                            <enumerationValues>
-                                <enumerationValue key="link">Link</enumerationValue>
-                                <enumerationValue key="button">Button</enumerationValue>
-                            </enumerationValues>
-                        </property>
-                        <property key="buttonStyle" type="enumeration" defaultValue="default">
-                            <caption>Button style</caption>
-                            <description />
-                            <enumerationValues>
-                                <enumerationValue key="default">Default</enumerationValue>
-                                <enumerationValue key="inverse">Inverse</enumerationValue>
-                                <enumerationValue key="primary">Primary</enumerationValue>
-                                <enumerationValue key="info">Info</enumerationValue>
-                                <enumerationValue key="success">Success</enumerationValue>
-                                <enumerationValue key="warning">Warning</enumerationValue>
-                                <enumerationValue key="danger">Danger</enumerationValue>
-                            </enumerationValues>
-                        </property>
-                    </propertyGroup>
-                </properties>
-            </property>
         </propertyGroup>
         <propertyGroup caption="Personalization">
             <propertyGroup caption="Column capabilities">
@@ -339,6 +296,59 @@
                     <description>Assistive technology will read this upon reaching a filtering or sorting section.</description>
                 </property>
             </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Buttons">
+            <property key="tableLabel" type="textTemplate" required="false">
+                <caption>Table label</caption>
+                <description>Label to show at the top of the datagrid</description>
+            </property>
+            <property key="buttons" type="object" isList="true" required="false">
+                <caption>Buttons</caption>
+                <description />
+                <properties>
+                    <propertyGroup caption="General">
+                        <property key="caption" type="string" required="false">
+                            <caption>Caption</caption>
+                            <description />
+                        </property>
+                        <property key="action" type="action" dataSource="../datasource" required="false">
+                            <caption>Action</caption>
+                            <description />
+                        </property>
+                        <property key="actionNoContext" type="action" required="false">
+                            <caption>Action(no context)</caption>
+                            <description />
+                        </property>
+                        <property key="icon" type="icon" required="false">
+                            <caption>Icon</caption>
+                            <description />
+                        </property>
+                    </propertyGroup>
+                    <propertyGroup caption="Appearance">
+                        <property key="renderMode" type="enumeration" defaultValue="button">
+                            <caption>Render mode</caption>
+                            <description />
+                            <enumerationValues>
+                                <enumerationValue key="link">Link</enumerationValue>
+                                <enumerationValue key="button">Button</enumerationValue>
+                            </enumerationValues>
+                        </property>
+                        <property key="buttonStyle" type="enumeration" defaultValue="default">
+                            <caption>Button style</caption>
+                            <description />
+                            <enumerationValues>
+                                <enumerationValue key="default">Default</enumerationValue>
+                                <enumerationValue key="inverse">Inverse</enumerationValue>
+                                <enumerationValue key="primary">Primary</enumerationValue>
+                                <enumerationValue key="info">Info</enumerationValue>
+                                <enumerationValue key="success">Success</enumerationValue>
+                                <enumerationValue key="warning">Warning</enumerationValue>
+                                <enumerationValue key="danger">Danger</enumerationValue>
+                            </enumerationValues>
+                        </property>
+                    </propertyGroup>
+                </properties>
+            </property>
         </propertyGroup>
     </properties>
 </widget>

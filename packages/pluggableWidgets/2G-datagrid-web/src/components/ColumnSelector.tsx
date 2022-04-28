@@ -1,4 +1,5 @@
 import { createElement, Dispatch, ReactElement, SetStateAction, useCallback, useMemo, useRef, useState } from "react";
+import { FaEye } from "./icons/FaEye";
 import { useOnClickOutside, usePositionObserver } from "@mendix/piw-utils-internal/components/web";
 import { ColumnProperty } from "./Table";
 import { createPortal } from "react-dom";
@@ -14,23 +15,29 @@ export interface ColumnSelectorProps {
 export function ColumnSelector(props: ColumnSelectorProps): ReactElement {
     const [show, setShow] = useState(false);
     const optionsRef = useRef<HTMLUListElement>(null);
-    const anchorRef = useRef<HTMLAnchorElement>(null);
-    const position = usePositionObserver(anchorRef.current, show);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const position = usePositionObserver(buttonRef.current, show);
+    const visibleCount = props.columns.length - props.hiddenColumns.length;
+    const isOnlyOneColumnVisible = visibleCount === 1;
 
-    useOnClickOutside([anchorRef, optionsRef], () => setShow(false));
+    useOnClickOutside([buttonRef, optionsRef], () => setShow(false));
 
     const label = props.label ?? "Column selector";
 
     const onClick = useCallback(
-        (isVisible: boolean, id: string) =>
-            props.setHiddenColumns(prev => {
-                if (!isVisible) {
-                    return prev.filter(v => v !== id);
-                } else {
-                    return [...prev, id];
-                }
-            }),
-        [props.setHiddenColumns]
+        (isVisible: boolean, id: string) => {
+            const isLastVisibleColumn = isVisible && isOnlyOneColumnVisible;
+            if (!isLastVisibleColumn) {
+                props.setHiddenColumns(prev => {
+                    if (!isVisible) {
+                        return prev.filter(v => v !== id);
+                    } else {
+                        return [...prev, id];
+                    }
+                });
+            }
+        },
+        [props.setHiddenColumns, isOnlyOneColumnVisible]
     );
 
     const firstHidableColumnIndex = useMemo(() => props.columns.findIndex(c => c.canHide), [props.columns]);
@@ -51,6 +58,7 @@ export function ColumnSelector(props: ColumnSelectorProps): ReactElement {
         >
             {props.columns.map((column: ColumnProperty, index: number) => {
                 const isVisible = !props.hiddenColumns.includes(column.id);
+                const isLastVisibleColumn = isVisible && isOnlyOneColumnVisible;
                 return column.canHide ? (
                     <li
                         key={index}
@@ -72,7 +80,7 @@ export function ColumnSelector(props: ColumnSelectorProps): ReactElement {
                             ) {
                                 e.preventDefault();
                                 setShow(false);
-                                anchorRef.current?.focus();
+                                buttonRef.current?.focus();
                             }
                         }}
                         role="menuitem"
@@ -80,8 +88,9 @@ export function ColumnSelector(props: ColumnSelectorProps): ReactElement {
                     >
                         <input
                             checked={isVisible}
-                            disabled={isVisible && props.columns.length - props.hiddenColumns.length === 1}
+                            disabled={isLastVisibleColumn}
                             id={`${props.id}_checkbox_toggle_${index}`}
+                            style={{ pointerEvents: "none" }}
                             type="checkbox"
                             tabIndex={-1}
                         />
@@ -105,11 +114,10 @@ export function ColumnSelector(props: ColumnSelectorProps): ReactElement {
     return (
         <div aria-label={label} className="th column-selector" role="columnheader" title={label}>
             <div className="column-selector-content">
-                <a
+                <button
                     aria-label={label}
-                    ref={anchorRef}
-                    role="button"
-                    className="mx-link"
+                    ref={buttonRef}
+                    className="btn btn-default column-selector-button"
                     onClick={containerClick}
                     onKeyDown={e => {
                         if (e.key === "Enter" || e.key === " ") {
@@ -122,8 +130,8 @@ export function ColumnSelector(props: ColumnSelectorProps): ReactElement {
                     aria-expanded={show}
                     aria-controls={`${props.id}-column-selectors`}
                 >
-                    <span className="glyphicon glyphicon-eye-open" aria-hidden={true}></span>
-                </a>
+                    <FaEye />
+                </button>
             </div>
             {show && optionsComponent}
         </div>

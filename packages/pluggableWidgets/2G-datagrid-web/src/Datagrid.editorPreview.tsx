@@ -5,12 +5,9 @@ import { Table, TableColumn } from "./components/Table";
 import { parseStyle } from "@mendix/piw-utils-internal";
 import { Selectable } from "mendix/preview/Selectable";
 import { ObjectItem, GUID } from "mendix";
+import classNames from "classnames";
 
-interface PreviewProps extends Omit<DatagridPreviewProps, "class"> {
-    className: string;
-}
-
-export function preview(props: PreviewProps): ReactElement {
+export function preview(props: DatagridPreviewProps): ReactElement {
     const data: ObjectItem[] = Array.from({ length: props.pageSize ?? 5 }).map((_, index) => ({
         id: String(index) as GUID
     }));
@@ -20,6 +17,7 @@ export function preview(props: PreviewProps): ReactElement {
             : [
                   {
                       header: "Column",
+                      tooltip: "",
                       attribute: "[No attribute selected]",
                       width: "autoFill",
                       columnClass: "",
@@ -33,7 +31,8 @@ export function preview(props: PreviewProps): ReactElement {
                       size: 1,
                       sortable: false,
                       alignment: "left",
-                      sortProperty: "Property"
+                      wrapText: false,
+                      sortProperty: "property"
                   }
               ];
 
@@ -55,15 +54,10 @@ export function preview(props: PreviewProps): ReactElement {
 
     return (
         <Table
-            buttons={props.buttons.map(button => ({
-                caption: button.caption,
-                buttonStyle: button.buttonStyle,
-                renderMode: button.renderMode
-            }))}
             cellRenderer={useCallback(
                 (renderWrapper, _, columnIndex) => {
                     const column = columns[columnIndex];
-                    const className = column.alignment ? `align-column-${column.alignment}` : "";
+                    const className = classNames(`align-column-${column.alignment}`, { "wrap-text": column.wrapText });
                     let content;
                     switch (column.showContentAs) {
                         case "attribute":
@@ -133,9 +127,11 @@ export function preview(props: PreviewProps): ReactElement {
             paging={props.pagination === "buttons"}
             pagingPosition={props.pagingPosition}
             preview
-            selectionMode={props.selectionMode}
             styles={parseStyle(props.style)}
             valueForSort={useCallback(() => undefined, [])}
+            buttons={[]}
+            selectionMode={"single"}
+            defaultTrigger={"singleClick"}
         />
     );
 }

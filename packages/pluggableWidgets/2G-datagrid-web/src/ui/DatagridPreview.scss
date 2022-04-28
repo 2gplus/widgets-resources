@@ -1,11 +1,6 @@
 $gray-primary: #e7e7e9 !default;
 $gray-lighter: #f8f8f8 !default;
 
-.table-actions {
-    display: flex;
-    margin-bottom: 16px;
-}
-
 svg {
     &.svg-inline--fa {
         height: 15px;
@@ -24,6 +19,18 @@ svg {
     .td {
         &.hidden-column-preview {
             background-color: $gray-lighter;
+        }
+    }
+}
+.table {
+    .table-content {
+        .tr {
+            &.selected {
+                background: $gray-lighter;
+            }
+            &:hover {
+                background: $gray-primary;
+            }
         }
     }
 }

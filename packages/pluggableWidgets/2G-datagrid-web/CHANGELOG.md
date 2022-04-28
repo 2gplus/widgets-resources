@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+-   We fixed an issue with column hiding behaviour. Now user can't uncheck last visible column in the datagrid. (Ticket #144500)
+
+## [2.2.2] - 2022-1-19
+
+### Fixed
+
+-   We fixed an issue with column selector on Windows machines (Ticket #139234).
+
+## [2.2.1] - 2022-1-6
+
+### Changed
+
+-   We changed the icons from front-awesome to be pure SVG.
+
+## [2.2.0] - 2021-12-23
+
+### Added
+
+-   We added "Tooltip" property for column, which allow you to control text that will be seen when hovering cell.
+-   We added dark mode to Structure mode preview.
+-   We added dark icons for Tile and List view.
+
+## [2.1.0] - 2021-12-3
+
+### Added
+
+-   We added a property to wrap texts in the columns.
+
 ## [2.0.3] - 2021-11-16
 
 ### Fixed

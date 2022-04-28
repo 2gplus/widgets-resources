@@ -1,50 +1,46 @@
 import {
-    ChangeEvent,
-    createElement,
     CSSProperties,
     ReactElement,
     ReactNode,
     useCallback,
     useEffect,
     useMemo,
-    useState
+    useState,
+    createElement
 } from "react";
 import { ColumnSelector } from "./ColumnSelector";
 import { Header } from "./Header";
-import { AlignmentEnum, ColumnsPreviewType, DefaultTriggerEnum, WidthEnum } from "../../typings/DatagridProps";
+import {
+    AlignmentEnum,
+    ColumnsPreviewType,
+    DefaultTriggerEnum,
+    SelectionModeEnum,
+    WidthEnum
+} from "../../typings/DatagridProps";
 import { Big } from "big.js";
 import classNames from "classnames";
-import { DynamicValue, EditableValue, ObjectItem } from "mendix";
+import { EditableValue, ObjectItem, DynamicValue } from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
-import { ButtonsType } from "./../../typings/DatagridProps.d";
-import { executeAction } from "@mendix/piw-utils-internal";
+import { Button } from "../utils/Button";
+import { executeAction } from "@mendix/piw-utils-internal/dist/functions";
+import { ButtonsTypeExt } from "../Datagrid";
 
 export type TableColumn = Omit<
     ColumnsPreviewType,
-    "attribute" | "columnClass" | "content" | "dynamicText" | "filter" | "showContentAs"
+    "attribute" | "columnClass" | "content" | "dynamicText" | "filter" | "showContentAs" | "tooltip"
 >;
 
-export interface RemoteSortConfig {
-    property?: string;
-    ascending?: boolean;
-}
+export type CellRenderer<T extends ObjectItem = ObjectItem> = (
+    renderWrapper: (children: ReactNode, className?: string, onClick?: () => void) => ReactElement,
+    value: T,
+    columnIndex: number
+) => ReactElement;
 
 export interface TableProps<T extends ObjectItem> {
-    selectionMode: any;
-    cellRenderer: (
-        renderWrapper: (
-            children: ReactNode,
-            className?: string,
-            onTrigger?: () => void,
-            defaultTrigger?: DefaultTriggerEnum
-        ) => ReactElement,
-        value: T,
-        columnIndex: number
-    ) => ReactElement;
+    cellRenderer: CellRenderer<T>;
     className: string;
-    buttons: ButtonsType[];
     columns: TableColumn[];
     columnsFilterable: boolean;
     columnsSortable: boolean;
@@ -65,16 +61,25 @@ export interface TableProps<T extends ObjectItem> {
     pageSize: number;
     pagingPosition: string;
     preview?: boolean;
-    onSettingsChange?: () => void;
     rowClass?: (value: T) => string;
     setPage?: (computePage: (prevPage: number) => number) => void;
     setSortParameters?: (sort?: { columnIndex: number; desc: boolean }) => void;
     settings?: EditableValue<string>;
     styles?: CSSProperties;
     valueForSort: (value: T, columnIndex: number) => string | Big | boolean | Date | undefined;
+    /**
+     * Custom 2G props
+     */
+    defaultTrigger: DefaultTriggerEnum;
+    buttons: ButtonsTypeExt[];
+    selectionMode: SelectionModeEnum;
     remoteSortConfig?: RemoteSortConfig;
     setRemoteSortConfig?: (config: RemoteSortConfig) => void;
     tableLabel?: DynamicValue<string>;
+}
+export interface RemoteSortConfig {
+    property?: string;
+    ascending?: boolean;
 }
 
 export interface ColumnWidth {
@@ -97,7 +102,6 @@ export interface ColumnProperty {
 
 export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement {
     const isInfinite = !props.paging;
-    const [selection, setSelection] = useState<T[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [dragOver, setDragOver] = useState("");
     const [columnOrder, setColumnOrder] = useState<string[]>([]);
@@ -112,35 +116,13 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     const [columnsWidth, setColumnsWidth] = useState<ColumnWidth>(
         Object.fromEntries(props.columns.map((_c, index) => [index.toString(), undefined]))
     );
-    useEffect(() => {
-        if (props.remoteSortConfig && props.remoteSortConfig.property) {
-            const column = props.columns.find(c => c.sortProperty === props.remoteSortConfig?.property);
-            if (column) {
-                const index = props.columns.indexOf(column).toString();
-                const desc = !(props.remoteSortConfig.ascending ?? false);
-                if (!(sortBy.length === 1 && sortBy[0].desc === desc && sortBy[0].id === index)) {
-                    setSortBy([{ id: index, desc }]);
-                }
-            }
-        }
-    }, [props.remoteSortConfig]);
-
-    useEffect(() => {
-        if (props.setRemoteSortConfig) {
-            if (sortBy.length > 0) {
-                props.setRemoteSortConfig({
-                    ascending: !sortBy[0].desc,
-                    property: props.columns[Number.parseInt(sortBy[0].id, 10)].sortProperty
-                });
-            } else {
-                props.setRemoteSortConfig({});
-            }
-        }
-    }, [sortBy]);
+    /**
+     * 2G custom button state
+     */
+    const [selection, setSelection] = useState<ObjectItem[]>([]);
 
     const { updateSettings } = useSettings(
         props.settings,
-        props.onSettingsChange,
         props.columns,
         columnOrder,
         setColumnOrder,
@@ -203,38 +185,37 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         (column: ColumnProperty, value: T, rowIndex: number) =>
             visibleColumns.find(c => c.id === column.id) || props.preview
                 ? props.cellRenderer(
-                      (children, className, onTrigger, defaultTrigger) => {
+                      (children, className, onClick) => {
+                          let singleClick;
+                          let doubleClick;
+                          switch (props.defaultTrigger) {
+                              case "singleClick":
+                                  singleClick = onClick;
+                                  break;
+                              case "doubleClick":
+                                  doubleClick = onClick;
+                          }
                           return (
                               <div
                                   key={`row_${value.id}_cell_${column.id}`}
                                   className={classNames("td", { "td-borders": rowIndex === 0 }, className, {
-                                      clickable: !!onTrigger,
+                                      clickable: !!onClick,
                                       "hidden-column-preview": props.preview && props.columnsHidable && column.hidden
                                   })}
-                                  onClick={
-                                      defaultTrigger === "singleClick"
-                                          ? onTrigger
-                                          : () => {
-                                                if (selection.length === 1 && selection[0] === value) {
-                                                    setSelection([]);
-                                                } else {
-                                                    setSelection([value]);
-                                                }
-                                            }
-                                  }
-                                  onDoubleClick={defaultTrigger === "doubleClick" ? onTrigger : undefined}
+                                  onClick={singleClick}
+                                  onDoubleClick={doubleClick}
                                   onKeyDown={
-                                      onTrigger
+                                      onClick
                                           ? e => {
                                                 if (e.key === "Enter" || e.key === " ") {
                                                     e.preventDefault();
-                                                    onTrigger();
+                                                    onClick();
                                                 }
                                             }
                                           : undefined
                                   }
-                                  role={onTrigger ? "button" : "cell"}
-                                  tabIndex={onTrigger ? 0 : undefined}
+                                  role={onClick ? "button" : "cell"}
+                                  tabIndex={onClick ? 0 : undefined}
                               >
                                   {children}
                               </div>
@@ -244,112 +225,23 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                       Number(column.id)
                   )
                 : null,
-        [props.cellRenderer, props.columnsHidable, props.preview, visibleColumns, selection]
+        [props.cellRenderer, props.columnsHidable, props.preview, visibleColumns]
     );
 
     const rows = useMemo(() => props.data.map(item => ({ item })), [props.data]);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, item?: T) => {
-        const { name, checked } = e.target;
-        if (checked) {
-            if (name === "allSelect") {
-                setSelection(props.data);
-            } else if (item !== undefined) {
-                setSelection([...selection, item]);
-            }
-        } else {
-            if (name === "allSelect") {
-                setSelection([]);
-            } else if (item !== undefined) {
-                const s = selection.filter(s => s.id !== item.id);
-                setSelection(s);
-            }
-        }
-    };
-
-    const pagination =
-        props.paging && props.pagingPosition !== "hide" ? (
-            <Pagination
-                canNextPage={props.hasMoreItems}
-                canPreviousPage={props.page !== 0}
-                gotoPage={(page: number) => props.setPage && props.setPage(() => page)}
-                nextPage={() => props.setPage && props.setPage(prev => prev + 1)}
-                numberOfItems={props.numberOfItems}
-                page={props.page}
-                pageSize={props.pageSize}
-                previousPage={() => props.setPage && props.setPage(prev => prev - 1)}
-                labelFirstPage={"Naar eerste pagina"}
-                labelNextPage={"Volgende pagina"}
-                labelLastPage={"Laatste pagina"}
-                labelPreviousPage={"Vorige pagina"}
-            />
-        ) : null;
-
-    const header =
-        props.buttons?.length > 0 || props.tableLabel?.value || props.pagingPosition === "top" ? (
-            <div className="table-header" role="rowgroup">
-                {props.tableLabel?.value ? (
-                    <div className={"table-label"}>
-                        <h4>{props.tableLabel?.value}</h4>
-                    </div>
-                ) : (
-                    ""
-                )}
-                <div className="table-actions">
-                    {props.buttons.map(button => {
-                        switch (button.renderMode) {
-                            case "link":
-                                return (
-                                    <a
-                                        key={null}
-                                        className={classNames("", "mx-link")}
-                                        onClick={() => {
-                                            executeAction(
-                                                button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
-                                            );
-                                        }}
-                                        href={"#"}
-                                    >
-                                        <span
-                                            className={classNames(
-                                                "glyphicon",
-                                                button.icon ? (button.icon.value as any).iconClass : ""
-                                            )}
-                                            aria-hidden="true"
-                                        />
-                                        {button.caption ? button.caption : ""}
-                                    </a>
-                                );
-                            case "button":
-                                return (
-                                    <button
-                                        key={null}
-                                        className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
-                                        onClick={() => {
-                                            executeAction(
-                                                button.action?.get(selection[0] ? selection[0] : ({} as ObjectItem))
-                                            );
-                                        }}
-                                    >
-                                        <span
-                                            className={classNames(
-                                                "glyphicon",
-                                                button.icon ? (button.icon.value as any).iconClass : ""
-                                            )}
-                                            aria-hidden="true"
-                                        />
-                                        {button.caption ? button.caption : ""}
-                                    </button>
-                                );
-                        }
-                    })}
-                </div>
-                {props.pagingPosition === "top" && pagination}
-                {props.tableLabel?.value ? <hr className={"table-header-line"} /> : ""}
-            </div>
-        ) : (
-            ""
-        );
+    const pagination = props.paging ? (
+        <Pagination
+            canNextPage={props.hasMoreItems}
+            canPreviousPage={props.page !== 0}
+            gotoPage={(page: number) => props.setPage && props.setPage(() => page)}
+            nextPage={() => props.setPage && props.setPage(prev => prev + 1)}
+            numberOfItems={props.numberOfItems}
+            page={props.page}
+            pageSize={props.pageSize}
+            previousPage={() => props.setPage && props.setPage(prev => prev - 1)}
+        />
+    ) : null;
 
     const cssGridStyles = useMemo(() => {
         const columnSizes = visibleColumns
@@ -369,17 +261,58 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             })
             .join(" ");
         return {
-            gridTemplateColumns:
-                (props.selectionMode === "multi" ? "fit-content(100%) " : "") +
-                columnSizes +
-                (props.columnsHidable ? " fit-content(50px)" : "")
+            gridTemplateColumns: columnSizes + (props.columnsHidable ? " fit-content(50px)" : "")
         };
     }, [columnsWidth, visibleColumns, props.columnsHidable]);
-
+    /**
+     * Update the selected ObjectItme list.
+     * @param item
+     */
+    const updateSelection = (item: ObjectItem): void => {
+        switch (props.selectionMode) {
+            case "single":
+                setSelection([item]);
+                break;
+            case "multi":
+                const selectedItem = selection.indexOf(item);
+                let newSelection: ObjectItem[] = [];
+                if (selectedItem > -1) {
+                    newSelection = selection.filter(x => x.id !== item.id);
+                } else {
+                    newSelection = [...selection, item];
+                }
+                for (const select of newSelection) {
+                    console.log(select.id);
+                }
+                setSelection(newSelection);
+                break;
+        }
+    };
+    const tableLabel = (): ReactNode => {
+        if (props.tableLabel?.value) {
+            return (
+                <div className={"table-label"}>
+                    <h4>{props.tableLabel?.value}</h4>
+                </div>
+            );
+        }
+        return null;
+    };
+    const tableLine = (): ReactNode => {
+        if (props.tableLabel?.value) {
+            return <hr className={"table-header-line"} />;
+        }
+        return null;
+    };
     return (
-        <div className={props.className}>
+        <div className={props.className} style={props.styles}>
             <div className="table" role="table">
-                {header}
+                <div className="table-header" role="rowgroup">
+                    {tableLabel()}
+                    {mapButtons(props.buttons, selection)}
+                    {props.pagingPosition === "top" && pagination}
+                    {tableLine()}
+                </div>
                 {props.headerFilters && (
                     <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
                         {props.headerFilters}
@@ -394,20 +327,6 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                     style={cssGridStyles}
                 >
                     <div className="tr" role="row">
-                        {props.selectionMode === "multi" ? (
-                            <div aria-label="checkbox" aria-sort="none" className="th" role="columnheader">
-                                <div className="column-container" id="check">
-                                    <div className="column-header align-column-left" id="check" role="cell">
-                                        <input
-                                            name="allSelect"
-                                            type="checkbox"
-                                            checked={selection?.length === props.data?.length}
-                                            onChange={e => handleChange(e)}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        ) : undefined}
                         {visibleColumns.map(column =>
                             props.headerWrapperRenderer(
                                 Number(column.id),
@@ -455,33 +374,15 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                     {rows.map((row, rowIndex) => {
                         return (
                             <div
+                                onClick={() => updateSelection(row.item)}
                                 key={`row_${row.item.id}`}
                                 className={classNames(
                                     "tr",
                                     props.rowClass?.(row.item),
-                                    row.item === selection[0] ? "selected" : ""
+                                    selection.find(x => x.id === row.item.id) ? "selected" : ""
                                 )}
                                 role="row"
                             >
-                                {props.selectionMode === "multi" ? (
-                                    <div
-                                        aria-label="checkbox"
-                                        aria-sort="none"
-                                        className={classNames("td", { "td-borders": rowIndex === 0 })}
-                                        role="columnheader"
-                                    >
-                                        <div className="column-container" id="check">
-                                            <div className="column-header align-column-left" id="check" role="cell">
-                                                <input
-                                                    name={row.item.id}
-                                                    type="checkbox"
-                                                    checked={selection.some(item => item?.id === row.item.id)}
-                                                    onChange={e => handleChange(e, row.item)}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : undefined}
                                 {visibleColumns.map(cell => renderCell(cell, row.item, rowIndex))}
                                 {props.columnsHidable && (
                                     <div
@@ -523,4 +424,30 @@ function sortColumns(columnsOrder: string[], columnA: ColumnProperty, columnB: C
         columnBValue = Number(columnB.id);
     }
     return columnAValue < columnBValue ? -1 : columnAValue > columnBValue ? 1 : 0;
+}
+
+function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNode {
+    return (
+        <div className="table-actions">
+            {buttons.map(btn => {
+                const action = btn.action;
+                if (action) {
+                    return Button(btn, () => {
+                        if (selection && selection.length > 0) {
+                            for (const entry of selection) {
+                                executeAction(action.get(entry));
+                            }
+                        }
+                    });
+                }
+                const actionNoContext = btn.actionNoContext;
+                if (actionNoContext) {
+                    return Button(btn, () => {
+                        executeAction(actionNoContext);
+                    });
+                }
+                return null;
+            })}
+        </div>
+    );
 }

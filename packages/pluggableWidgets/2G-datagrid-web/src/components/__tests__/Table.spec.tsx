@@ -58,7 +58,7 @@ describe("Table", () => {
                 width: "autoFill" as const,
                 size: 1,
                 alignment: "left" as const,
-                sortProperty: "Test"
+                wrapText: false
             }
         ];
         const component = render(<Table {...mockTableProps()} columnsFilterable columns={columns} />);
@@ -85,7 +85,7 @@ describe("Table", () => {
                 width: "autoFill" as const,
                 size: 1,
                 alignment: "center" as const,
-                sortProperty: "Test"
+                wrapText: false
             },
             {
                 header: "Test 2",
@@ -96,7 +96,7 @@ describe("Table", () => {
                 width: "autoFill" as const,
                 size: 1,
                 alignment: "right" as const,
-                sortProperty: "Test"
+                wrapText: false
             }
         ];
 
@@ -128,7 +128,7 @@ describe("Table", () => {
                 width: "autoFill" as const,
                 size: 1,
                 alignment: "center" as const,
-                sortProperty: "Test"
+                wrapText: false
             }
         ];
         const component = render(<Table {...mockTableProps()} preview columns={columns} />);
@@ -175,13 +175,12 @@ function mockTableProps(): TableProps<ObjectItem> {
             width: "autoFill" as const,
             size: 1,
             alignment: "left" as const,
-            sortProperty: "Test"
+            wrapText: false
         }
     ];
     return {
         setPage: jest.fn(),
         page: 1,
-        buttons: [],
         hasMoreItems: false,
         pageSize: 10,
         columnsResizable: false,
@@ -193,7 +192,6 @@ function mockTableProps(): TableProps<ObjectItem> {
         columnsFilterable: false,
         columnsSortable: false,
         columns,
-        selectionMode: "single",
         valueForSort: () => "dummy",
         filterRenderer: () => <input type="text" value="dummy" />,
         cellRenderer: (renderWrapper, _, columnIndex) => renderWrapper(columns[columnIndex].header),
