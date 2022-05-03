@@ -59,6 +59,6 @@ steps:
       progetServiceName: '2G Proget'
       progetFeedName: 'upack/mendix-widgets'
       pathToPublish: '$(widgetFolder)/dist/$(Build.BuildNumber)/$(mpkName)'
-      packageNameVersionRegex: '$(widgetFolder)\/dist\/(?<version>\d+.\d+.\d)\/(?<name>.*).mpk'
+      packageNameVersionRegex: '$(widgetFolder)\/dist\/(?<version>\d+.\d+.\d+)\/(?<name>.*).mpk'
 
 
