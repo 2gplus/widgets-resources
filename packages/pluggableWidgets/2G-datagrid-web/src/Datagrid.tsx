@@ -21,6 +21,13 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     const id = useRef(`DataGrid${generateUUID()}`);
 
     const [sortParameters, setSortParameters] = useState<{ columnIndex: number; desc: boolean } | undefined>(undefined);
+    /** Remote sorting
+     *
+     */
+    const [remoteSortConfig, setRemoteSortConfig] = useState<RemoteSortConfig>({
+        ascending: props.sortAscending?.value,
+        property: props.sortAttribute?.value
+    });
     const isInfiniteLoad = props.pagination === "virtualScrolling";
     const currentPage = isInfiniteLoad
         ? props.datasource.limit / props.pageSize
@@ -107,13 +114,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             ),
         [props.filterList, viewStateFilters.current]
     );
-    /** Remote sorting
-     *
-     */
-    const [remoteSortConfig, setRemoteSortConfig] = useState<RemoteSortConfig>({
-        ascending: props.sortAscending?.value,
-        property: props.sortAttribute?.value
-    });
+
     useEffect(() => {
         if (props.sortingType === "remote") {
             if (

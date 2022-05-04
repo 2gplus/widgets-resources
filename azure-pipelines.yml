@@ -5,9 +5,8 @@
 
 variables:
   projectName: 'Mendix.Widgets.Datagrid-web'
-  widgetName: 'packages/pluggableWidgets/2G-datagrid-web'
   mpkName: 'com.2gplus.widget.web.Datagrid.mpk'
-  widgetFolder: '2G-datagrid-web'
+  widgetFolder: 'packages/pluggableWidgets/2G-datagrid-web'
 pool: Windows Build
 
 
@@ -30,13 +29,13 @@ steps:
     displayName: 'Update build number'
     inputs:
       command: 'custom'
-      workingDir: $(widgetName)
+      workingDir: $(widgetFolder)
       customCommand: '--no-git-tag-version version $(Build.BuildNumber)'
   - task: Npm@1
     displayName: 'npm run build'
     inputs:
       command: 'custom'
-      workingDir: $(widgetName)
+      workingDir: $(widgetFolder)
       customCommand: 'run build'
   - task: BuildServer@0
     condition: failed()
@@ -59,7 +58,7 @@ steps:
     inputs:
       progetServiceName: '2G Proget'
       progetFeedName: 'upack/mendix-widgets'
-      pathToPublish: '$(widgetName)/dist/$(Build.BuildNumber)/$(mpkName)'
-      packageNameVersionRegex: '$(widgetFolder)\/dist\/(?<version>\d+.\d+.\d)\/(?<name>.*).mpk'
+      pathToPublish: '$(widgetFolder)/dist/$(Build.BuildNumber)/$(mpkName)'
+      packageNameVersionRegex: '$(widgetFolder)\/dist\/(?<version>\d+.\d+.\d+)\/(?<name>.*).mpk'
 
 

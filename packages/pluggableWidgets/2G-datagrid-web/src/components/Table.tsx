@@ -121,6 +121,35 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
      */
     const [selection, setSelection] = useState<ObjectItem[]>([]);
 
+    /**
+     * 2G remote sort config
+     */
+    useEffect(() => {
+        if (props.remoteSortConfig && props.remoteSortConfig.property) {
+            const column = props.columns.find(c => c.sortProperty === props.remoteSortConfig?.property);
+            if (column) {
+                const index = props.columns.indexOf(column).toString();
+                const desc = !(props.remoteSortConfig.ascending ?? false);
+                if (!(sortBy.length === 1 && sortBy[0].desc === desc && sortBy[0].id === index)) {
+                    setSortBy([{ id: index, desc }]);
+                }
+            }
+        }
+    }, [props.remoteSortConfig]);
+
+    useEffect(() => {
+        if (props.setRemoteSortConfig) {
+            if (sortBy.length > 0) {
+                props.setRemoteSortConfig({
+                    ascending: !sortBy[0].desc,
+                    property: props.columns[Number.parseInt(sortBy[0].id, 10)].sortProperty
+                });
+            } else {
+                props.setRemoteSortConfig({});
+            }
+        }
+    }, [sortBy]);
+
     const { updateSettings } = useSettings(
         props.settings,
         props.columns,
