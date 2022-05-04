@@ -333,6 +333,10 @@
                                 <enumerationValue key="button">Button</enumerationValue>
                             </enumerationValues>
                         </property>
+                        <property key="btnClass" type="string" defaultValue="" required="false">
+                            <caption>Class</caption>
+                            <description />
+                        </property>
                         <property key="buttonStyle" type="enumeration" defaultValue="default">
                             <caption>Button style</caption>
                             <description />

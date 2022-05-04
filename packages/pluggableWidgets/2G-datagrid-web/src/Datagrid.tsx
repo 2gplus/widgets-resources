@@ -296,7 +296,8 @@ function transformButtonsType(buttons: ButtonsType[]): ButtonsTypeExt[] {
             caption: btn.caption,
             actionNoContext: btn.actionNoContext,
             icon: btn.icon,
-            renderMode: btn.renderMode
+            renderMode: btn.renderMode,
+            btnClass: btn.btnClass
         } as ButtonsTypeExt;
     });
 }
