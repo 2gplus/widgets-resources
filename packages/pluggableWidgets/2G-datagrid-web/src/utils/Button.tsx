@@ -16,7 +16,7 @@ export function Button(button: ButtonsTypeExt, action: () => void) {
 }
 function linkButton(button: ButtonsTypeExt, action: () => void): ReactNode {
     return (
-        <a key={button.key} className={classNames("", "mx-link")} onClick={action} href={"#"}>
+        <a key={button.key} className={classNames("", "mx-link", button.btnClass)} onClick={action} href={"#"}>
             <span
                 className={classNames("glyphicon", button.icon ? (button.icon.value as any).iconClass : "")}
                 aria-hidden="true"
@@ -29,7 +29,7 @@ function defaultButton(button: ButtonsTypeExt, action: () => void): ReactNode {
     return (
         <button
             key={button.key}
-            className={classNames("btn", "mx-button", "btn-" + button.buttonStyle)}
+            className={classNames("btn", "mx-button", "btn-" + button.buttonStyle, button.btnClass)}
             onClick={action}
         >
             <span

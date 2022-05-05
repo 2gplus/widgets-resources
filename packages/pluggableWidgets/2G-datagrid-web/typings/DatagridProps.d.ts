@@ -71,6 +71,7 @@ export interface ButtonsType {
     actionNoContext?: ActionValue;
     icon?: DynamicValue<WebIcon>;
     renderMode: RenderModeEnum;
+    btnClass: string;
     buttonStyle: ButtonStyleEnum;
 }
 
@@ -104,6 +105,7 @@ export interface ButtonsPreviewType {
     actionNoContext: {} | null;
     icon: { type: "glyph"; iconClass: string } | { type: "image"; imageUrl: string } | null;
     renderMode: RenderModeEnum;
+    btnClass: string;
     buttonStyle: ButtonStyleEnum;
 }
 

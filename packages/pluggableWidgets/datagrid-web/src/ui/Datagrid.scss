@@ -51,29 +51,30 @@ div[class^="mx-name-dataGrid"] {
                 margin: 0;
             }
             margin-left: 8px;
-            flex: 1 100%;
+            flex: 1;
             justify-self: center;
             align-self: center;
         }
-        .table-actions {
-            flex: 1 50%;
-            a {
-                padding: 0.65rem 0px;
+    }
+    .table-actions {
+        flex: 1 35%;
+        justify-content: flex-end;
+        margin-right: 8px;
+        a {
+            padding: 0.65rem 0px;
+        }
+        button {
+            padding: 0.65rem 9px;
+        }
+        button,
+        a {
+            margin: 0 0.3em;
+            &:first-of-type {
+                margin: 0 0.3em 0 0.3em;
             }
-            button {
-                padding: 0.65rem 9px;
+            &:last-of-type {
+                margin: 0 0 0 0.3em;
             }
-            button,
-            a {
-                margin: 0 0.3em;
-                &:first-of-type {
-                    margin: 0 0.3em 0 0.3em;
-                }
-                &:last-of-type {
-                    margin: 0 0 0 0.3em;
-                }
-            }
-            margin-right: 8px;
         }
     }
     .pagination-bar .pagination-button {
