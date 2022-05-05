@@ -74,7 +74,7 @@ export interface TableProps<T extends ObjectItem> {
     buttons: ButtonsTypeExt[];
     selectionMode: SelectionModeEnum;
     remoteSortConfig?: RemoteSortConfig;
-    setRemoteSortConfig?: (config: RemoteSortConfig) => void;
+    updateRemoteSortConfig?: (config: RemoteSortConfig) => void;
     tableLabel?: DynamicValue<string>;
 }
 export interface RemoteSortConfig {
@@ -138,17 +138,20 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     }, [props.remoteSortConfig]);
 
     useEffect(() => {
-        if (props.setRemoteSortConfig) {
+        if (props.updateRemoteSortConfig) {
             if (sortBy.length > 0) {
-                props.setRemoteSortConfig({
+                props.updateRemoteSortConfig({
                     ascending: !sortBy[0].desc,
                     property: props.columns[Number.parseInt(sortBy[0].id, 10)].sortProperty
                 });
             } else {
-                props.setRemoteSortConfig({});
+                props.updateRemoteSortConfig({});
             }
         }
     }, [sortBy]);
+    /**
+     * End 2G remote sort config
+     */
 
     const { updateSettings } = useSettings(
         props.settings,

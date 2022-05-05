@@ -21,13 +21,16 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     const id = useRef(`DataGrid${generateUUID()}`);
 
     const [sortParameters, setSortParameters] = useState<{ columnIndex: number; desc: boolean } | undefined>(undefined);
-    /** Remote sorting
-     *
+    /**
+     * 2G Remote sorting
      */
     const [remoteSortConfig, setRemoteSortConfig] = useState<RemoteSortConfig>({
         ascending: props.sortAscending?.value,
         property: props.sortAttribute?.value
     });
+    /**
+     * End 2G Remote sorting
+     */
     const isInfiniteLoad = props.pagination === "virtualScrolling";
     const currentPage = isInfiniteLoad
         ? props.datasource.limit / props.pageSize
@@ -115,76 +118,49 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
         [props.filterList, viewStateFilters.current]
     );
 
-    useEffect(() => {
-        if (props.sortingType === "remote") {
-            if (
-                props.sortAscending?.value !== remoteSortConfig.ascending ||
-                props.sortAttribute?.value !== remoteSortConfig.property
-            ) {
-                setRemoteSortConfig({
-                    ascending: props.sortAscending?.value,
-                    property: props.sortAttribute?.value
-                });
-            }
-        }
-    }, [props.sortAscending, props.sortAttribute]);
-    useEffect(() => {
-        if (props.sortingType === "remote") {
-            let changed = false;
-            // check if any property is set
-            if (remoteSortConfig.property) {
-                if (remoteSortConfig.ascending != null && remoteSortConfig.ascending !== props.sortAscending?.value) {
-                    props.sortAscending?.setValue(remoteSortConfig.ascending);
-                    changed = true;
-                }
-                if (remoteSortConfig.property && remoteSortConfig.property !== props.sortAttribute?.value) {
-                    props.sortAttribute?.setValue(remoteSortConfig.property);
-                    changed = true;
-                }
-            } else {
-                if (props.sortAttribute?.value) {
-                    props.sortAttribute?.setValue(undefined);
-                    changed = true;
-                }
-            }
-            if (changed) {
-                props.onSortChangedAction?.execute();
-            }
-        }
-    }, [remoteSortConfig]);
     /**
-     * End Remote Sorting
+     * 2G Remote sorting
      */
+    const updateRemoteSortConfig = (newConfig: RemoteSortConfig) => {
+        let changed = false;
+        // check if any property is set
+        if (newConfig.property) {
+            if (newConfig.ascending != null && newConfig.ascending !== props.sortAscending?.value) {
+                props.sortAscending?.setValue(newConfig.ascending);
+                changed = true;
+            }
+            if (newConfig.property && newConfig.property !== props.sortAttribute?.value) {
+                props.sortAttribute?.setValue(newConfig.property);
+                changed = true;
+            }
+        } else {
+            if (props.sortAttribute?.value) {
+                props.sortAttribute?.setValue(undefined);
+                changed = true;
+            }
+        }
+        if (changed) {
+            props.onSortChangedAction?.execute();
+        }
+    };
+
+    if (props.sortingType === "remote") {
+        if (
+            props.sortAscending?.value !== remoteSortConfig.ascending ||
+            props.sortAttribute?.value !== remoteSortConfig.property
+        ) {
+            setRemoteSortConfig({
+                ascending: props.sortAscending?.value,
+                property: props.sortAttribute?.value
+            });
+        }
+    }
+    /**
+     * End 2G Remote Sorting
+     */
+
     const [totalCount, setTotalCount] = useState<number>();
 
-    // /**
-    //  * 2G custom button state
-    //  */
-    // const [selection, setSelection] = useState<ObjectItem[]>([]);
-    // /**
-    //  * Update the selected ObjectItme list.
-    //  * @param item
-    //  */
-    // const updateSelection = (item: ObjectItem): void => {
-    //     switch (props.selectionMode) {
-    //         case "single":
-    //             setSelection([item]);
-    //             break;
-    //         case "multi":
-    //             const selectedItem = selection.indexOf(item);
-    //             let newSelection: ObjectItem[] = [];
-    //             if (selectedItem > -1) {
-    //                 newSelection = selection.filter(x => x.id !== item.id);
-    //             } else {
-    //                 newSelection = [...selection, item];
-    //             }
-    //             for (const select of newSelection) {
-    //                 console.log(select.id);
-    //             }
-    //             setSelection(newSelection);
-    //             break;
-    //     }
-    // };
     return (
         <Table
             cellRenderer={cellRenderer}
@@ -279,7 +255,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             selectionMode={props.selectionMode}
             tableLabel={props.tableLabel}
             remoteSortConfig={remoteSortConfig}
-            setRemoteSortConfig={setRemoteSortConfig}
+            updateRemoteSortConfig={updateRemoteSortConfig}
             defaultTrigger={props.defaultTrigger}
         />
     );
