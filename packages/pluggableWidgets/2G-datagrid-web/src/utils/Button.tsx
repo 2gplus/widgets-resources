@@ -1,12 +1,12 @@
 import classNames from "classnames";
-import { ReactNode, createElement } from "react";
+import { ReactNode, createElement, MouseEventHandler } from "react";
 import { ButtonsTypeExt } from "../Datagrid";
 
 /**
  * 2G custom buttons like default Mendix DataGrid
  *
  */
-export function Button(button: ButtonsTypeExt, action: () => void) {
+export function Button(button: ButtonsTypeExt, action: MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>) {
     switch (button.renderMode) {
         case "link":
             return linkButton(button, action);
@@ -14,7 +14,7 @@ export function Button(button: ButtonsTypeExt, action: () => void) {
             return defaultButton(button, action);
     }
 }
-function linkButton(button: ButtonsTypeExt, action: () => void): ReactNode {
+function linkButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLAnchorElement>): ReactNode {
     return (
         <a key={button.key} className={classNames("", "mx-link", button.btnClass)} onClick={action} href={"#"}>
             <span
@@ -25,7 +25,7 @@ function linkButton(button: ButtonsTypeExt, action: () => void): ReactNode {
         </a>
     );
 }
-function defaultButton(button: ButtonsTypeExt, action: () => void): ReactNode {
+function defaultButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLButtonElement>): ReactNode {
     return (
         <button
             key={button.key}

@@ -464,7 +464,8 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
             {buttons.map(btn => {
                 const action = btn.action;
                 if (action) {
-                    return Button(btn, () => {
+                    return Button(btn, e => {
+                        e.preventDefault();
                         if (selection && selection.length > 0) {
                             for (const entry of selection) {
                                 executeAction(action.get(entry));
@@ -474,7 +475,8 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
                 }
                 const actionNoContext = btn.actionNoContext;
                 if (actionNoContext) {
-                    return Button(btn, () => {
+                    return Button(btn, e => {
+                        e.preventDefault();
                         executeAction(actionNoContext);
                     });
                 }
