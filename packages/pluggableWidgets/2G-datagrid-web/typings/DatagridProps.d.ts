@@ -51,11 +51,15 @@ export interface ColumnsType {
 
 export type PaginationEnum = "buttons" | "virtualScrolling";
 
+export type PagingTypeEnum = "default" | "remote";
+
 export type PagingPositionEnum = "bottom" | "top";
 
 export type ShowEmptyPlaceholderEnum = "none" | "custom";
 
 export type DefaultTriggerEnum = "singleClick" | "doubleClick";
+
+export type PagingDisplayTypeEnum = "objectBased" | "pageBased";
 
 export interface FilterListType {
     filter: ListAttributeValue<string | Big | boolean | Date>;
@@ -125,12 +129,18 @@ export interface DatagridContainerProps {
     columnsFilterable: boolean;
     pageSize: number;
     pagination: PaginationEnum;
+    pagingType: PagingTypeEnum;
     pagingPosition: PagingPositionEnum;
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder?: ReactNode;
     rowClass?: ListExpressionValue<string>;
     onClick?: ListActionValue;
     defaultTrigger: DefaultTriggerEnum;
+    pagingAction?: ActionValue;
+    pagingDisplayType: PagingDisplayTypeEnum;
+    pagingTotalCount?: EditableValue<Big>;
+    pageNumber?: EditableValue<Big>;
+    pageSizeAttribute?: EditableValue<Big>;
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;
@@ -160,12 +170,18 @@ export interface DatagridPreviewProps {
     columnsFilterable: boolean;
     pageSize: number | null;
     pagination: PaginationEnum;
+    pagingType: PagingTypeEnum;
     pagingPosition: PagingPositionEnum;
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     rowClass: string;
     onClick: {} | null;
     defaultTrigger: DefaultTriggerEnum;
+    pagingAction: {} | null;
+    pagingDisplayType: PagingDisplayTypeEnum;
+    pagingTotalCount: string;
+    pageNumber: string;
+    pageSizeAttribute: string;
     columnsSortable: boolean;
     columnsResizable: boolean;
     columnsDraggable: boolean;

@@ -14,6 +14,8 @@ import {
     AlignmentEnum,
     ColumnsPreviewType,
     DefaultTriggerEnum,
+    PagingDisplayTypeEnum,
+    PagingTypeEnum,
     SelectionModeEnum,
     WidthEnum
 } from "../../typings/DatagridProps";
@@ -76,6 +78,9 @@ export interface TableProps<T extends ObjectItem> {
     remoteSortConfig?: RemoteSortConfig;
     updateRemoteSortConfig?: (config: RemoteSortConfig) => void;
     tableLabel?: DynamicValue<string>;
+    pagingTypeEnum: PagingTypeEnum;
+    pagingDisplayTypeEnum: PagingDisplayTypeEnum;
+    updatePage: (page: number) => void;
 }
 export interface RemoteSortConfig {
     property?: string;

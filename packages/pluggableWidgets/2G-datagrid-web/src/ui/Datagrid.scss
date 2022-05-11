@@ -51,14 +51,11 @@ div[class^="mx-name-dataGrid"] {
                 margin: 0;
             }
             margin-left: 8px;
-            flex: 1;
-            justify-self: center;
-            align-self: center;
+            flex: 100;
         }
     }
     .table-actions {
-        flex: 1 35%;
-        justify-content: flex-end;
+        flex: 1;
         margin-right: 8px;
         a {
             padding: 0.65rem 0px;
@@ -83,6 +80,6 @@ div[class^="mx-name-dataGrid"] {
     .table-header-line {
         border-bottom: 1px solid #ced0d3;
         flex-basis: 100%;
-        margin: 8px 4px 0;
+        margin: 4px 4px 0;
     }
 }

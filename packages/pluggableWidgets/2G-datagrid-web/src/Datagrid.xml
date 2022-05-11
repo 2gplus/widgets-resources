@@ -180,6 +180,15 @@
                         <enumerationValue key="virtualScrolling">Virtual scrolling</enumerationValue>
                     </enumerationValues>
                 </property>
+                <property key="pagingType" type="enumeration" defaultValue="default">
+                    <caption>Paging type</caption>
+                    <description />
+                    <enumerationValues>
+                        <enumerationValue key="default">Default</enumerationValue>
+                        <enumerationValue key="remote">Remote</enumerationValue>
+                    </enumerationValues>
+                </property>
+
                 <property key="pagingPosition" type="enumeration" defaultValue="bottom">
                     <caption>Position of paging buttons</caption>
                     <description />
@@ -222,6 +231,44 @@
                 </property>
             </propertyGroup>
         </propertyGroup>
+        <propertyGroup caption="CustomPaging">
+            <property key="pagingAction" type="action" required="false">
+                <caption>Paging action</caption>
+                <description>Action to execute to retrieve the batch</description>
+            </property>
+            <property key="pagingDisplayType" type="enumeration" defaultValue="objectBased">
+                <caption>Display</caption>
+                <description />
+                <enumerationValues>
+                    <enumerationValue key="objectBased">Object count</enumerationValue>
+                    <enumerationValue key="pageBased">Page count</enumerationValue>
+                </enumerationValues>
+            </property>
+            <property key="pagingTotalCount" type="attribute" required="false">
+                <caption>totalCount</caption>
+                <description />
+                <attributeTypes>
+                    <attributeType name="Integer" />
+                    <attributeType name="Long" />
+                </attributeTypes>
+            </property>
+            <property key="pageNumber" type="attribute" required="false">
+                <caption>Page number</caption>
+                <description />
+                <attributeTypes>
+                    <attributeType name="Integer" />
+                    <attributeType name="Long" />
+                </attributeTypes>
+            </property>
+            <property key="pageSizeAttribute" type="attribute" required="false">
+                <caption>Page size</caption>
+                <description />
+                <attributeTypes>
+                    <attributeType name="Integer" />
+                    <attributeType name="Long" />
+                </attributeTypes>
+            </property>
+        </propertyGroup>
         <propertyGroup caption="Personalization">
             <propertyGroup caption="Column capabilities">
                 <property key="columnsSortable" type="boolean" defaultValue="true">
@@ -249,7 +296,7 @@
                         <attributeType name="String" />
                     </attributeTypes>
                 </property>
-                <property key="onConfigurationChange" type="action" required="false">
+                <property key="onConfigurationChange" type="action">
                     <caption>On change</caption>
                     <description />
                 </property>
