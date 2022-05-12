@@ -133,9 +133,6 @@ export function preview(props: DatagridPreviewProps): ReactElement {
             selectionMode={"single"}
             defaultTrigger={"singleClick"}
             pagingDisplayTypeEnum={"objectBased"}
-            updatePage={page => {
-                console.log(page);
-            }}
             pagingTypeEnum={"default"}
         />
     );

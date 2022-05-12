@@ -32,21 +32,6 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     /**
      * End 2G Remote sorting
      */
-    /**
-     * 2G remote paging
-     */
-    const updatePaging = (page: number) => {
-        if (props.pageNumber) {
-            // @ts-ignore
-            props.pageNumber.setValue(page);
-        }
-        if (props.pagingAction && props.pagingAction.canExecute) {
-            props.pagingAction.execute();
-        }
-    };
-    /**
-     * End 2G remote paging
-     */
     if (
         props.pagingType === "remote" &&
         (!props.pageNumber || !props.pagingAction || !props.pagingTotalCount || !props.pageSizeAttribute)
@@ -82,7 +67,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                 props.datasource.requestTotalCount(true);
                 if (props.datasource.totalCount) {
                     setTotalCount(props.datasource.totalCount);
-                    setHasMoreItems(props.datasource.hasMoreItems);
+                    setHasMoreItems(props.datasource.hasMoreItems ?? false);
                 }
                 if (props.datasource.limit === Number.POSITIVE_INFINITY) {
                     props.datasource.setLimit(props.pageSize);
@@ -91,13 +76,14 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             case "remote":
                 if (props.pagingTotalCount && props.pagingTotalCount.value) {
                     const totalCountNumber = props.pagingTotalCount.value.toNumber();
-                    setTotalCount(totalCountNumber);
+                    if (totalCountNumber !== totalCount) {
+                        setTotalCount(totalCountNumber);
+                    }
                     setHasMoreItems(currentPage + 1 < Math.ceil(totalCountNumber / pageSize));
                 }
                 break;
         }
-    }, [props.datasource, pageSize]);
-
+    }, [props.datasource, pageSize, currentPage]);
     useEffect(() => {
         if (props.datasource.filter && !filtered && !viewStateFilters.current) {
             viewStateFilters.current = props.datasource.filter;
@@ -119,6 +105,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                     if (props.pageNumber && props.pagingAction && props.pagingAction.canExecute) {
                         props.pageNumber.setValue(new Big(newPage));
                         props.pagingAction.execute();
+                        setHasMoreItems(newPage + 1 < Math.ceil((totalCount || 0) / pageSize));
                     }
                     break;
             }
@@ -217,7 +204,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
      */
 
     const [totalCount, setTotalCount] = useState<number>();
-    const [hasMoreItems, setHasMoreItems] = useState<boolean>();
+    const [hasMoreItems, setHasMoreItems] = useState<boolean>(false);
 
     return (
         <Table
@@ -264,7 +251,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                 [FilterContext, customFiltersState, props.columns]
             )}
             filtersTitle={props.filterSectionTitle?.value}
-            hasMoreItems={hasMoreItems ?? false}
+            hasMoreItems={hasMoreItems}
             headerWrapperRenderer={useCallback((_columnIndex: number, header: ReactElement) => header, [])}
             headerFilters={useMemo(
                 () =>
@@ -315,7 +302,6 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             remoteSortConfig={remoteSortConfig}
             updateRemoteSortConfig={updateRemoteSortConfig}
             defaultTrigger={props.defaultTrigger}
-            updatePage={updatePaging}
             pagingDisplayTypeEnum={props.pagingDisplayType}
             pagingTypeEnum={props.pagingType}
         />

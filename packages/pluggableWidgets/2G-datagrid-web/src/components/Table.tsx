@@ -80,7 +80,6 @@ export interface TableProps<T extends ObjectItem> {
     tableLabel?: DynamicValue<string>;
     pagingTypeEnum: PagingTypeEnum;
     pagingDisplayTypeEnum: PagingDisplayTypeEnum;
-    updatePage: (page: number) => void;
 }
 export interface RemoteSortConfig {
     property?: string;
