@@ -343,17 +343,17 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     return (
         <div className={props.className} style={props.styles}>
             <div className="table" role="table">
+                {props.headerFilters && (
+                    <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
+                        {props.headerFilters}
+                    </div>
+                )}
                 <div className="table-header" role="rowgroup">
                     {tableLabel()}
                     {mapButtons(props.buttons, selection)}
                     {props.pagingPosition === "top" && pagination}
                     {tableLine()}
                 </div>
-                {props.headerFilters && (
-                    <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
-                        {props.headerFilters}
-                    </div>
-                )}
                 <InfiniteBody
                     className="table-content"
                     hasMoreItems={props.hasMoreItems}
