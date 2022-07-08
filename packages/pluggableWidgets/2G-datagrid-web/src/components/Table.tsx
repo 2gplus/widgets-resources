@@ -54,7 +54,7 @@ export interface TableProps<T extends ObjectItem> {
     filterRenderer: (renderWrapper: (children: ReactNode) => ReactElement, columnIndex: number) => ReactElement;
     filtersTitle?: string;
     hasMoreItems: boolean;
-    headerFilters?: ReactNode;
+    useHeaderFilters: boolean;
     headerWrapperRenderer: (columnIndex: number, header: ReactElement) => ReactElement;
     id?: string;
     numberOfItems?: number;
@@ -343,11 +343,13 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     return (
         <div className={props.className} style={props.styles}>
             <div className="table" role="table">
-                {props.headerFilters && (
+                {props.useHeaderFilters ? (
                     <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
-                        {props.headerFilters}
+                        {tableColumns.map(column => {
+                            return column.customFilter;
+                        })}
                     </div>
-                )}
+                ) : null}
                 <div className="table-header" role="rowgroup">
                     {tableLabel()}
                     {mapButtons(props.buttons, selection)}
@@ -372,7 +374,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                     column={column}
                                     draggable={props.columnsDraggable}
                                     dragOver={dragOver}
-                                    filterable={props.columnsFilterable}
+                                    filterable={!props.useHeaderFilters && props.columnsFilterable}
                                     hidable={props.columnsHidable}
                                     isDragging={isDragging}
                                     preview={props.preview}

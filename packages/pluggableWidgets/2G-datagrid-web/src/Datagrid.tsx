@@ -146,21 +146,21 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     /**
      * Multiple filtering properties
      */
-    const filterList = useMemo(
-        () => props.filterList.reduce((filters, { filter }) => ({ ...filters, [filter.id]: filter }), {}),
-        [props.filterList]
-    );
-    const multipleInitialFilters = useMemo(
-        () =>
-            props.filterList.reduce(
-                (filters, { filter }) => ({
-                    ...filters,
-                    [filter.id]: extractFilters(filter, viewStateFilters.current)
-                }),
-                {}
-            ),
-        [props.filterList, viewStateFilters.current]
-    );
+    // const filterList = useMemo(
+    //     () => props.filterList.reduce((filters, { filter }) => ({ ...filters, [filter.id]: filter }), {}),
+    //     [props.filterList]
+    // );
+    // const multipleInitialFilters = useMemo(
+    //     () =>
+    //         props.filterList.reduce(
+    //             (filters, { filter }) => ({
+    //                 ...filters,
+    //                 [filter.id]: extractFilters(filter, viewStateFilters.current)
+    //             }),
+    //             {}
+    //         ),
+    //     [props.filterList, viewStateFilters.current]
+    // );
 
     /**
      * 2G Remote sorting
@@ -253,28 +253,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             filtersTitle={props.filterSectionTitle?.value}
             hasMoreItems={hasMoreItems}
             headerWrapperRenderer={useCallback((_columnIndex: number, header: ReactElement) => header, [])}
-            headerFilters={useMemo(
-                () =>
-                    props.showHeaderFilters ? (
-                        <FilterContext.Provider
-                            value={{
-                                filterDispatcher: prev => {
-                                    if (prev.filterType) {
-                                        const [, filterDispatcher] = multipleFilteringState[prev.filterType];
-                                        filterDispatcher(prev);
-                                        setFiltered(true);
-                                    }
-                                    return prev;
-                                },
-                                multipleAttributes: filterList,
-                                multipleInitialFilters
-                            }}
-                        >
-                            {props.filtersPlaceholder}
-                        </FilterContext.Provider>
-                    ) : null,
-                [FilterContext, customFiltersState, filterList, multipleInitialFilters, props.filtersPlaceholder]
-            )}
+            useHeaderFilters={props.showHeaderFilters}
             id={id.current}
             numberOfItems={totalCount}
             page={currentPage}

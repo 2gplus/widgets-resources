@@ -214,18 +214,6 @@ export const getPreview = (values: DatagridPreviewProps, isDarkMode: boolean): S
             }
         ]
     };
-    const headerFilters = {
-        type: "RowLayout",
-        columnSize: "fixed",
-        borders: true,
-        children: [
-            {
-                type: "DropZone",
-                property: values.filtersPlaceholder,
-                placeholder: "Place filter widget(s) here"
-            } as DropZoneProps
-        ]
-    } as RowLayoutProps;
     const headers: RowLayoutProps = {
         type: "RowLayout",
         columnSize: "fixed",
@@ -353,14 +341,7 @@ export const getPreview = (values: DatagridPreviewProps, isDarkMode: boolean): S
             : [];
     return {
         type: "Container",
-        children: [
-            titleHeader,
-            button,
-            ...(values.showHeaderFilters && values.filterList.length > 0 ? [headerFilters] : []),
-            headers,
-            ...Array.from({ length: 5 }).map(() => columns),
-            ...footer
-        ]
+        children: [titleHeader, button, headers, ...Array.from({ length: 5 }).map(() => columns), ...footer]
     };
 };
 

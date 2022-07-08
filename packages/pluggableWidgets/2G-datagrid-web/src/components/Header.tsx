@@ -10,9 +10,6 @@ import {
     HTMLAttributes
 } from "react";
 import classNames from "classnames";
-import { FaLongArrowAltDown } from "./icons/FaLongArrowAltDown";
-import { FaLongArrowAltUp } from "./icons/FaLongArrowAltUp";
-import { FaArrowsAltV } from "./icons/FaArrowsAltV";
 import { ColumnProperty } from "./Table";
 import { ColumnResizerProps } from "./ColumnResizer";
 import { SortingRule } from "../utils/settings";
@@ -52,17 +49,7 @@ export function Header(props: HeaderProps): ReactElement {
     const isSorted = sortProperties && sortProperties.id === props.column.id;
     const isSortedDesc = isSorted && sortProperties.desc;
 
-    const sortIcon = canSort ? (
-        isSorted ? (
-            isSortedDesc ? (
-                <FaLongArrowAltDown />
-            ) : (
-                <FaLongArrowAltUp />
-            )
-        ) : (
-            <FaArrowsAltV />
-        )
-    ) : null;
+    const sortIcon = canSort ? (isSorted ? (isSortedDesc ? "▲" : "▼") : null) : null;
 
     const caption = props.column.header.trim();
 
