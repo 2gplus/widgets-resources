@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@mendix/pluggable-widgets-tools": ">=8.9.2",
-    "@mendix/piw-utils-internal": "1.0.0",
+    "@mendix/piw-utils-internal": "^1.0.0",
     "@types/querystringify": "^2.0.0",
     "@types/react-native-dialog": "^5.5.0",
     "eslint": "^7.20.0",

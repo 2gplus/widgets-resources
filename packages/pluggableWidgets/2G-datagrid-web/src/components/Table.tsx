@@ -469,7 +469,13 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
         <div className="table-actions">
             {buttons.map(btn => {
                 const action = btn.action;
-                if (action) {
+                if (
+                    action &&
+                    selection &&
+                    Array.isArray(selection) &&
+                    // @ts-ignore
+                    selection.find(x => action.get(x).isAuthorized)
+                ) {
                     return Button(btn, e => {
                         e.preventDefault();
                         if (selection && selection.length > 0) {
@@ -480,7 +486,8 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
                     });
                 }
                 const actionNoContext = btn.actionNoContext;
-                if (actionNoContext) {
+                // @ts-ignore
+                if (actionNoContext && actionNoContext.isAuthorized) {
                     return Button(btn, e => {
                         e.preventDefault();
                         executeAction(actionNoContext);

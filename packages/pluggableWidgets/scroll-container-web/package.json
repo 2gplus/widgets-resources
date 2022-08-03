@@ -27,7 +27,7 @@
     "release": "pluggable-widgets-tools release:web"
   },
   "devDependencies": {
-    "@mendix/pluggable-widgets-tools": ">=9.0.0",
+    "@mendix/pluggable-widgets-tools": ">=8.9.2",
     "eslint": "^7.20.0"
   },
   "dependencies": {
