@@ -470,16 +470,18 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
             {buttons.map(btn => {
                 const action = btn.action;
                 if (
-                    action &&
-                    selection &&
-                    Array.isArray(selection) &&
-                    // @ts-ignore
-                    selection.find(x => action.get(x).isAuthorized)
+                    (action && !btn.checkAuth) ||
+                    (btn.checkAuth &&
+                        selection &&
+                        Array.isArray(selection) &&
+                        // @ts-ignore
+                        selection.find(x => action.get(x).isAuthorized))
                 ) {
                     return Button(btn, e => {
                         e.preventDefault();
                         if (selection && selection.length > 0) {
                             for (const entry of selection) {
+                                // @ts-ignore
                                 executeAction(action.get(entry));
                             }
                         }
@@ -487,7 +489,7 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
                 }
                 const actionNoContext = btn.actionNoContext;
                 // @ts-ignore
-                if (actionNoContext && actionNoContext.isAuthorized) {
+                if (actionNoContext && (!btn.checkAuth || (btn.checkAuth && actionNoContext.isAuthorized))) {
                     return Button(btn, e => {
                         e.preventDefault();
                         executeAction(actionNoContext);

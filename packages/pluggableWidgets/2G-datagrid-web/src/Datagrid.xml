@@ -370,6 +370,10 @@
                             <caption>Icon</caption>
                             <description />
                         </property>
+                        <property key="checkAuth" type="boolean" defaultValue="false">
+                            <caption>Check authentication</caption>
+                            <description>Check if the user is authorized to execute the action before render. (For context buttons this means it will render when a selection is made and the user is authorized)</description>
+                        </property>
                     </propertyGroup>
                     <propertyGroup caption="Appearance">
                         <property key="renderMode" type="enumeration" defaultValue="button">

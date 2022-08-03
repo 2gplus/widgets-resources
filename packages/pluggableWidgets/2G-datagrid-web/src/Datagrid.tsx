@@ -300,7 +300,8 @@ function transformButtonsType(buttons: ButtonsType[]): ButtonsTypeExt[] {
             actionNoContext: btn.actionNoContext,
             icon: btn.icon,
             renderMode: btn.renderMode,
-            btnClass: btn.btnClass
+            btnClass: btn.btnClass,
+            checkAuth: btn.checkAuth
         } as ButtonsTypeExt;
     });
 }
