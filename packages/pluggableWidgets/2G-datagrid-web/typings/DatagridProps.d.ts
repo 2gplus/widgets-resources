@@ -73,10 +73,12 @@ export interface ButtonsType {
     caption: string;
     action?: ListActionValue;
     actionNoContext?: ActionValue;
+    tooltip?: DynamicValue<string>;
     icon?: DynamicValue<WebIcon>;
     checkAuth: boolean;
     renderMode: RenderModeEnum;
     btnClass: string;
+    iconClass: string;
     buttonStyle: ButtonStyleEnum;
 }
 
@@ -108,10 +110,12 @@ export interface ButtonsPreviewType {
     caption: string;
     action: {} | null;
     actionNoContext: {} | null;
+    tooltip: string;
     icon: { type: "glyph"; iconClass: string } | { type: "image"; imageUrl: string } | null;
     checkAuth: boolean;
     renderMode: RenderModeEnum;
     btnClass: string;
+    iconClass: string;
     buttonStyle: ButtonStyleEnum;
 }
 

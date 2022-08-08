@@ -366,9 +366,14 @@
                             <caption>Action(no context)</caption>
                             <description />
                         </property>
+                        <property key="tooltip" type="expression" required="false">
+                            <caption>Tooltip</caption>
+                            <description />
+                            <returnType type="String" />
+                        </property>
                         <property key="icon" type="icon" required="false">
                             <caption>Icon</caption>
-                            <description />
+                            <description>Set icon class in appearance tab to use custom icons</description>
                         </property>
                         <property key="checkAuth" type="boolean" defaultValue="false">
                             <caption>Check authentication</caption>
@@ -387,6 +392,10 @@
                         <property key="btnClass" type="string" defaultValue="" required="false">
                             <caption>Class</caption>
                             <description />
+                        </property>
+                        <property key="iconClass" type="string" defaultValue="" required="false">
+                            <caption>Icon class</caption>
+                            <description>Icon class to use instead of Glyphicon (Overwrites any selected glyphicon/image)</description>
                         </property>
                         <property key="buttonStyle" type="enumeration" defaultValue="default">
                             <caption>Button style</caption>

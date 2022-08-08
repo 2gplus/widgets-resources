@@ -298,9 +298,11 @@ function transformButtonsType(buttons: ButtonsType[]): ButtonsTypeExt[] {
             buttonStyle: btn.buttonStyle,
             caption: btn.caption,
             actionNoContext: btn.actionNoContext,
+            tooltip: btn.tooltip,
             icon: btn.icon,
             renderMode: btn.renderMode,
             btnClass: btn.btnClass,
+            iconClass: btn.iconClass,
             checkAuth: btn.checkAuth
         } as ButtonsTypeExt;
     });
