@@ -475,7 +475,7 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
                         selection &&
                         Array.isArray(selection) &&
                         // @ts-ignore
-                        selection.find(x => action.get(x).isAuthorized))
+                        selection.find(x => (action ? action.get(x).isAuthorized : false)))
                 ) {
                     return Button(btn, e => {
                         e.preventDefault();
