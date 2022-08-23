@@ -25,7 +25,7 @@ function linkButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLAnchor
             className={classNames("", "mx-link", button.btnClass)}
             onClick={action}
             href={"#"}
-            title={button.tooltip?.value}
+            title={button.tooltip}
         >
             {renderIcon(button)}
             {button.caption ? button.caption : ""}
@@ -38,7 +38,7 @@ function defaultButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLBut
             key={button.key}
             className={classNames("btn", "mx-button", "btn-" + button.buttonStyle, button.btnClass, "button-tooltip")}
             onClick={action}
-            title={button.tooltip?.value}
+            title={button.tooltip}
         >
             {renderIcon(button)}
             {button.caption ? button.caption : ""}
@@ -46,12 +46,21 @@ function defaultButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLBut
     );
 }
 function renderIcon(button: ButtonsTypeExt): ReactNode {
-    return button.iconClass ? (
-        <span className={classNames(button.iconClass)} aria-hidden="true" />
-    ) : button.icon ? (
-        <span
-            className={classNames("glyphicon", button.icon ? (button.icon.value as any).iconClass : "")}
-            aria-hidden="true"
-        />
-    ) : null;
+    if (button.iconClass) {
+        return <span className={classNames(button.iconClass)} aria-hidden="true" />;
+    } else if (button.icon && button.icon.value) {
+        switch (button.icon.value.type) {
+            case "glyph":
+                return (
+                    <span
+                        className={classNames("glyphicon", button.icon ? (button.icon.value as any).iconClass : "")}
+                        aria-hidden="true"
+                    />
+                );
+            case "image":
+                return <img src={button.icon.value.iconUrl} alt="" />;
+        }
+    }
+
+    return null;
 }

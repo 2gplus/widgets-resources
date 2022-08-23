@@ -366,10 +366,9 @@
                             <caption>Action(no context)</caption>
                             <description />
                         </property>
-                        <property key="tooltip" type="expression" required="false">
+                        <property key="tooltip" type="string" required="false">
                             <caption>Tooltip</caption>
                             <description />
-                            <returnType type="String" />
                         </property>
                         <property key="icon" type="icon" required="false">
                             <caption>Icon</caption>

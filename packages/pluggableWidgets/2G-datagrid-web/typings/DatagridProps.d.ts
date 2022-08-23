@@ -73,7 +73,7 @@ export interface ButtonsType {
     caption: string;
     action?: ListActionValue;
     actionNoContext?: ActionValue;
-    tooltip?: DynamicValue<string>;
+    tooltip: string;
     icon?: DynamicValue<WebIcon>;
     checkAuth: boolean;
     renderMode: RenderModeEnum;
