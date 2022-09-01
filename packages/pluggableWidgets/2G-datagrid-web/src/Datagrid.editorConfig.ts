@@ -69,6 +69,11 @@ export function getProperties(
     if (!values.showHeaderFilters) {
         hidePropertyIn(defaultProperties, values, "filterList");
     }
+    values.buttons.forEach((button, index) => {
+        if (button.checkAuth !== "Attribute") {
+            hidePropertyIn(defaultProperties, values, "buttons", index, "checkAuthAttribute");
+        }
+    });
 
     changePropertyIn(
         defaultProperties,
@@ -367,6 +372,13 @@ export function check(values: DatagridPreviewProps): Problem[] {
             });
         }
     });
-
+    values.buttons.forEach((button, index) => {
+        if (button.checkAuth === "Attribute" && !button.checkAuthAttribute) {
+            errors.push({
+                property: `buttons/${index + 1}/checkAuth`,
+                message: "Action is checked on Expression but no expression is set."
+            });
+        }
+    });
     return errors;
 }

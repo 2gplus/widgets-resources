@@ -65,6 +65,8 @@ export interface FilterListType {
     filter: ListAttributeValue<string | Big | boolean | Date>;
 }
 
+export type CheckAuthEnum = "True" | "Attribute" | "False";
+
 export type RenderModeEnum = "link" | "button";
 
 export type ButtonStyleEnum = "default" | "inverse" | "primary" | "info" | "success" | "warning" | "danger";
@@ -75,7 +77,8 @@ export interface ButtonsType {
     actionNoContext?: ActionValue;
     tooltip: string;
     icon?: DynamicValue<WebIcon>;
-    checkAuth: boolean;
+    checkAuth: CheckAuthEnum;
+    checkAuthAttribute?: DynamicValue<boolean>;
     renderMode: RenderModeEnum;
     btnClass: string;
     iconClass: string;
@@ -112,7 +115,8 @@ export interface ButtonsPreviewType {
     actionNoContext: {} | null;
     tooltip: string;
     icon: { type: "glyph"; iconClass: string } | { type: "image"; imageUrl: string } | null;
-    checkAuth: boolean;
+    checkAuth: CheckAuthEnum;
+    checkAuthAttribute: string;
     renderMode: RenderModeEnum;
     btnClass: string;
     iconClass: string;

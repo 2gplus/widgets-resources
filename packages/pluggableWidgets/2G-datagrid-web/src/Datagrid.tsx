@@ -294,16 +294,7 @@ function transformButtonsType(buttons: ButtonsType[]): ButtonsTypeExt[] {
     return buttons.map(btn => {
         return {
             key: buttons.indexOf(btn),
-            action: btn.action,
-            buttonStyle: btn.buttonStyle,
-            caption: btn.caption,
-            actionNoContext: btn.actionNoContext,
-            tooltip: btn.tooltip,
-            icon: btn.icon,
-            renderMode: btn.renderMode,
-            btnClass: btn.btnClass,
-            iconClass: btn.iconClass,
-            checkAuth: btn.checkAuth
+            ...btn
         } as ButtonsTypeExt;
     });
 }

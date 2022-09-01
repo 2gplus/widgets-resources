@@ -374,9 +374,19 @@
                             <caption>Icon</caption>
                             <description>Set icon class in appearance tab to use custom icons</description>
                         </property>
-                        <property key="checkAuth" type="boolean" defaultValue="false">
+                        <property key="checkAuth" type="enumeration" defaultValue="False">
                             <caption>Check authentication</caption>
                             <description>Check if the user is authorized to execute the action before render. (For context buttons this means it will render when a selection is made and the user is authorized)</description>
+                            <enumerationValues>
+                                <enumerationValue key="True">True</enumerationValue>
+                                <enumerationValue key="Attribute">Attribute</enumerationValue>
+                                <enumerationValue key="False">False</enumerationValue>
+                            </enumerationValues>
+                        </property>
+                        <property key="checkAuthAttribute" type="expression" required="false">
+                            <caption>Check authentication expression</caption>
+                            <description />
+                            <returnType type="Boolean" />
                         </property>
                     </propertyGroup>
                     <propertyGroup caption="Appearance">

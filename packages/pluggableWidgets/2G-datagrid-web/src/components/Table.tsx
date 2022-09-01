@@ -25,9 +25,9 @@ import { EditableValue, ObjectItem, DynamicValue } from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
-import { Button } from "../utils/Button";
-import { executeAction } from "@mendix/piw-utils-internal/dist/functions";
 import { ButtonsTypeExt } from "../Datagrid";
+import { Button } from "../utils/Button";
+import { executeAction } from "@mendix/piw-utils-internal";
 
 export type TableColumn = Omit<
     ColumnsPreviewType,
@@ -468,32 +468,41 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
     return (
         <div className="table-actions">
             {buttons.map(btn => {
-                const action = btn.action;
-                if (
-                    (action && !btn.checkAuth) ||
-                    (btn.checkAuth &&
-                        selection &&
-                        Array.isArray(selection) &&
-                        // @ts-ignore
-                        selection.find(x => (action ? action.get(x).isAuthorized : false)))
-                ) {
-                    return Button(btn, e => {
-                        e.preventDefault();
-                        if (selection && selection.length > 0) {
-                            for (const entry of selection) {
+                const renderBtn = (btn: ButtonsTypeExt, selection: ObjectItem[]): boolean => {
+                    switch (btn.checkAuth) {
+                        case "Attribute":
+                            return btn.checkAuthAttribute?.value ?? false;
+                        case "False":
+                            return true;
+                        case "True":
+                            return (
                                 // @ts-ignore
-                                executeAction(action.get(entry));
+                                (btn.actionNoContext && btn.actionNoContext.isAuthorized) ||
+                                (btn.checkAuth &&
+                                    selection &&
+                                    Array.isArray(selection) &&
+                                    // @ts-ignore
+                                    selection.find(x => (action ? action.get(x).isAuthorized : false)))
+                            );
+                    }
+                };
+                if (renderBtn(btn, selection)) {
+                    if (btn.action) {
+                        return Button(btn, e => {
+                            e.preventDefault();
+                            if (selection && selection.length > 0) {
+                                for (const entry of selection) {
+                                    // @ts-ignore
+                                    executeAction(btn.action.get(entry));
+                                }
                             }
-                        }
-                    });
-                }
-                const actionNoContext = btn.actionNoContext;
-                // @ts-ignore
-                if (actionNoContext && (!btn.checkAuth || (btn.checkAuth && actionNoContext.isAuthorized))) {
-                    return Button(btn, e => {
-                        e.preventDefault();
-                        executeAction(actionNoContext);
-                    });
+                        });
+                    } else if (btn.actionNoContext) {
+                        return Button(btn, e => {
+                            e.preventDefault();
+                            executeAction(btn.actionNoContext);
+                        });
+                    }
                 }
                 return null;
             })}
