@@ -342,20 +342,20 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     };
     return (
         <div className={props.className} style={props.styles}>
-            <div className="table" role="table">
-                {props.useHeaderFilters ? (
-                    <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
-                        {tableColumns.map(column => {
-                            return column.customFilter;
-                        })}
-                    </div>
-                ) : null}
-                <div className="table-header" role="rowgroup">
-                    {tableLabel()}
-                    {mapButtons(props.buttons, selection)}
-                    {props.pagingPosition === "top" && pagination}
-                    {tableLine()}
+            {props.useHeaderFilters ? (
+                <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
+                    {tableColumns.map(column => {
+                        return column.customFilter;
+                    })}
                 </div>
+            ) : null}
+            <div className="table-header" role="rowgroup" style={{ display: "flex" }}>
+                {tableLabel()}
+                {mapButtons(props.buttons, selection)}
+                {props.pagingPosition === "top" && pagination}
+                {tableLine()}
+            </div>
+            <div className="table" role="table">
                 <InfiniteBody
                     className="table-content"
                     hasMoreItems={props.hasMoreItems}
@@ -444,9 +444,9 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                             </div>
                         ))}
                 </InfiniteBody>
-                <div className="table-footer" role="rowgroup">
-                    {props.pagingPosition === "bottom" && pagination}
-                </div>
+            </div>
+            <div className="table-footer" role="rowgroup">
+                {props.pagingPosition === "bottom" && pagination}
             </div>
         </div>
     );
@@ -466,7 +466,7 @@ function sortColumns(columnsOrder: string[], columnA: ColumnProperty, columnB: C
 
 function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNode {
     return (
-        <div className="table-actions">
+        <div className="table-actions" style={{ flex: 1 }}>
             {buttons.map(btn => {
                 const renderBtn = (btn: ButtonsTypeExt, selection: ObjectItem[]): boolean => {
                     switch (btn.checkAuth) {
