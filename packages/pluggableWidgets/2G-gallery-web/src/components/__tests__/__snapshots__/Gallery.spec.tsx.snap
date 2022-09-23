@@ -1,0 +1,218 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gallery DOM Structure renders correctly 1`] = `
+<div
+  class="widget-gallery"
+  data-focusindex="0"
+>
+  <div
+    class="widget-gallery-filter"
+    role="section"
+  />
+  <div
+    class="widget-gallery-items widget-gallery-lg-4 widget-gallery-md-3 widget-gallery-sm-2 infinite-loading"
+    role="list"
+  >
+    <div
+      class="widget-gallery-item"
+      role="listitem"
+    >
+      11
+    </div>
+    <div
+      class="widget-gallery-item"
+      role="listitem"
+    >
+      22
+    </div>
+    <div
+      class="widget-gallery-item"
+      role="listitem"
+    >
+      33
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Gallery DOM Structure renders correctly with onclick event 1`] = `
+<div
+  class="widget-gallery"
+  data-focusindex="0"
+>
+  <div
+    class="widget-gallery-filter"
+    role="section"
+  />
+  <div
+    class="widget-gallery-items widget-gallery-lg-4 widget-gallery-md-3 widget-gallery-sm-2 infinite-loading"
+    role="list"
+  >
+    <div
+      class="widget-gallery-item widget-gallery-clickable"
+      role="button"
+      tabindex="0"
+    >
+      11
+    </div>
+    <div
+      class="widget-gallery-item widget-gallery-clickable"
+      role="button"
+      tabindex="0"
+    >
+      22
+    </div>
+    <div
+      class="widget-gallery-item widget-gallery-clickable"
+      role="button"
+      tabindex="0"
+    >
+      33
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Gallery with accessibility properties renders correctly 1`] = `
+<div
+  class="widget-gallery"
+  data-focusindex="0"
+>
+  <div
+    aria-label="filter title"
+    class="widget-gallery-filter"
+    role="section"
+  />
+  <div
+    aria-label="empty message"
+    class="widget-gallery-empty"
+    role="section"
+  >
+    <div
+      class="empty-placeholder"
+    >
+      <span>
+        No items found
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Gallery with empty option renders correctly 1`] = `
+<div
+  class="widget-gallery"
+  data-focusindex="0"
+>
+  <div
+    class="widget-gallery-filter"
+    role="section"
+  />
+  <div
+    class="widget-gallery-empty"
+    role="section"
+  >
+    <div
+      class="empty-placeholder"
+    >
+      <span>
+        No items found
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Gallery with pagination renders correctly 1`] = `
+<div
+  class="widget-gallery"
+  data-focusindex="0"
+>
+  <div
+    class="widget-gallery-pagination"
+  >
+    <div
+      aria-label="Pagination"
+      class="pagination-bar"
+      role="pagination"
+    >
+      <button
+        aria-label="Go to first page"
+        class="btn pagination-button"
+        disabled=""
+      >
+        <span
+          aria-hidden="true"
+          class="glyphicon glyphicon-step-backward"
+        />
+      </button>
+      <button
+        aria-label="Go to previous page"
+        class="btn pagination-button"
+        disabled=""
+      >
+        <span
+          aria-hidden="true"
+          class="glyphicon glyphicon-backward"
+        />
+      </button>
+      <span
+        class="sr-only sr-only-focusable"
+      >
+        Currently showing 1 to 10 of 20
+      </span>
+      <div
+        aria-hidden="true"
+        class="paging-status"
+      >
+        1 to 10 of 20
+      </div>
+      <button
+        aria-label="Go to next page"
+        class="btn pagination-button"
+      >
+        <span
+          aria-hidden="true"
+          class="glyphicon glyphicon-forward"
+        />
+      </button>
+      <button
+        aria-label="Go to last page"
+        class="btn pagination-button"
+      >
+        <span
+          aria-hidden="true"
+          class="glyphicon glyphicon-step-forward"
+        />
+      </button>
+    </div>
+  </div>
+  <div
+    class="widget-gallery-filter"
+    role="section"
+  />
+  <div
+    class="widget-gallery-items widget-gallery-lg-4 widget-gallery-md-3 widget-gallery-sm-2"
+    role="list"
+  >
+    <div
+      class="widget-gallery-item"
+      role="listitem"
+    >
+      11
+    </div>
+    <div
+      class="widget-gallery-item"
+      role="listitem"
+    >
+      22
+    </div>
+    <div
+      class="widget-gallery-item"
+      role="listitem"
+    >
+      33
+    </div>
+  </div>
+</div>
+`;
