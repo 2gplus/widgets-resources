@@ -344,6 +344,16 @@
                 </property>
             </propertyGroup>
         </propertyGroup>
+        <propertyGroup caption="TreeView">
+            <property key="treeViewEnabled" type="boolean" defaultValue="false">
+                <caption>Enabled</caption>
+                <description />
+            </property>
+            <property key="treeViewWidgets" type="widgets" dataSource="datasource" required="false">
+                <caption>Tree view widgets</caption>
+                <description>Widgets to show when treeView is expanded</description>
+            </property>
+        </propertyGroup>
         <propertyGroup caption="Buttons">
             <property key="tableLabel" type="textTemplate" required="false">
                 <caption>Table label</caption>

@@ -283,6 +283,8 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             defaultTrigger={props.defaultTrigger}
             pagingDisplayTypeEnum={props.pagingDisplayType}
             pagingTypeEnum={props.pagingType}
+            treeViewEnabled={props.treeViewEnabled}
+            treeViewwidgets={props.treeViewWidgets}
         />
     );
 }

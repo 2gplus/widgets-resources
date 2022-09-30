@@ -1,12 +1,12 @@
 import {
+    createElement,
     CSSProperties,
     ReactElement,
     ReactNode,
     useCallback,
     useEffect,
     useMemo,
-    useState,
-    createElement
+    useState
 } from "react";
 import { ColumnSelector } from "./ColumnSelector";
 import { Header } from "./Header";
@@ -21,13 +21,14 @@ import {
 } from "../../typings/DatagridProps";
 import { Big } from "big.js";
 import classNames from "classnames";
-import { EditableValue, ObjectItem, DynamicValue } from "mendix";
+import { DynamicValue, EditableValue, ListWidgetValue, ObjectItem } from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
 import { ButtonsTypeExt } from "../Datagrid";
 import { Button } from "../utils/Button";
 import { executeAction } from "@mendix/piw-utils-internal";
+import { TableRow } from "./Row";
 
 export type TableColumn = Omit<
     ColumnsPreviewType,
@@ -80,6 +81,8 @@ export interface TableProps<T extends ObjectItem> {
     tableLabel?: DynamicValue<string>;
     pagingTypeEnum: PagingTypeEnum;
     pagingDisplayTypeEnum: PagingDisplayTypeEnum;
+    treeViewEnabled: boolean;
+    treeViewwidgets?: ListWidgetValue;
 }
 export interface RemoteSortConfig {
     property?: string;
@@ -192,7 +195,6 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         ),
         [isDragging]
     );
-
     const tableColumns: ColumnProperty[] = useMemo(
         () =>
             props.columns.map((column, index) => ({
@@ -408,27 +410,33 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                 setHiddenColumns={setHiddenColumns}
                             />
                         )}
+                        {!props.columnsHidable && props.treeViewEnabled && (
+                            <div aria-label={"label"} className="th" role="columnheader" title={""}></div>
+                        )}
                     </div>
                     {rows.map((row, rowIndex) => {
                         return (
-                            <div
-                                onClick={() => updateSelection(row.item)}
+                            <TableRow
                                 key={`row_${row.item.id}`}
-                                className={classNames(
+                                onClick={() => updateSelection(row.item)}
+                                row={row.item}
+                                index={rowIndex}
+                                columnCount={visibleColumns.length + (props.treeViewEnabled ? 1 : 0)}
+                                rowClass={classNames([
                                     "tr",
                                     props.rowClass?.(row.item),
                                     selection.find(x => x.id === row.item.id) ? "selected" : ""
-                                )}
-                                role="row"
+                                ])}
+                                treeViewWidget={props.treeViewwidgets}
                             >
                                 {visibleColumns.map(cell => renderCell(cell, row.item, rowIndex))}
-                                {props.columnsHidable && (
+                                {!props.treeViewEnabled && props.columnsHidable && (
                                     <div
                                         aria-hidden
                                         className={classNames("td column-selector", { "td-borders": rowIndex === 0 })}
                                     />
                                 )}
-                            </div>
+                            </TableRow>
                         );
                     })}
                     {(props.data.length === 0 || props.preview) &&

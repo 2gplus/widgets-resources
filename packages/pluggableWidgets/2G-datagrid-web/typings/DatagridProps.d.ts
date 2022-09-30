@@ -160,6 +160,8 @@ export interface DatagridContainerProps {
     filterList: FilterListType[];
     filtersPlaceholder?: ReactNode;
     filterSectionTitle?: DynamicValue<string>;
+    treeViewEnabled: boolean;
+    treeViewWidgets?: ListWidgetValue;
     tableLabel?: DynamicValue<string>;
     buttons: ButtonsType[];
 }
@@ -202,6 +204,8 @@ export interface DatagridPreviewProps {
     filterList: FilterListPreviewType[];
     filtersPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     filterSectionTitle: string;
+    treeViewEnabled: boolean;
+    treeViewWidgets: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     tableLabel: string;
     buttons: ButtonsPreviewType[];
 }

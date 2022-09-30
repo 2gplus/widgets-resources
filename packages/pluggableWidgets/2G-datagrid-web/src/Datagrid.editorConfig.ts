@@ -69,6 +69,9 @@ export function getProperties(
     if (!values.showHeaderFilters) {
         hidePropertyIn(defaultProperties, values, "filterList");
     }
+    if (!values.treeViewEnabled) {
+        hidePropertyIn(defaultProperties, values, "treeViewWidgets");
+    }
     values.buttons.forEach((button, index) => {
         if (button.checkAuth !== "Attribute") {
             hidePropertyIn(defaultProperties, values, "buttons", index, "checkAuthAttribute");
@@ -344,6 +347,21 @@ export const getPreview = (values: DatagridPreviewProps, isDarkMode: boolean): S
                   } as RowLayoutProps
               ]
             : [];
+    if (values.treeViewEnabled) {
+        footer.push({
+            type: "RowLayout",
+            columnSize: "fixed",
+            borders: true,
+            children: [
+                {
+                    type: "DropZone",
+                    property: values.treeViewWidgets,
+                    placeholder: "Drop widgets to show on expansion here"
+                } as DropZoneProps
+            ]
+        } as RowLayoutProps);
+    }
+
     return {
         type: "Container",
         children: [titleHeader, button, headers, ...Array.from({ length: 5 }).map(() => columns), ...footer]
