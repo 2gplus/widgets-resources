@@ -129,6 +129,7 @@ export function preview(props: DatagridPreviewProps): ReactElement {
             pagingDisplayTypeEnum={"objectBased"}
             pagingTypeEnum={"default"}
             treeViewEnabled={false}
+            treeViewPosition={"left"}
         />
     );
 }

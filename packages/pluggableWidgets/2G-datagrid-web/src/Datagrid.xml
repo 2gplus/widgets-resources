@@ -349,6 +349,19 @@
                 <caption>Enabled</caption>
                 <description />
             </property>
+            <property key="treeViewPosition" type="enumeration" defaultValue="left">
+                <caption>Icon Position</caption>
+                <description>Default(Left) will position the expand icon in the first column, right in the last column</description>
+                <enumerationValues>
+                    <enumerationValue key="left">Left</enumerationValue>
+                    <enumerationValue key="Right">Right</enumerationValue>
+                </enumerationValues>
+            </property>
+            <property key="treeViewCondition" type="expression" required="false" dataSource="datasource">
+                <caption>Show condition</caption>
+                <description />
+                <returnType type="Boolean" />
+            </property>
             <property key="treeViewWidgets" type="widgets" dataSource="datasource" required="false">
                 <caption>Tree view widgets</caption>
                 <description>Widgets to show when treeView is expanded</description>

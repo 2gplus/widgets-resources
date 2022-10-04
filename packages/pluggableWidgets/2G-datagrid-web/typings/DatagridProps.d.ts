@@ -65,6 +65,8 @@ export interface FilterListType {
     filter: ListAttributeValue<string | Big | boolean | Date>;
 }
 
+export type TreeViewPositionEnum = "left" | "Right";
+
 export type CheckAuthEnum = "True" | "Attribute" | "False";
 
 export type RenderModeEnum = "link" | "button";
@@ -161,6 +163,8 @@ export interface DatagridContainerProps {
     filtersPlaceholder?: ReactNode;
     filterSectionTitle?: DynamicValue<string>;
     treeViewEnabled: boolean;
+    treeViewPosition: TreeViewPositionEnum;
+    treeViewCondition?: ListExpressionValue<boolean>;
     treeViewWidgets?: ListWidgetValue;
     tableLabel?: DynamicValue<string>;
     buttons: ButtonsType[];
@@ -205,6 +209,8 @@ export interface DatagridPreviewProps {
     filtersPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     filterSectionTitle: string;
     treeViewEnabled: boolean;
+    treeViewPosition: TreeViewPositionEnum;
+    treeViewCondition: string;
     treeViewWidgets: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     tableLabel: string;
     buttons: ButtonsPreviewType[];

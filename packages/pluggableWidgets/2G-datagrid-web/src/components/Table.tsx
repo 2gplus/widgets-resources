@@ -17,11 +17,12 @@ import {
     PagingDisplayTypeEnum,
     PagingTypeEnum,
     SelectionModeEnum,
+    TreeViewPositionEnum,
     WidthEnum
 } from "../../typings/DatagridProps";
 import { Big } from "big.js";
 import classNames from "classnames";
-import { DynamicValue, EditableValue, ListWidgetValue, ObjectItem } from "mendix";
+import { DynamicValue, EditableValue, ListWidgetValue, ListExpressionValue, ObjectItem } from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
@@ -82,7 +83,9 @@ export interface TableProps<T extends ObjectItem> {
     pagingTypeEnum: PagingTypeEnum;
     pagingDisplayTypeEnum: PagingDisplayTypeEnum;
     treeViewEnabled: boolean;
+    treeViewPosition: TreeViewPositionEnum;
     treeViewwidgets?: ListWidgetValue;
+    treeViewCondition?: ListExpressionValue<boolean>;
 }
 export interface RemoteSortConfig {
     property?: string;
@@ -299,7 +302,10 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             })
             .join(" ");
         return {
-            gridTemplateColumns: columnSizes + (props.columnsHidable ? " fit-content(50px)" : "")
+            gridTemplateColumns:
+                columnSizes +
+                (props.treeViewEnabled && props.treeViewPosition === "left" ? " fit-content(50px)" : "") +
+                (props.columnsHidable ? " fit-content(50px)" : "")
         };
     }, [columnsWidth, visibleColumns, props.columnsHidable]);
     /**
@@ -367,6 +373,9 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                     style={cssGridStyles}
                 >
                     <div className="tr" role="row">
+                        {props.treeViewEnabled && props.treeViewPosition === "left" && (
+                            <div aria-label={"label"} className="th" role="columnheader" title={""}></div>
+                        )}
                         {visibleColumns.map(column =>
                             props.headerWrapperRenderer(
                                 Number(column.id),
@@ -410,7 +419,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                 setHiddenColumns={setHiddenColumns}
                             />
                         )}
-                        {!props.columnsHidable && props.treeViewEnabled && (
+                        {!props.columnsHidable && props.treeViewEnabled && props.treeViewPosition === "Right" && (
                             <div aria-label={"label"} className="th" role="columnheader" title={""}></div>
                         )}
                     </div>
@@ -421,19 +430,26 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                 onClick={() => updateSelection(row.item)}
                                 row={row.item}
                                 index={rowIndex}
-                                columnCount={visibleColumns.length + (props.treeViewEnabled ? 1 : 0)}
+                                columnCount={
+                                    visibleColumns.length +
+                                    (props.treeViewEnabled ? (props.treeViewPosition === "left" ? 2 : 1) : 0)
+                                }
                                 rowClass={classNames([
                                     "tr",
                                     props.rowClass?.(row.item),
                                     selection.find(x => x.id === row.item.id) ? "selected" : ""
                                 ])}
                                 treeViewWidget={props.treeViewwidgets}
+                                treeViewPosition={props.treeViewPosition}
+                                treeViewCondition={props.treeViewCondition}
                             >
                                 {visibleColumns.map(cell => renderCell(cell, row.item, rowIndex))}
-                                {!props.treeViewEnabled && props.columnsHidable && (
+                                {(!props.treeViewEnabled || props.treeViewPosition === "left") && props.columnsHidable && (
                                     <div
                                         aria-hidden
-                                        className={classNames("td column-selector", { "td-borders": rowIndex === 0 })}
+                                        className={classNames("td column-selector", {
+                                            "td-borders": rowIndex === 0
+                                        })}
                                     />
                                 )}
                             </TableRow>
