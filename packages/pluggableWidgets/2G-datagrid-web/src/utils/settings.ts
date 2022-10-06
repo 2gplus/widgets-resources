@@ -84,7 +84,7 @@ export function useSettings(
                 columnOrder: columns.sort((a, b) => a.order - b.order).map(s => s.columnId),
                 hiddenColumns: columns.filter(s => s.hidden).map(s => s.columnId),
                 sortBy: columns
-                    .filter(s => s.sort)
+                    .filter(s => s.sort && !isNaN(parseInt(s.columnId, 10)))
                     .map(s => ({
                         id: s.columnId,
                         desc: s.sortMethod === "desc"
