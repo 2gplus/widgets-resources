@@ -459,9 +459,12 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                         props.emptyPlaceholderRenderer &&
                         props.emptyPlaceholderRenderer(children => (
                             <div
-                                className={classNames("td", "td-borders")}
+                                className={classNames("td", "td-borders td-empty-placeholder")}
                                 style={{
-                                    gridColumn: `span ${props.columns.length + (props.columnsHidable ? 1 : 0)}`
+                                    gridColumn: `span ${
+                                        props.columns.length +
+                                        (props.treeViewEnabled ? (props.treeViewPosition === "left" ? 2 : 1) : 0)
+                                    }`
                                 }}
                             >
                                 <div className="empty-placeholder">{children}</div>
@@ -503,10 +506,11 @@ function mapButtons(buttons: ButtonsTypeExt[], selection: ObjectItem[]): ReactNo
                                 // @ts-ignore
                                 (btn.actionNoContext && btn.actionNoContext.isAuthorized) ||
                                 (btn.checkAuth &&
+                                    btn.action &&
                                     selection &&
                                     Array.isArray(selection) &&
                                     // @ts-ignore
-                                    selection.find(x => (action ? action.get(x).isAuthorized : false)))
+                                    selection.find(x => btn.action.get(x).isAuthorized))
                             );
                     }
                 };

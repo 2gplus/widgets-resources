@@ -55,7 +55,7 @@ export function TableRow(props: TableRowProps): JSX.Element {
     const treeRender = () => {
         if (treeViewEnabled) {
             return (
-                <div key={`tree_row_${props.row.id}`} className={classNames("tree-view-row")} style={style}>
+                <div key={`tree_row_${props.row.id}`} className={classNames("tr tree-view-row")} style={style}>
                     {props.treeViewWidget?.get(props.row)}
                 </div>
             );

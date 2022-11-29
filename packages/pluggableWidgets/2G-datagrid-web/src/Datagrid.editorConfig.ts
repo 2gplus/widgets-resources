@@ -103,6 +103,7 @@ export function getProperties(
                         : `Manual (${column.size})`,
                     alignment ? alignment.charAt(0).toUpperCase() + alignment.slice(1) : ""
                 ];
+                column.sortProperty = column.attribute;
             });
         },
         "columns"

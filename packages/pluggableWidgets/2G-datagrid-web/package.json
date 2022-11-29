@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "config": {
     "projectPath": "../../../../../Mendix/table-test",
-    "mendixHost": "http://localhost:8080",
+    "mendixHost": "http://localhost:8090",
     "developmentPort": 3000
   },
   "packagePath": "com.2gplus.widget.web",

@@ -2,7 +2,6 @@ import { createElement, ReactElement, useCallback, useEffect, useMemo, useRef, u
 import { ButtonsType, ColumnsType, DatagridContainerProps } from "../typings/DatagridProps";
 import { FilterCondition } from "mendix/filters";
 import { and } from "mendix/filters/builders";
-
 import { RemoteSortConfig, Table, TableColumn } from "./components/Table";
 import {
     FilterFunction,
@@ -29,6 +28,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
         ascending: props.sortAscending?.value,
         property: props.sortAttribute?.value
     });
+    const timer = useRef<any>(null);
     /**
      * End 2G Remote sorting
      */
@@ -184,7 +184,10 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             }
         }
         if (changed) {
-            props.onSortChangedAction?.execute();
+            clearTimeout(timer.current);
+            timer.current = setTimeout(() => {
+                props.onSortChangedAction?.execute();
+            }, 40);
         }
     };
 
@@ -294,6 +297,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
 export interface ButtonsTypeExt extends ButtonsType {
     key: number;
 }
+
 function transformButtonsType(buttons: ButtonsType[]): ButtonsTypeExt[] {
     return buttons.map(btn => {
         return {
