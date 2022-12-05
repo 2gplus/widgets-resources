@@ -215,21 +215,6 @@
                     <returnType type="String" />
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Events">
-                <property key="onClick" type="action" required="false" dataSource="datasource">
-                    <caption>On click action</caption>
-                    <description />
-                </property>
-
-                <property key="defaultTrigger" type="enumeration" defaultValue="doubleClick">
-                    <caption>Default Trigger</caption>
-                    <description />
-                    <enumerationValues>
-                        <enumerationValue key="singleClick">Single click</enumerationValue>
-                        <enumerationValue key="doubleClick">Double click</enumerationValue>
-                    </enumerationValues>
-                </property>
-            </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="CustomPaging">
             <property key="pagingAction" type="action" required="false">
@@ -291,7 +276,10 @@
             <propertyGroup caption="Configuration">
                 <property key="configurationAttribute" type="attribute" required="false" onChange="onConfigurationChange">
                     <caption>Attribute</caption>
-                    <description>Attribute containing the personalized configuration of the capabilities. This configuration is automatically stored and loaded. The attribute requires Unlimited String.</description>
+                    <description>
+                        Attribute containing the personalized configuration of the capabilities. This
+                        configuration is automatically stored and loaded. The attribute requires Unlimited String.
+                    </description>
                     <attributeTypes>
                         <attributeType name="String" />
                     </attributeTypes>
@@ -399,7 +387,11 @@
                         </property>
                         <property key="checkAuth" type="enumeration" defaultValue="False">
                             <caption>Check authentication</caption>
-                            <description>Check if the user is authorized to execute the action before render. (For context buttons this means it will render when a selection is made and the user is authorized)</description>
+                            <description>
+                                Check if the user is authorized to execute the action before render. (For
+                                context buttons this means it will render when a selection is made and the user is
+                                authorized)
+                            </description>
                             <enumerationValues>
                                 <enumerationValue key="True">True</enumerationValue>
                                 <enumerationValue key="Attribute">Attribute</enumerationValue>
@@ -427,7 +419,10 @@
                         </property>
                         <property key="iconClass" type="string" defaultValue="" required="false">
                             <caption>Icon class</caption>
-                            <description>Icon class to use instead of Glyphicon (Overwrites any selected glyphicon/image)</description>
+                            <description>
+                                Icon class to use instead of Glyphicon (Overwrites any selected
+                                glyphicon/image)
+                            </description>
                         </property>
                         <property key="buttonStyle" type="enumeration" defaultValue="default">
                             <caption>Button style</caption>
@@ -445,6 +440,38 @@
                     </propertyGroup>
                 </properties>
             </property>
+        </propertyGroup>
+        <propertyGroup caption="Events">
+            <propertyGroup caption="Click events">
+                <property key="onClick" type="action" required="false" dataSource="datasource">
+                    <caption>On click action</caption>
+                    <description />
+                </property>
+
+                <property key="defaultTrigger" type="enumeration" defaultValue="doubleClick">
+                    <caption>Default Trigger</caption>
+                    <description />
+                    <enumerationValues>
+                        <enumerationValue key="singleClick">Single click</enumerationValue>
+                        <enumerationValue key="doubleClick">Double click</enumerationValue>
+                    </enumerationValues>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Ctrl click events">
+                <property key="ctrlClick" type="action" required="false" dataSource="datasource">
+                    <caption>On ctrl click action</caption>
+                    <description />
+                </property>
+
+                <property key="ctrlDefaultTrigger" type="enumeration" defaultValue="doubleClick">
+                    <caption>Default ctrl Trigger</caption>
+                    <description />
+                    <enumerationValues>
+                        <enumerationValue key="singleClick">Single ctrl click</enumerationValue>
+                        <enumerationValue key="doubleClick">Double ctrl click</enumerationValue>
+                    </enumerationValues>
+                </property>
+            </propertyGroup>
         </propertyGroup>
     </properties>
 </widget>

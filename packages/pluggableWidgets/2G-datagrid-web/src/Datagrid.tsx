@@ -59,7 +59,11 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     const [filtered, setFiltered] = useState(false);
     const multipleFilteringState = useMultipleFiltering();
     const { FilterContext } = useFilterContext();
-    const cellRenderer = useCellRenderer({ columns: props.columns, onClick: props.onClick });
+    const cellRenderer = useCellRenderer({
+        columns: props.columns,
+        onClick: props.onClick,
+        ctrlClick: props.ctrlClick
+    });
 
     useEffect(() => {
         switch (props.pagingType) {
@@ -284,6 +288,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             remoteSortConfig={remoteSortConfig}
             updateRemoteSortConfig={updateRemoteSortConfig}
             defaultTrigger={props.defaultTrigger}
+            ctrlDefaultTrigger={props.ctrlDefaultTrigger}
             pagingDisplayTypeEnum={props.pagingDisplayType}
             pagingTypeEnum={props.pagingType}
             treeViewEnabled={props.treeViewEnabled}

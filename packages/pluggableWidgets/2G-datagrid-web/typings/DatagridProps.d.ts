@@ -57,8 +57,6 @@ export type PagingPositionEnum = "bottom" | "top";
 
 export type ShowEmptyPlaceholderEnum = "none" | "custom";
 
-export type DefaultTriggerEnum = "singleClick" | "doubleClick";
-
 export type PagingDisplayTypeEnum = "objectBased" | "pageBased";
 
 export interface FilterListType {
@@ -86,6 +84,10 @@ export interface ButtonsType {
     iconClass: string;
     buttonStyle: ButtonStyleEnum;
 }
+
+export type DefaultTriggerEnum = "singleClick" | "doubleClick";
+
+export type CtrlDefaultTriggerEnum = "singleClick" | "doubleClick";
 
 export interface ColumnsPreviewType {
     showContentAs: ShowContentAsEnum;
@@ -146,8 +148,6 @@ export interface DatagridContainerProps {
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder?: ReactNode;
     rowClass?: ListExpressionValue<string>;
-    onClick?: ListActionValue;
-    defaultTrigger: DefaultTriggerEnum;
     pagingAction?: ActionValue;
     pagingDisplayType: PagingDisplayTypeEnum;
     pagingTotalCount?: EditableValue<Big>;
@@ -168,6 +168,10 @@ export interface DatagridContainerProps {
     treeViewWidgets?: ListWidgetValue;
     tableLabel?: DynamicValue<string>;
     buttons: ButtonsType[];
+    onClick?: ListActionValue;
+    defaultTrigger: DefaultTriggerEnum;
+    ctrlClick?: ListActionValue;
+    ctrlDefaultTrigger: CtrlDefaultTriggerEnum;
 }
 
 export interface DatagridPreviewProps {
@@ -191,8 +195,6 @@ export interface DatagridPreviewProps {
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     rowClass: string;
-    onClick: {} | null;
-    defaultTrigger: DefaultTriggerEnum;
     pagingAction: {} | null;
     pagingDisplayType: PagingDisplayTypeEnum;
     pagingTotalCount: string;
@@ -214,4 +216,8 @@ export interface DatagridPreviewProps {
     treeViewWidgets: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     tableLabel: string;
     buttons: ButtonsPreviewType[];
+    onClick: {} | null;
+    defaultTrigger: DefaultTriggerEnum;
+    ctrlClick: {} | null;
+    ctrlDefaultTrigger: CtrlDefaultTriggerEnum;
 }

@@ -8,9 +8,10 @@ import { executeAction } from "@mendix/piw-utils-internal";
 interface CellRendererHookProps {
     columns: ColumnsType[];
     onClick?: ListActionValue;
+    ctrlClick?: ListActionValue;
 }
 
-export function useCellRenderer({ onClick, columns }: CellRendererHookProps): CellRenderer {
+export function useCellRenderer({ onClick, ctrlClick, columns }: CellRendererHookProps): CellRenderer {
     const renderer: CellRenderer = (renderWrapper, value, columnIndex) => {
         const column = columns[columnIndex];
         const title = column.tooltip && column.tooltip.get(value)?.value;
@@ -37,9 +38,10 @@ export function useCellRenderer({ onClick, columns }: CellRendererHookProps): Ce
             classNames(`align-column-${column.alignment}`, column.columnClass?.get(value)?.value, {
                 "wrap-text": column.wrapText
             }),
-            onClick ? () => executeAction(onClick?.get(value)) : undefined
+            onClick ? () => executeAction(onClick?.get(value)) : undefined,
+            ctrlClick ? () => executeAction(ctrlClick?.get(value)) : undefined
         );
     };
 
-    return useCallback(renderer, [columns, onClick]);
+    return useCallback(renderer, [columns, onClick, ctrlClick]);
 }

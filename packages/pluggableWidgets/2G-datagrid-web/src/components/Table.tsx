@@ -13,6 +13,7 @@ import { Header } from "./Header";
 import {
     AlignmentEnum,
     ColumnsPreviewType,
+    CtrlDefaultTriggerEnum,
     DefaultTriggerEnum,
     PagingDisplayTypeEnum,
     PagingTypeEnum,
@@ -37,7 +38,12 @@ export type TableColumn = Omit<
 >;
 
 export type CellRenderer<T extends ObjectItem = ObjectItem> = (
-    renderWrapper: (children: ReactNode, className?: string, onClick?: () => void) => ReactElement,
+    renderWrapper: (
+        children: ReactNode,
+        className?: string,
+        onClick?: () => void,
+        ctrlClick?: () => void
+    ) => ReactElement,
     value: T,
     columnIndex: number
 ) => ReactElement;
@@ -75,6 +81,7 @@ export interface TableProps<T extends ObjectItem> {
      * Custom 2G props
      */
     defaultTrigger: DefaultTriggerEnum;
+    ctrlDefaultTrigger: CtrlDefaultTriggerEnum;
     buttons: ButtonsTypeExt[];
     selectionMode: SelectionModeEnum;
     remoteSortConfig?: RemoteSortConfig;
@@ -87,6 +94,7 @@ export interface TableProps<T extends ObjectItem> {
     treeViewwidgets?: ListWidgetValue;
     treeViewCondition?: ListExpressionValue<boolean>;
 }
+
 export interface RemoteSortConfig {
     property?: string;
     ascending?: boolean;
@@ -226,16 +234,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         (column: ColumnProperty, value: T, rowIndex: number) =>
             visibleColumns.find(c => c.id === column.id) || props.preview
                 ? props.cellRenderer(
-                      (children, className, onClick) => {
-                          let singleClick;
-                          let doubleClick;
-                          switch (props.defaultTrigger) {
-                              case "singleClick":
-                                  singleClick = onClick;
-                                  break;
-                              case "doubleClick":
-                                  doubleClick = onClick;
-                          }
+                      (children, className, onClick, ctrlClick) => {
                           return (
                               <div
                                   key={`row_${value.id}_cell_${column.id}`}
@@ -243,8 +242,28 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                       clickable: !!onClick,
                                       "hidden-column-preview": props.preview && props.columnsHidable && column.hidden
                                   })}
-                                  onClick={singleClick}
-                                  onDoubleClick={doubleClick}
+                                  onClick={(e: any) => {
+                                      if (e.ctrlKey && props.ctrlDefaultTrigger === "singleClick" && ctrlClick) {
+                                          ctrlClick();
+                                      } else if (
+                                          onClick &&
+                                          (props.ctrlDefaultTrigger === "singleClick" ||
+                                              props.defaultTrigger === "singleClick")
+                                      ) {
+                                          onClick();
+                                      }
+                                  }}
+                                  onDoubleClick={(e: any) => {
+                                      if (e.ctrlKey && props.ctrlDefaultTrigger === "doubleClick" && ctrlClick) {
+                                          ctrlClick();
+                                      } else if (
+                                          onClick &&
+                                          (props.ctrlDefaultTrigger === "doubleClick" ||
+                                              props.defaultTrigger === "doubleClick")
+                                      ) {
+                                          onClick();
+                                      }
+                                  }}
                                   onKeyDown={
                                       onClick
                                           ? e => {
