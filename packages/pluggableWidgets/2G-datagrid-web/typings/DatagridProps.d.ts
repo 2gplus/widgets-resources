@@ -72,10 +72,10 @@ export type RenderModeEnum = "link" | "button";
 export type ButtonStyleEnum = "default" | "inverse" | "primary" | "info" | "success" | "warning" | "danger";
 
 export interface ButtonsType {
-    caption: string;
+    caption?: DynamicValue<string>;
     action?: ListActionValue;
     actionNoContext?: ActionValue;
-    tooltip: string;
+    tooltip?: DynamicValue<string>;
     icon?: DynamicValue<WebIcon>;
     checkAuth: CheckAuthEnum;
     checkAuthAttribute?: DynamicValue<boolean>;

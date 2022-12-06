@@ -365,7 +365,7 @@
                 <description />
                 <properties>
                     <propertyGroup caption="General">
-                        <property key="caption" type="string" required="false">
+                        <property key="caption" type="textTemplate" required="false">
                             <caption>Caption</caption>
                             <description />
                         </property>
@@ -377,7 +377,7 @@
                             <caption>Action(no context)</caption>
                             <description />
                         </property>
-                        <property key="tooltip" type="string" required="false">
+                        <property key="tooltip" type="textTemplate" required="false">
                             <caption>Tooltip</caption>
                             <description />
                         </property>

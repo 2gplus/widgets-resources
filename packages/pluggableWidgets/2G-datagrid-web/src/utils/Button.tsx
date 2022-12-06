@@ -25,7 +25,7 @@ function linkButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLAnchor
             className={classNames("", "mx-link", button.btnClass)}
             onClick={action}
             href={"#"}
-            title={button.tooltip}
+            title={button.tooltip?.value}
         >
             {renderIcon(button)}
             {button.caption ? button.caption : ""}
@@ -38,10 +38,10 @@ function defaultButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLBut
             key={button.key}
             className={classNames("btn", "mx-button", "btn-" + button.buttonStyle, button.btnClass, "button-tooltip")}
             onClick={action}
-            title={button.tooltip}
+            title={button.tooltip?.value}
         >
             {renderIcon(button)}
-            {button.caption ? button.caption : ""}
+            {button.caption?.value ? button.caption?.value : ""}
         </button>
     );
 }
