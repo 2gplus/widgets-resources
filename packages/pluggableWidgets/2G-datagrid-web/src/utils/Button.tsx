@@ -28,7 +28,7 @@ function linkButton(button: ButtonsTypeExt, action: MouseEventHandler<HTMLAnchor
             title={button.tooltip?.value}
         >
             {renderIcon(button)}
-            {button.caption ? button.caption : ""}
+            {button.caption?.value ? button.caption?.value : ""}
         </a>
     );
 }
