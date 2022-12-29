@@ -48,7 +48,7 @@ export function TableRow(props: TableRowProps): JSX.Element {
     };
     const style = {
         gridColumnStart: 1,
-        gridColumnEnd: props.columnCount + 1,
+        gridColumnEnd: props.columnCount,
         display: "grid",
         gridTemplateColumns: "1fr"
     };
