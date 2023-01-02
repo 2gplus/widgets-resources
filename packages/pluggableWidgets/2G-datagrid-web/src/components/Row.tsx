@@ -24,7 +24,7 @@ export function TableRow(props: TableRowProps): JSX.Element {
             if (props.treeViewCondition === undefined || props.treeViewCondition.get(props.row).value) {
                 treeViewWidget = (
                     <TreeView
-                        classNames={classNames("td", { " td-borders": props.index === 0 })}
+                        classNames={classNames({ "td-borders": props.index === 0 })}
                         open={treeViewEnabled}
                         onChange={() => setTreeViewEnabled(!treeViewEnabled)}
                     />
@@ -48,9 +48,9 @@ export function TableRow(props: TableRowProps): JSX.Element {
     };
     const style = {
         gridColumnStart: 1,
-        gridColumnEnd: props.columnCount,
+        gridColumnEnd: props.columnCount + 1,
         display: "grid",
-        gridTemplateColumns: "1fr"
+        gridTemplateColumns: treeViewEnabled ? "fit-content(100%)" : "1fr"
     };
     const treeRender = () => {
         if (treeViewEnabled) {

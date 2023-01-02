@@ -22,6 +22,11 @@ div[class^="mx-name-dataGrid"] {
     .table {
         .th {
             padding: 8px;
+            font-weight: 600;
+        }
+        .table-content {
+            display: grid;
+            position: relative;
         }
     }
     .white-space-pre {

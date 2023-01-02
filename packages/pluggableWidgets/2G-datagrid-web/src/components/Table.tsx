@@ -322,8 +322,9 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
             .join(" ");
         return {
             gridTemplateColumns:
+                (props.treeViewEnabled && props.treeViewPosition === "left" ? "fit-content(50px) " : "") +
                 columnSizes +
-                (props.treeViewEnabled && props.treeViewPosition === "left" ? " fit-content(50px)" : "") +
+                (props.treeViewEnabled && props.treeViewPosition === "Right" ? " fit-content(50px)" : "") +
                 (props.columnsHidable ? " fit-content(50px)" : "")
         };
     }, [columnsWidth, visibleColumns, props.columnsHidable]);
@@ -451,7 +452,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                 index={rowIndex}
                                 columnCount={
                                     visibleColumns.length +
-                                    (props.treeViewEnabled ? (props.treeViewPosition === "left" ? 2 : 1) : 0)
+                                    (props.treeViewEnabled ? (props.treeViewPosition === "left" ? 1 : 1) : 0)
                                 }
                                 rowClass={classNames([
                                     "tr",
