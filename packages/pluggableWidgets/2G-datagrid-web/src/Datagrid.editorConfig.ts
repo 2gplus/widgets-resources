@@ -77,6 +77,17 @@ export function getProperties(
             hidePropertyIn(defaultProperties, values, "buttons", index, "checkAuthAttribute");
         }
     });
+    if (!values.ctrlClick) {
+        hidePropertyIn(defaultProperties, values, "ctrlClick");
+        hidePropertyIn(defaultProperties, values, "ctrlDefaultTrigger");
+    }
+    if (!values.onClick) {
+        hidePropertyIn(defaultProperties, values, "onClick");
+        hidePropertyIn(defaultProperties, values, "defaultTrigger");
+    }
+    if (values.selectionMode !== "external") {
+        hidePropertyIn(defaultProperties, values, "externalSelectionAttribute");
+    }
 
     changePropertyIn(
         defaultProperties,
@@ -107,6 +118,34 @@ export function getProperties(
             });
         },
         "columns"
+    );
+
+    changePropertyIn(
+        defaultProperties,
+        values,
+        () => {
+            if (values.onClick || values.ctrlClick) {
+                if (!values.rowClickevents.find(x => x.onClick === values.onClick)) {
+                    values.rowClickevents.push({
+                        onClick: values.onClick,
+                        ctrlTrigger: false,
+                        defaultTrigger: values.defaultTrigger === "singleClick" ? "singleClick" : "doubleClick",
+                        documentation: "Imported by update"
+                    });
+                    values.onClick = null;
+                }
+                if (!values.rowClickevents.find(x => x.onClick === values.ctrlClick)) {
+                    values.rowClickevents.push({
+                        onClick: values.onClick,
+                        ctrlTrigger: true,
+                        defaultTrigger: values.defaultTrigger === "singleClick" ? "singleClick" : "doubleClick",
+                        documentation: "Imported by update"
+                    });
+                    values.ctrlClick = null;
+                }
+            }
+        },
+        "rowClickevents"
     );
 
     if (platform === "web") {
@@ -399,5 +438,25 @@ export function check(values: DatagridPreviewProps): Problem[] {
             });
         }
     });
+    if (values.selectionMode === "external" && (!values.externalSelectionAttribute || !values.externalUpdateAction)) {
+        errors.push({
+            property: `externalSelectionAttribute`,
+            message: "External selection expects an attribute and update action"
+        });
+    }
+    if (values.ctrlClick) {
+        errors.push({
+            property: `ctrlClick`,
+            message:
+                "Action is removed please move action to Events / Click events. This action will not be executed on ctrl click"
+        });
+    }
+    if (values.onClick) {
+        errors.push({
+            property: `onClick`,
+            message:
+                "Action is removed please move action to Events / Click events. This action will not be executed on click"
+        });
+    }
     return errors;
 }

@@ -13,7 +13,6 @@ import { Header } from "./Header";
 import {
     AlignmentEnum,
     ColumnsPreviewType,
-    CtrlDefaultTriggerEnum,
     DefaultTriggerEnum,
     PagingDisplayTypeEnum,
     PagingTypeEnum,
@@ -23,7 +22,15 @@ import {
 } from "../../typings/DatagridProps";
 import { Big } from "big.js";
 import classNames from "classnames";
-import { DynamicValue, EditableValue, ListWidgetValue, ListExpressionValue, ObjectItem } from "mendix";
+import {
+    DynamicValue,
+    EditableValue,
+    ListWidgetValue,
+    ListExpressionValue,
+    ObjectItem,
+    ListAttributeValue,
+    ListActionValue
+} from "mendix";
 import { SortingRule, useSettings } from "../utils/settings";
 import { ColumnResizer } from "./ColumnResizer";
 import { InfiniteBody, Pagination } from "@mendix/piw-utils-internal/components/web";
@@ -80,8 +87,7 @@ export interface TableProps<T extends ObjectItem> {
     /**
      * Custom 2G props
      */
-    defaultTrigger: DefaultTriggerEnum;
-    ctrlDefaultTrigger: CtrlDefaultTriggerEnum;
+    defaultTrigger?: DefaultTriggerEnum;
     buttons: ButtonsTypeExt[];
     selectionMode: SelectionModeEnum;
     remoteSortConfig?: RemoteSortConfig;
@@ -93,6 +99,8 @@ export interface TableProps<T extends ObjectItem> {
     treeViewPosition: TreeViewPositionEnum;
     treeViewwidgets?: ListWidgetValue;
     treeViewCondition?: ListExpressionValue<boolean>;
+    rowOnClickHandler?: (e: any, isDoubleClick: boolean, value: ObjectItem) => void;
+    externalSelectionHandler?: { updateAction: ListActionValue; attribute: ListAttributeValue<boolean> };
 }
 
 export interface RemoteSortConfig {
@@ -234,48 +242,32 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         (column: ColumnProperty, value: T, rowIndex: number) =>
             visibleColumns.find(c => c.id === column.id) || props.preview
                 ? props.cellRenderer(
-                      (children, className, onClick, ctrlClick) => {
+                      (children, className) => {
                           return (
                               <div
                                   key={`row_${value.id}_cell_${column.id}`}
                                   className={classNames("td", { "td-borders": rowIndex === 0 }, className, {
-                                      clickable: !!onClick,
+                                      clickable: !!props.rowOnClickHandler,
                                       "hidden-column-preview": props.preview && props.columnsHidable && column.hidden
                                   })}
                                   onClick={(e: any) => {
-                                      if (e.ctrlKey && props.ctrlDefaultTrigger === "singleClick" && ctrlClick) {
-                                          ctrlClick();
-                                      } else if (
-                                          onClick &&
-                                          (props.ctrlDefaultTrigger === "singleClick" ||
-                                              props.defaultTrigger === "singleClick")
-                                      ) {
-                                          onClick();
+                                      if (props.rowOnClickHandler) {
+                                          props.rowOnClickHandler(e, false, value);
                                       }
                                   }}
                                   onDoubleClick={(e: any) => {
-                                      if (e.ctrlKey && props.ctrlDefaultTrigger === "doubleClick" && ctrlClick) {
-                                          ctrlClick();
-                                      } else if (
-                                          onClick &&
-                                          (props.ctrlDefaultTrigger === "doubleClick" ||
-                                              props.defaultTrigger === "doubleClick")
-                                      ) {
-                                          onClick();
+                                      if (props.rowOnClickHandler) {
+                                          props.rowOnClickHandler(e, true, value);
                                       }
                                   }}
-                                  onKeyDown={
-                                      onClick
-                                          ? e => {
-                                                if (e.key === "Enter" || e.key === " ") {
-                                                    e.preventDefault();
-                                                    onClick();
-                                                }
-                                            }
-                                          : undefined
-                                  }
-                                  role={onClick ? "button" : "cell"}
-                                  tabIndex={onClick ? 0 : undefined}
+                                  onKeyDown={(e: any) => {
+                                      if (props.rowOnClickHandler && (e.key === "Enter" || e.key === " ")) {
+                                          e.preventDefault();
+                                          props.rowOnClickHandler(e, false, value);
+                                      }
+                                  }}
+                                  role={props.rowOnClickHandler ? "button" : "cell"}
+                                  tabIndex={props.rowOnClickHandler ? 0 : undefined}
                               >
                                   {children}
                               </div>
@@ -338,6 +330,13 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                 setSelection([item]);
                 break;
             case "multi":
+            case "external":
+                if (props.externalSelectionHandler) {
+                    const action = props.externalSelectionHandler.updateAction.get(item);
+                    if (action && action.canExecute) {
+                        executeAction(action);
+                    }
+                }
                 const selectedItem = selection.indexOf(item);
                 let newSelection: ObjectItem[] = [];
                 if (selectedItem > -1) {
@@ -345,11 +344,20 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                 } else {
                     newSelection = [...selection, item];
                 }
-                for (const select of newSelection) {
-                    console.log(select.id);
-                }
                 setSelection(newSelection);
+
                 break;
+        }
+    };
+    // Function returns whether the ObjectItem is selected
+    const isRowSelected = (item: ObjectItem): "selected" | "" => {
+        switch (props.selectionMode) {
+            case "external":
+                return props.externalSelectionHandler?.attribute.get(item)?.value ? "selected" : "";
+            case "multi":
+            case "single":
+            default:
+                return selection.find(x => x.id === item.id) ? "selected" : "";
         }
     };
     const tableLabel = (): ReactNode => {
@@ -454,11 +462,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                     visibleColumns.length +
                                     (props.treeViewEnabled ? (props.treeViewPosition === "left" ? 1 : 1) : 0)
                                 }
-                                rowClass={classNames([
-                                    "tr",
-                                    props.rowClass?.(row.item),
-                                    selection.find(x => x.id === row.item.id) ? "selected" : ""
-                                ])}
+                                rowClass={classNames(["tr", props.rowClass?.(row.item), isRowSelected(row.item)])}
                                 treeViewWidget={props.treeViewwidgets}
                                 treeViewPosition={props.treeViewPosition}
                                 treeViewCondition={props.treeViewCondition}

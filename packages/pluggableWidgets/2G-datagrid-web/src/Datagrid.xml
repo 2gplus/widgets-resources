@@ -21,7 +21,19 @@
                     <enumerationValues>
                         <enumerationValue key="single">Single selection</enumerationValue>
                         <enumerationValue key="multi">Multi selection</enumerationValue>
+                        <enumerationValue key="external">External selection</enumerationValue>
                     </enumerationValues>
+                </property>
+                <property key="externalSelectionAttribute" type="attribute" dataSource="datasource" required="false">
+                    <caption>Selection attribute</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="Boolean" />
+                    </attributeTypes>
+                </property>
+                <property key="externalUpdateAction" type="action" dataSource="datasource" required="false">
+                    <caption>Selection update</caption>
+                    <description>Action to execute when updating selection</description>
                 </property>
                 <property key="sortingType" type="enumeration" required="true" defaultValue="local">
                     <caption>Sort Type</caption>
@@ -443,6 +455,36 @@
         </propertyGroup>
         <propertyGroup caption="Events">
             <propertyGroup caption="Click events">
+                <property key="rowClickevents" type="object" isList="true" required="false">
+                    <caption>Click events</caption>
+                    <description />
+                    <properties>
+                        <propertyGroup caption="General">
+                            <property key="onClick" type="action" dataSource="../datasource" required="true">
+                                <caption>On click action</caption>
+                                <description />
+                            </property>
+                            <property key="ctrlTrigger" type="boolean" defaultValue="false">
+                                <caption>CTRL</caption>
+                                <description>Hold CTRL to execute the action</description>
+                            </property>
+                            <property key="defaultTrigger" type="enumeration" defaultValue="doubleClick">
+                                <caption>Default Trigger</caption>
+                                <description />
+                                <enumerationValues>
+                                    <enumerationValue key="singleClick">Single click</enumerationValue>
+                                    <enumerationValue key="doubleClick">Double click</enumerationValue>
+                                </enumerationValues>
+                            </property>
+                            <property key="documentation" type="string" required="false">
+                                <caption>Documentation</caption>
+                                <description />
+                            </property>
+                        </propertyGroup>
+                    </properties>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Click events DEPRECATED">
                 <property key="onClick" type="action" required="false" dataSource="datasource">
                     <caption>On click action</caption>
                     <description />
@@ -457,7 +499,7 @@
                     </enumerationValues>
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Ctrl click events">
+            <propertyGroup caption="Ctrl click events DEPRECATED">
                 <property key="ctrlClick" type="action" required="false" dataSource="datasource">
                     <caption>On ctrl click action</caption>
                     <description />

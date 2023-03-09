@@ -10,10 +10,10 @@ import {
     useFilterContext,
     useMultipleFiltering
 } from "@mendix/piw-utils-internal/components/web";
-import { isAvailable } from "@mendix/piw-utils-internal";
+import { executeAction, isAvailable } from "@mendix/piw-utils-internal";
 import { extractFilters } from "./utils/filters";
 import { useCellRenderer } from "./utils/useCellRenderer";
-
+import { ObjectItem } from "mendix";
 import "./ui/Datagrid.scss";
 import { Big } from "big.js";
 
@@ -59,10 +59,42 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
     const [filtered, setFiltered] = useState(false);
     const multipleFilteringState = useMultipleFiltering();
     const { FilterContext } = useFilterContext();
+    const hasDblClick = props.rowClickevents.findIndex(clickEvent => clickEvent.defaultTrigger === "doubleClick") > -1;
+    let timeout: NodeJS.Timeout;
+    const onClickHandler = (e: any, dblClick: boolean, value: ObjectItem) => {
+        console.log(`Click handler`, e, dblClick, value);
+        //If the events on the data grid have doubleclick action we want to wait when the user click on a row, since the user can doubleclick the row.
+        let waitTime = 0;
+        if (hasDblClick) {
+            waitTime = 250;
+        }
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            let logMessage;
+            if (props.rowClickevents.length > 0) {
+                // filter the action where the trigger and ctrl key event are equal
+                const eventsToExecute = props.rowClickevents.filter(
+                    clickEvent =>
+                        (clickEvent.defaultTrigger === "doubleClick") === dblClick &&
+                        e.ctrlKey === clickEvent.ctrlTrigger
+                );
+                logMessage = "Executing actions, logging documentation";
+                for (const clickEvent of eventsToExecute) {
+                    logMessage += `\r\n${clickEvent.documentation}`;
+                    if (clickEvent.onClick) {
+                        const action = clickEvent.onClick.get(value);
+                        if (action.canExecute) {
+                            executeAction(action);
+                        }
+                    }
+                }
+            }
+            console.log(logMessage);
+        }, waitTime);
+    };
     const cellRenderer = useCellRenderer({
         columns: props.columns,
-        onClick: props.onClick,
-        ctrlClick: props.ctrlClick
+        onClick: onClickHandler
     });
 
     useEffect(() => {
@@ -287,14 +319,18 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             tableLabel={props.tableLabel}
             remoteSortConfig={remoteSortConfig}
             updateRemoteSortConfig={updateRemoteSortConfig}
-            defaultTrigger={props.defaultTrigger}
-            ctrlDefaultTrigger={props.ctrlDefaultTrigger}
             pagingDisplayTypeEnum={props.pagingDisplayType}
             pagingTypeEnum={props.pagingType}
             treeViewEnabled={props.treeViewEnabled}
             treeViewPosition={props.treeViewPosition}
             treeViewwidgets={props.treeViewWidgets}
             treeViewCondition={props.treeViewCondition}
+            rowOnClickHandler={onClickHandler}
+            externalSelectionHandler={
+                props.externalSelectionAttribute && props.externalUpdateAction
+                    ? { updateAction: props.externalUpdateAction, attribute: props.externalSelectionAttribute }
+                    : undefined
+            }
         />
     );
 }

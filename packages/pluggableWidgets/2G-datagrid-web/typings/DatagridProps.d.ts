@@ -17,7 +17,7 @@ import {
 } from "mendix";
 import { Big } from "big.js";
 
-export type SelectionModeEnum = "single" | "multi";
+export type SelectionModeEnum = "single" | "multi" | "external";
 
 export type SortingTypeEnum = "local" | "remote";
 
@@ -87,6 +87,15 @@ export interface ButtonsType {
 
 export type DefaultTriggerEnum = "singleClick" | "doubleClick";
 
+export interface RowClickeventsType {
+    onClick?: ListActionValue;
+    ctrlTrigger: boolean;
+    defaultTrigger: DefaultTriggerEnum;
+    documentation: string;
+}
+
+export type DefaultTriggerEnum = "singleClick" | "doubleClick";
+
 export type CtrlDefaultTriggerEnum = "singleClick" | "doubleClick";
 
 export interface ColumnsPreviewType {
@@ -127,6 +136,13 @@ export interface ButtonsPreviewType {
     buttonStyle: ButtonStyleEnum;
 }
 
+export interface RowClickeventsPreviewType {
+    onClick: {} | null;
+    ctrlTrigger: boolean;
+    defaultTrigger: DefaultTriggerEnum;
+    documentation: string;
+}
+
 export interface DatagridContainerProps {
     name: string;
     class: string;
@@ -135,6 +151,8 @@ export interface DatagridContainerProps {
     advanced: boolean;
     datasource: ListValue;
     selectionMode: SelectionModeEnum;
+    externalSelectionAttribute?: ListAttributeValue<boolean>;
+    externalUpdateAction?: ListActionValue;
     sortingType: SortingTypeEnum;
     sortAttribute?: EditableValue<string>;
     sortAscending?: EditableValue<boolean>;
@@ -168,6 +186,7 @@ export interface DatagridContainerProps {
     treeViewWidgets?: ListWidgetValue;
     tableLabel?: DynamicValue<string>;
     buttons: ButtonsType[];
+    rowClickevents: RowClickeventsType[];
     onClick?: ListActionValue;
     defaultTrigger: DefaultTriggerEnum;
     ctrlClick?: ListActionValue;
@@ -182,6 +201,8 @@ export interface DatagridPreviewProps {
     advanced: boolean;
     datasource: {} | { type: string } | null;
     selectionMode: SelectionModeEnum;
+    externalSelectionAttribute: string;
+    externalUpdateAction: {} | null;
     sortingType: SortingTypeEnum;
     sortAttribute: string;
     sortAscending: string;
@@ -216,6 +237,7 @@ export interface DatagridPreviewProps {
     treeViewWidgets: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     tableLabel: string;
     buttons: ButtonsPreviewType[];
+    rowClickevents: RowClickeventsPreviewType[];
     onClick: {} | null;
     defaultTrigger: DefaultTriggerEnum;
     ctrlClick: {} | null;

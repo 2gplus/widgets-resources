@@ -1,17 +1,14 @@
 import { createElement, useCallback } from "react";
-import { ListActionValue } from "mendix";
 import { CellRenderer } from "../components/Table";
 import { ColumnsType } from "../../typings/DatagridProps";
 import classNames from "classnames";
-import { executeAction } from "@mendix/piw-utils-internal";
-
+import { ObjectItem } from "mendix";
 interface CellRendererHookProps {
     columns: ColumnsType[];
-    onClick?: ListActionValue;
-    ctrlClick?: ListActionValue;
+    onClick: (e: any, dblEvent: boolean, context?: ObjectItem) => void;
 }
 
-export function useCellRenderer({ onClick, ctrlClick, columns }: CellRendererHookProps): CellRenderer {
+export function useCellRenderer({ onClick, columns }: CellRendererHookProps): CellRenderer {
     const renderer: CellRenderer = (renderWrapper, value, columnIndex) => {
         const column = columns[columnIndex];
         const title = column.tooltip && column.tooltip.get(value)?.value;
@@ -37,11 +34,9 @@ export function useCellRenderer({ onClick, ctrlClick, columns }: CellRendererHoo
             content,
             classNames(`align-column-${column.alignment}`, column.columnClass?.get(value)?.value, {
                 "wrap-text": column.wrapText
-            }),
-            onClick ? () => executeAction(onClick?.get(value)) : undefined,
-            ctrlClick ? () => executeAction(ctrlClick?.get(value)) : undefined
+            })
         );
     };
 
-    return useCallback(renderer, [columns, onClick, ctrlClick]);
+    return useCallback(renderer, [columns, onClick]);
 }

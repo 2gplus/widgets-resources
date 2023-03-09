@@ -130,7 +130,6 @@ export function preview(props: DatagridPreviewProps): ReactElement {
             pagingTypeEnum={"default"}
             treeViewEnabled={false}
             treeViewPosition={"left"}
-            ctrlDefaultTrigger={"singleClick"}
         />
     );
 }
