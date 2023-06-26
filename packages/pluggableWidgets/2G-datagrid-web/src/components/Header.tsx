@@ -82,6 +82,7 @@ export function Header(props: HeaderProps): ReactElement {
         tabIndex: 0
     };
 
+    // @ts-ignore
     return (
         <div
             aria-label={caption}
@@ -104,6 +105,7 @@ export function Header(props: HeaderProps): ReactElement {
                 <div
                     className={classNames("column-header", canSort ? "clickable" : "", props.className)}
                     id={props.column.id}
+                    // @ts-ignore
                     style={{ pointerEvents: props.isDragging ? "none" : undefined }}
                     {...(canSort ? sortProps : undefined)}
                 >
