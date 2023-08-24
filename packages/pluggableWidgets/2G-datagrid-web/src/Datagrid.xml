@@ -226,6 +226,23 @@
                     <description />
                     <returnType type="String" />
                 </property>
+                <property key="dataObjects" type="object" isList="true" required="false">
+                    <caption>Data objects</caption>
+                    <description>Custom data- options on the row</description>
+                    <properties>
+                        <propertyGroup caption="General">
+                            <property key="attribute" type="string">
+                                <caption>Attribute</caption>
+                                <description>Attribute without data-</description>
+                            </property>
+                            <property key="data" type="expression" required="false" dataSource="../datasource">
+                                <caption>data in attribute</caption>
+                                <description />
+                                <returnType type="String" />
+                            </property>
+                        </propertyGroup>
+                    </properties>
+                </property>
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="CustomPaging">

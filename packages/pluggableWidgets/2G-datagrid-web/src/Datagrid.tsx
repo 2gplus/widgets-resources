@@ -331,6 +331,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                     ? { updateAction: props.externalUpdateAction, attribute: props.externalSelectionAttribute }
                     : undefined
             }
+            dataAttributes={props.dataObjects}
         />
     );
 }

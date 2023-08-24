@@ -13,6 +13,7 @@ import { Header } from "./Header";
 import {
     AlignmentEnum,
     ColumnsPreviewType,
+    DataObjectsType,
     DefaultTriggerEnum,
     PagingDisplayTypeEnum,
     PagingTypeEnum,
@@ -101,6 +102,7 @@ export interface TableProps<T extends ObjectItem> {
     treeViewCondition?: ListExpressionValue<boolean>;
     rowOnClickHandler?: (e: any, isDoubleClick: boolean, value: ObjectItem) => void;
     externalSelectionHandler?: { updateAction: ListActionValue; attribute: ListAttributeValue<boolean> };
+    dataAttributes?: DataObjectsType[];
 }
 
 export interface RemoteSortConfig {
@@ -466,6 +468,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                 treeViewWidget={props.treeViewwidgets}
                                 treeViewPosition={props.treeViewPosition}
                                 treeViewCondition={props.treeViewCondition}
+                                dataAttributes={props.dataAttributes}
                             >
                                 {visibleColumns.map(cell => renderCell(cell, row.item, rowIndex))}
                                 {(!props.treeViewEnabled || props.treeViewPosition === "left") && props.columnsHidable && (

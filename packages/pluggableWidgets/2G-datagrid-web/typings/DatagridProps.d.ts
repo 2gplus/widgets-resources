@@ -57,6 +57,11 @@ export type PagingPositionEnum = "bottom" | "top";
 
 export type ShowEmptyPlaceholderEnum = "none" | "custom";
 
+export interface DataObjectsType {
+    attribute: string;
+    data?: ListExpressionValue<string>;
+}
+
 export type PagingDisplayTypeEnum = "objectBased" | "pageBased";
 
 export interface FilterListType {
@@ -118,6 +123,11 @@ export interface ColumnsPreviewType {
     wrapText: boolean;
 }
 
+export interface DataObjectsPreviewType {
+    attribute: string;
+    data: string;
+}
+
 export interface FilterListPreviewType {
     filter: string;
 }
@@ -166,6 +176,7 @@ export interface DatagridContainerProps {
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder?: ReactNode;
     rowClass?: ListExpressionValue<string>;
+    dataObjects: DataObjectsType[];
     pagingAction?: ActionValue;
     pagingDisplayType: PagingDisplayTypeEnum;
     pagingTotalCount?: EditableValue<Big>;
@@ -216,6 +227,7 @@ export interface DatagridPreviewProps {
     showEmptyPlaceholder: ShowEmptyPlaceholderEnum;
     emptyPlaceholder: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     rowClass: string;
+    dataObjects: DataObjectsPreviewType[];
     pagingAction: {} | null;
     pagingDisplayType: PagingDisplayTypeEnum;
     pagingTotalCount: string;

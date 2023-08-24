@@ -2,9 +2,11 @@ import { TreeView } from "./TreeViewButton";
 import { createElement, ReactNode, useState, Fragment } from "react";
 import { ObjectItem, ListWidgetValue, ListExpressionValue } from "mendix";
 import classNames from "classnames";
-import { TreeViewPositionEnum } from "../../typings/DatagridProps";
+import { DataObjectsType, TreeViewPositionEnum } from "../../typings/DatagridProps";
+
 export interface TableRowProps {
     rowClass: string;
+    dataAttributes?: DataObjectsType[];
     row: ObjectItem;
     index: number;
     columnCount: number;
@@ -61,6 +63,12 @@ export function TableRow(props: TableRowProps): JSX.Element {
             );
         }
     };
+    const fragmentProps: any = {};
+    if (props.dataAttributes) {
+        for (const dataObject of props.dataAttributes) {
+            fragmentProps[`data-${dataObject.attribute}`] = dataObject.data?.get(props.row)?.value;
+        }
+    }
 
     return (
         <Fragment>
@@ -69,6 +77,7 @@ export function TableRow(props: TableRowProps): JSX.Element {
                 key={`row_${props.row.id}`}
                 className={props.rowClass}
                 role="row"
+                {...fragmentProps}
             >
                 {getChildren()}
             </div>
