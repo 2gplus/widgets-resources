@@ -167,6 +167,7 @@ export interface DatagridContainerProps {
     sortAttribute?: EditableValue<string>;
     sortAscending?: EditableValue<boolean>;
     onSortChangedAction?: ActionValue;
+    executeSortChangedActionOnStartup: boolean;
     columns: ColumnsType[];
     columnsFilterable: boolean;
     pageSize: number;
@@ -218,6 +219,7 @@ export interface DatagridPreviewProps {
     sortAttribute: string;
     sortAscending: string;
     onSortChangedAction: {} | null;
+    executeSortChangedActionOnStartup: boolean;
     columns: ColumnsPreviewType[];
     columnsFilterable: boolean;
     pageSize: number | null;

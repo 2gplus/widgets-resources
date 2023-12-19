@@ -49,7 +49,7 @@ function renderIcon(button: ButtonsTypeExt): ReactNode {
     if (button.iconClass) {
         return <span className={classNames(button.iconClass)} aria-hidden="true" />;
     } else if (button.icon && button.icon.value) {
-        switch (button.icon.value.type) {
+        switch (button.icon.value.type as any) {
             case "glyph":
                 return (
                     <span
@@ -58,7 +58,9 @@ function renderIcon(button: ButtonsTypeExt): ReactNode {
                     />
                 );
             case "image":
-                return <img src={button.icon.value.iconUrl} alt="" />;
+                return <img src={(button.icon.value as any).iconUrl} alt="" />;
+            case "icon":
+                return <span className={(button.icon.value as any).iconClass} aria-hidden="true" />;
         }
     }
 

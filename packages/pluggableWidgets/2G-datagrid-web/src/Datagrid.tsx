@@ -16,11 +16,14 @@ import { useCellRenderer } from "./utils/useCellRenderer";
 import { ObjectItem } from "mendix";
 import "./ui/Datagrid.scss";
 import { Big } from "big.js";
+import { debounce } from "./utils/debounce";
 
 export default function Datagrid(props: DatagridContainerProps): ReactElement {
     const id = useRef(`DataGrid${generateUUID()}`);
 
     const [sortParameters, setSortParameters] = useState<{ columnIndex: number; desc: boolean } | undefined>(undefined);
+    const [isStarted, setIsStarted] = useState<boolean>(false);
+
     /**
      * 2G Remote sorting
      */
@@ -219,7 +222,8 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                 changed = true;
             }
         }
-        if (changed) {
+        // only execute the changed action when we are started to prevent double loading
+        if (changed && isStarted) {
             clearTimeout(timer.current);
             timer.current = setTimeout(() => {
                 props.onSortChangedAction?.execute();
@@ -227,17 +231,38 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
         }
     };
 
-    if (props.sortingType === "remote") {
-        if (
-            props.sortAscending?.value !== remoteSortConfig.ascending ||
-            props.sortAttribute?.value !== remoteSortConfig.property
-        ) {
-            setRemoteSortConfig({
-                ascending: props.sortAscending?.value,
-                property: props.sortAttribute?.value
-            });
+    /**
+     * called after the remote sort has been set.
+     * If the execute on startup is true we can call the on sort changed action
+     */
+    const onIsStarted = useMemo(
+        () =>
+            debounce(() => {
+                if (isStarted == false) {
+                    if (props.executeSortChangedActionOnStartup == true) {
+                        props.onSortChangedAction?.execute();
+                    }
+                    setIsStarted(true);
+                }
+            }, 100),
+        [isStarted]
+    );
+
+    // only call once
+    useEffect(() => {
+        if (props.sortingType === "remote") {
+            if (
+                props.sortAscending?.value !== remoteSortConfig.ascending ||
+                props.sortAttribute?.value !== remoteSortConfig.property
+            ) {
+                setRemoteSortConfig({
+                    ascending: props.sortAscending?.value,
+                    property: props.sortAttribute?.value
+                });
+            }
         }
-    }
+    }, []);
+
     /**
      * End 2G Remote Sorting
      */
@@ -332,6 +357,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
                     : undefined
             }
             dataAttributes={props.dataObjects}
+            onIsStarted={onIsStarted}
         />
     );
 }

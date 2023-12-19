@@ -93,6 +93,7 @@ export interface TableProps<T extends ObjectItem> {
     selectionMode: SelectionModeEnum;
     remoteSortConfig?: RemoteSortConfig;
     updateRemoteSortConfig?: (config: RemoteSortConfig) => void;
+    onIsStarted: () => void;
     tableLabel?: DynamicValue<string>;
     pagingTypeEnum: PagingTypeEnum;
     pagingDisplayTypeEnum: PagingDisplayTypeEnum;
@@ -176,7 +177,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                 props.updateRemoteSortConfig({});
             }
         }
-    }, [sortBy]);
+    }, [sortBy, props.updateRemoteSortConfig]);
     /**
      * End 2G remote sort config
      */
@@ -194,7 +195,11 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         setColumnsWidth
     );
 
-    useEffect(() => updateSettings(), [columnOrder, hiddenColumns, sortBy]);
+    useEffect(() => {
+        updateSettings();
+        /* Settings have been applied so we can mark as start */
+        props.onIsStarted();
+    }, [columnOrder, hiddenColumns, sortBy]);
 
     useEffect(() => {
         const [sortProperties] = sortBy;

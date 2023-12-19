@@ -61,6 +61,10 @@
                     <caption>Sort changed action</caption>
                     <description />
                 </property>
+                <property key="executeSortChangedActionOnStartup" type="boolean" defaultValue="false" required="true">
+                    <caption>Execute "Sort changed action" on Startup</caption>
+                    <description />
+                </property>
             </propertyGroup>
             <propertyGroup caption="Columns">
                 <property key="columns" type="object" isList="true">

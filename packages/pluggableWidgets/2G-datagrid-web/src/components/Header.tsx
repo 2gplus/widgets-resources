@@ -13,6 +13,8 @@ import classNames from "classnames";
 import { ColumnProperty } from "./Table";
 import { ColumnResizerProps } from "./ColumnResizer";
 import { SortingRule } from "../utils/settings";
+import { FaCaretUp } from "./icons/FaCaretUp";
+import { FaCaretDown } from "./icons/FaCaretDown";
 
 export interface HeaderProps {
     className?: string;
@@ -49,7 +51,7 @@ export function Header(props: HeaderProps): ReactElement {
     const isSorted = sortProperties && sortProperties.id === props.column.id;
     const isSortedDesc = isSorted && sortProperties.desc;
 
-    const sortIcon = canSort ? (isSorted ? (isSortedDesc ? "▲" : "▼") : null) : null;
+    const sortIcon = canSort ? isSorted ? isSortedDesc ? <FaCaretUp /> : <FaCaretDown /> : null : null;
 
     const caption = props.column.header.trim();
 
