@@ -23,6 +23,10 @@ svg {
     }
 }
 .table {
+    .header-filters {
+        height: 20px;
+        width: 100%;
+    }
     .table-content {
         .tr {
             &.selected {

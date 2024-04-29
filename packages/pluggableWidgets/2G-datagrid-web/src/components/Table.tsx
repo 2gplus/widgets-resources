@@ -70,6 +70,7 @@ export interface TableProps<T extends ObjectItem> {
     filterRenderer: (renderWrapper: (children: ReactNode) => ReactElement, columnIndex: number) => ReactElement;
     filtersTitle?: string;
     hasMoreItems: boolean;
+    headerFilters?: ReactNode;
     useHeaderFilters: boolean;
     headerWrapperRenderer: (columnIndex: number, header: ReactElement) => ReactElement;
     id?: string;
@@ -393,9 +394,11 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
         <div className={props.className} style={props.styles}>
             {props.useHeaderFilters ? (
                 <div className="header-filters" role="rowgroup" aria-label={props.filtersTitle}>
-                    {tableColumns.map(column => {
-                        return column.customFilter;
-                    })}
+                    {props.columnsFilterable
+                        ? tableColumns.map(column => {
+                              return column.customFilter;
+                          })
+                        : props.headerFilters}
                 </div>
             ) : null}
             <div className="table-header" role="rowgroup" style={{ display: "flex" }}>

@@ -269,7 +269,24 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
 
     const [totalCount, setTotalCount] = useState<number>();
     const [hasMoreItems, setHasMoreItems] = useState<boolean>(false);
-
+    /**
+     * Multiple filtering properties
+     */
+    const filterList = useMemo(
+        () => props.filterList.reduce((filters, { filter }) => ({ ...filters, [filter.id]: filter }), {}),
+        [props.filterList]
+    );
+    const multipleInitialFilters = useMemo(
+        () =>
+            props.filterList.reduce(
+                (filters, { filter }) => ({
+                    ...filters,
+                    [filter.id]: extractFilters(filter, viewStateFilters.current)
+                }),
+                {}
+            ),
+        [props.filterList, viewStateFilters.current]
+    );
     return (
         <Table
             cellRenderer={cellRenderer}
@@ -281,6 +298,28 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             columnsResizable={props.columnsResizable}
             columnsSortable={props.columnsSortable}
             data={props.datasource.items ?? []}
+            headerFilters={useMemo(
+                () =>
+                    props.showHeaderFilters ? (
+                        <FilterContext.Provider
+                            value={{
+                                filterDispatcher: prev => {
+                                    if (prev.filterType) {
+                                        const [, filterDispatcher] = multipleFilteringState[prev.filterType];
+                                        filterDispatcher(prev);
+                                        setFiltered(true);
+                                    }
+                                    return prev;
+                                },
+                                multipleAttributes: filterList,
+                                multipleInitialFilters
+                            }}
+                        >
+                            {props.filtersPlaceholder}
+                        </FilterContext.Provider>
+                    ) : null,
+                [FilterContext, customFiltersState, filterList, multipleInitialFilters, props.filtersPlaceholder]
+            )}
             emptyPlaceholderRenderer={useCallback(
                 (renderWrapper: any) =>
                     props.showEmptyPlaceholder === "custom" ? renderWrapper(props.emptyPlaceholder) : <div />,
