@@ -127,6 +127,7 @@ export interface ColumnProperty {
     customFilter: ReactNode;
     width: WidthEnum;
     weight: number;
+    clickEvents: boolean;
 }
 
 export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement {
@@ -235,7 +236,8 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                 canSort: column.sortable,
                 customFilter: props.columnsFilterable ? props.filterRenderer(filterRenderer, index) : null,
                 width: column.width,
-                weight: column.size ?? 1
+                weight: column.size ?? 1,
+                clickEvents: column.clickEvents
             })),
         [props.columns, props.filterRenderer, props.columnsFilterable, filterRenderer]
     );
@@ -254,27 +256,31 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                               <div
                                   key={`row_${value.id}_cell_${column.id}`}
                                   className={classNames("td", { "td-borders": rowIndex === 0 }, className, {
-                                      clickable: !!props.rowOnClickHandler,
+                                      clickable: !!props.rowOnClickHandler && column.clickEvents,
                                       "hidden-column-preview": props.preview && props.columnsHidable && column.hidden
                                   })}
                                   onClick={(e: any) => {
-                                      if (props.rowOnClickHandler) {
+                                      if (props.rowOnClickHandler && column.clickEvents) {
                                           props.rowOnClickHandler(e, false, value);
                                       }
                                   }}
                                   onDoubleClick={(e: any) => {
-                                      if (props.rowOnClickHandler) {
+                                      if (props.rowOnClickHandler && column.clickEvents) {
                                           props.rowOnClickHandler(e, true, value);
                                       }
                                   }}
                                   onKeyDown={(e: any) => {
-                                      if (props.rowOnClickHandler && (e.key === "Enter" || e.key === " ")) {
+                                      if (
+                                          props.rowOnClickHandler &&
+                                          column.clickEvents &&
+                                          (e.key === "Enter" || e.key === " ")
+                                      ) {
                                           e.preventDefault();
                                           props.rowOnClickHandler(e, false, value);
                                       }
                                   }}
-                                  role={props.rowOnClickHandler ? "button" : "cell"}
-                                  tabIndex={props.rowOnClickHandler ? 0 : undefined}
+                                  role={props.rowOnClickHandler && column.clickEvents ? "button" : "cell"}
+                                  tabIndex={props.rowOnClickHandler && column.clickEvents ? 0 : undefined}
                               >
                                   {children}
                               </div>

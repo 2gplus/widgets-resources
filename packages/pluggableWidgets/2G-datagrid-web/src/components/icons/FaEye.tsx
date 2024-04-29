@@ -1,7 +1,11 @@
 import { createElement, ReactElement } from "react";
 
 /**
- * Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.
+ * Component created by FontAwesome (Fonticons, Inc.) under the Creative Commons Attribution 4.0 International license.
+ * License link https://fontawesome.com/license
+ * Icon name: eye-regular.svg
+ *
+ * No changes were made in the original content
  */
 export function FaEye(): ReactElement {
     return (

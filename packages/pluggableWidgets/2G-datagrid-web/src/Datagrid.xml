@@ -133,6 +133,10 @@
                                 <caption>Can reorder</caption>
                                 <description />
                             </property>
+                            <property key="clickEvents" type="boolean" defaultValue="true">
+                                <caption>Handle click events</caption>
+                                <description />
+                            </property>
                             <property key="hidable" type="enumeration" defaultValue="yes">
                                 <caption>Can hide</caption>
                                 <description />

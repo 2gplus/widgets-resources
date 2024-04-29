@@ -41,6 +41,7 @@ export interface ColumnsType {
     sortable: boolean;
     resizable: boolean;
     draggable: boolean;
+    clickEvents: boolean;
     hidable: HidableEnum;
     width: WidthEnum;
     size: number;
@@ -115,6 +116,7 @@ export interface ColumnsPreviewType {
     sortable: boolean;
     resizable: boolean;
     draggable: boolean;
+    clickEvents: boolean;
     hidable: HidableEnum;
     width: WidthEnum;
     size: number | null;

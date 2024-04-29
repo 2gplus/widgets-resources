@@ -198,7 +198,8 @@ export const getPreview = (values: DatagridPreviewProps, isDarkMode: boolean): S
                   sortable: false,
                   alignment: "left",
                   wrapText: false,
-                  sortProperty: "property"
+                  sortProperty: "property",
+                  clickEvents: true
               }
           ];
     const columns: RowLayoutProps = {

@@ -32,7 +32,8 @@ export function preview(props: DatagridPreviewProps): ReactElement {
                       sortable: false,
                       alignment: "left",
                       wrapText: false,
-                      sortProperty: "property"
+                      sortProperty: "property",
+                      clickEvents: true
                   }
               ];
 
