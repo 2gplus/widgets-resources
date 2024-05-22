@@ -32,6 +32,7 @@ export interface HeaderProps {
     setDragOver: Dispatch<SetStateAction<string>>;
     setIsDragging: Dispatch<SetStateAction<boolean>>;
     setSortBy: Dispatch<SetStateAction<SortingRule[]>>;
+    setCanUpdateSort: (value: boolean) => void;
     sortBy: SortingRule[];
     visibleColumns: ColumnProperty[];
 }
@@ -70,6 +71,7 @@ export function Header(props: HeaderProps): ReactElement {
         } else {
             props.setSortBy([]);
         }
+        props.setCanUpdateSort(true);
     };
 
     const sortProps: HTMLAttributes<HTMLDivElement> = {

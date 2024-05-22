@@ -55,6 +55,7 @@ export function preview(props: DatagridPreviewProps): ReactElement {
 
     return (
         <Table
+            setCanUpdateSort={() => {}}
             cellRenderer={useCallback(
                 (renderWrapper, _, columnIndex) => {
                     const column = columns[columnIndex];

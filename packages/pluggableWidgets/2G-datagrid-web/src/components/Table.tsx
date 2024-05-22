@@ -89,6 +89,7 @@ export interface TableProps<T extends ObjectItem> {
     /**
      * Custom 2G props
      */
+    canUpdateSort?: boolean;
     defaultTrigger?: DefaultTriggerEnum;
     buttons: ButtonsTypeExt[];
     selectionMode: SelectionModeEnum;
@@ -105,6 +106,7 @@ export interface TableProps<T extends ObjectItem> {
     rowOnClickHandler?: (e: any, isDoubleClick: boolean, value: ObjectItem) => void;
     externalSelectionHandler?: { updateAction: ListActionValue; attribute: ListAttributeValue<boolean> };
     dataAttributes?: DataObjectsType[];
+    setCanUpdateSort: (value: ((prevState: boolean) => boolean) | boolean) => void;
 }
 
 export interface RemoteSortConfig {
@@ -169,6 +171,10 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
     }, [props.remoteSortConfig]);
 
     useEffect(() => {
+        console.log(`SortBy effect called`);
+        if (!props.canUpdateSort) {
+            return;
+        }
         if (props.updateRemoteSortConfig) {
             if (sortBy.length > 0) {
                 props.updateRemoteSortConfig({
@@ -450,6 +456,7 @@ export function Table<T extends ObjectItem>(props: TableProps<T>): ReactElement 
                                     setIsDragging={setIsDragging}
                                     setSortBy={setSortBy}
                                     sortable={props.columnsSortable}
+                                    setCanUpdateSort={props.setCanUpdateSort}
                                     sortBy={sortBy}
                                     visibleColumns={visibleColumns}
                                 />

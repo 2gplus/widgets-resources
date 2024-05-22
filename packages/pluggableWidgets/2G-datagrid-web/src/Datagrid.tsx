@@ -23,7 +23,7 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
 
     const [sortParameters, setSortParameters] = useState<{ columnIndex: number; desc: boolean } | undefined>(undefined);
     const [isStarted, setIsStarted] = useState<boolean>(false);
-
+    const [canUpdateSort, setCanUpdateSort] = useState<boolean>(false);
     /**
      * 2G Remote sorting
      */
@@ -205,6 +205,9 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
      * 2G Remote sorting
      */
     const updateRemoteSortConfig = (newConfig: RemoteSortConfig) => {
+        if (!canUpdateSort) {
+            return;
+        }
         let changed = false;
         // check if any property is set
         if (newConfig.property) {
@@ -397,6 +400,8 @@ export default function Datagrid(props: DatagridContainerProps): ReactElement {
             }
             dataAttributes={props.dataObjects}
             onIsStarted={onIsStarted}
+            canUpdateSort={canUpdateSort}
+            setCanUpdateSort={setCanUpdateSort}
         />
     );
 }
